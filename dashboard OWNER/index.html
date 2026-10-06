@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="id">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="#063c2e" name="theme-color"/>
+  <title>
+   Owner Overview | Teh Dandang OWNER
+  </title>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js">
+  </script>
+  <script defer="" src="../assets/js/app.js">
+  </script>
+ </head>
+ <body data-page="overview">
+  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox"/>
+  <a class="skip-link" href="#main">
+   Lewati navigasi
+  </a>
+  <label aria-label="Tutup navigasi" class="sidebar-backdrop" for="nav-toggle">
+  </label>
+  <aside aria-label="Navigasi utama" class="sidebar" id="sidebar">
+   <a class="brand" href="index.html">
+    <span class="brand-mark" data-icon="box">
+     <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10">
+      </path>
+     </svg>
+    </span>
+    <span>
+     <strong>
+      TEH DANDANG
+     </strong>
+     <small>
+      EXECUTIVE PORTAL
+     </small>
+    </span>
+   </a>
+   <div class="connection">
+    <span class="dot">
+    </span>
+    <span>
+     Snapshot SAP · 24 Okt 2025
+    </span>
+    <span class="demo-label">
+     DEMO
+    </span>
+   </div>
+   <nav id="navigation">
+    <section class="nav-group">
+     <h2>
+      Overview &amp; Dashboard
+     </h2>
+     <a aria-current="page" class="nav-link active" data-view="overview" href="index.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z">
+       </path>
+      </svg>
+      <span>
+       Owner Overview
+      </span>
+     </a>
+     <a class="nav-link" data-view="sales" href="sales.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 17l6-6 4 4 8-10 M15 5h6v6">
+       </path>
+      </svg>
+      <span>
+       Sales &amp; Target
+      </span>
+     </a>
+     <a class="nav-link" data-view="achievement" href="achievement.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2">
+       </path>
+      </svg>
+      <span>
+       Target vs Realisasi
+      </span>
+     </a>
+     <a class="nav-link" data-view="drilldown" href="drilldown.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2">
+       </path>
+      </svg>
+      <span>
+       Grafik Sales Drilldown
+      </span>
+     </a>
+    </section>
+    <section class="nav-group">
+     <h2>
+      Master Data
+     </h2>
+     <a class="nav-link" data-view="master-sales" href="master-sales.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8">
+       </path>
+      </svg>
+      <span>
+       Master Sales &amp; NPK
+      </span>
+     </a>
+     <a class="nav-link" data-view="outlets" href="outlets.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0">
+       </path>
+      </svg>
+      <span>
+       Master Outlet / CardCode
+      </span>
+     </a>
+     <a class="nav-link" data-view="products" href="products.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10">
+       </path>
+      </svg>
+      <span>
+       Master Produk &amp; SKU
+      </span>
+     </a>
+     <a class="nav-link" data-view="regions" href="regions.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17">
+       </path>
+      </svg>
+      <span>
+       Master Wilayah &amp; Rute
+      </span>
+     </a>
+     <a class="nav-link" data-view="vehicles" href="vehicles.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
+       </path>
+      </svg>
+      <span>
+       Kendaraan &amp; GPS IoT
+      </span>
+     </a>
+    </section>
+    <section class="nav-group">
+     <h2>
+      Transaksi &amp; Field
+     </h2>
+     <a class="nav-link" data-view="orders" href="orders.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M8 4H4v18h16V4h-4 M8 2h8v5H8z M8 12h8 M8 16h6">
+       </path>
+      </svg>
+      <span>
+       Sales Order SAP
+      </span>
+     </a>
+     <a class="nav-link" data-view="visits" href="visits.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6">
+       </path>
+      </svg>
+      <span>
+       Sales Visit &amp; Check-in
+      </span>
+     </a>
+     <a class="nav-link" data-view="noo" href="noo.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0">
+       </path>
+      </svg>
+      <span>
+       NOO (New Outlet)
+      </span>
+      <span class="count">
+       482
+      </span>
+     </a>
+     <a class="nav-link" data-view="nop" href="nop.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10">
+       </path>
+      </svg>
+      <span>
+       NOP (Penetration)
+      </span>
+      <span class="count">
+       92%
+      </span>
+     </a>
+     <a class="nav-link" data-view="ro" href="ro.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2">
+       </path>
+      </svg>
+      <span>
+       RO &amp; ROA Monitoring
+      </span>
+     </a>
+    </section>
+    <section class="nav-group">
+     <h2>
+      Monitoring &amp; Audit
+     </h2>
+     <a class="nav-link" data-view="gps" href="gps.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
+       </path>
+      </svg>
+      <span>
+       Live Telematics GPS
+      </span>
+     </a>
+     <a class="nav-link" data-view="audit" href="audit.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6">
+       </path>
+      </svg>
+      <span>
+       Audit Radius Kunjungan
+      </span>
+     </a>
+     <a class="nav-link" data-view="integration" href="integration.html">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M20 7a8 8 0 0 0-14-2L3 8 M3 3v5h5 M4 17a8 8 0 0 0 14 2l3-3 M16 16h5v5">
+       </path>
+      </svg>
+      <span>
+       Integrasi SAP S/4HANA
+      </span>
+     </a>
+    </section>
+   </nav>
+   <div class="sidebar-profile">
+    <span class="avatar">
+     HS
+    </span>
+    <div>
+     <strong>
+      Bpk. Hadi Santoso
+     </strong>
+     <small>
+      OWNER
+     </small>
+    </div>
+   </div>
+  </aside>
+  <div class="workspace">
+   <header class="topbar">
+    <div class="topbar-left">
+     <label aria-label="Buka navigasi" class="icon-button menu-toggle" data-icon="menu" for="nav-toggle">
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M3 6h18 M3 12h18 M3 18h18">
+       </path>
+      </svg>
+     </label>
+     <span class="breadcrumb">
+      Executive Portal
+      <span>
+       /
+      </span>
+      <strong id="breadcrumb">
+       Owner Overview
+      </strong>
+     </span>
+    </div>
+    <div class="topbar-right">
+     <span class="snapshot-label">
+      <span class="dot">
+      </span>
+      Data contoh · Oktober 2025
+     </span>
+     <button aria-label="Lihat pemberitahuan" class="icon-button" data-icon="bell" id="notification-button" onclick='openPopup("notifications")'>
+      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+       <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4">
+       </path>
+      </svg>
+     </button>
+     <span class="avatar small">
+      HS
+     </span>
+    </div>
+   </header>
+   <main id="main" tabindex="-1">
+    <div class="page-heading">
+     <div>
+      <p class="eyebrow">
+       TEH DANDANG / DISTRIBUTION INTELLIGENCE
+      </p>
+      <h1 id="page-title">
+       Executive Overview
+      </h1>
+      <p class="muted" id="page-description">
+       Ringkasan penjualan, cakupan outlet, dan aktivitas distribusi.
+      </p>
+     </div>
+    </div>
+    <div class="toolbar">
+     <div class="search-field">
+      <span data-icon="search">
+       <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14 M15 15l6 6">
+        </path>
+       </svg>
+      </span>
+      <label class="sr-only" for="search">
+       Cari data tabel
+      </label>
+      <input id="search" oninput="searchTables()" placeholder="Cari sales, outlet, atau armada…" type="search"/>
+     </div>
+    </div>
+    <noscript>
+     <style>
+      .chart-wrap { height: auto; } .chart-wrap canvas { display: none; } .toolbar, #notification-button { display: none; }
+     </style>
+     <p class="note">
+      Data dashboard tersedia sebagai HTML statis. JavaScript diperlukan untuk chart, drilldown, pencarian, dan popup.
+     </p>
+    </noscript>
+    <div id="views">
+     <div class="view" data-label="Owner Overview" data-title="Executive Overview" data-view="overview">
+      <section aria-label="Ringkasan kinerja" class="kpi-grid">
+       <article class="card kpi">
+        <div class="kpi-header">
+         <h2 class="kpi-label">
+          MTD Penjualan
+          <br/>
+          Gross DocTotal
+         </h2>
+         <span class="badge">
+          105.2% target
+         </span>
+        </div>
+        <div class="kpi-value">
+         Rp 18.42
+         <small>
+          Miliar
+         </small>
+        </div>
+        <div class="progress" style="--value:100%">
+         <span>
+         </span>
+        </div>
+        <p class="kpi-footer">
+         <strong>
+          +Rp 920.4 Jt surplus
+         </strong>
+         <br/>
+         Target Rp 17.50 M · YTD Rp 148.6 M
+        </p>
+       </article>
+       <article class="card kpi">
+        <div class="kpi-header">
+         <h2 class="kpi-label">
+          Master Outlet
+          <br/>
+          &amp; Coverage
+         </h2>
+         <span class="badge">
+          88.4% RO
+         </span>
+        </div>
+        <div class="kpi-value">
+         14,820
+         <small>
+          outlet
+         </small>
+        </div>
+        <div class="progress" style="--value:88.4%">
+         <span>
+         </span>
+        </div>
+        <p class="kpi-footer">
+         GT 10,240 · MT 3,120 · HOREKA 1,460
+         <br/>
+         <strong>
+          13,100 active RO
+         </strong>
+         · 1,720 warning
+        </p>
+       </article>
+       <article class="card kpi">
+        <div class="kpi-header">
+         <h2 class="kpi-label">
+          Sales Force
+          <br/>
+          Automation
+         </h2>
+         <span class="badge blue">
+          142 aktif
+         </span>
+        </div>
+        <div class="kpi-value">
+         1,280
+         <small>
+          EC / hari
+         </small>
+        </div>
+        <div class="progress" style="--value:94.6%">
+         <span>
+         </span>
+        </div>
+        <p class="kpi-footer">
+         <strong>
+          94.6% rute compliance
+         </strong>
+         <br/>
+         Deviasi rute 5.4%
+        </p>
+       </article>
+       <article class="card kpi">
+        <div class="kpi-header">
+         <h2 class="kpi-label">
+          SAP Integration
+          <br/>
+          Queue
+         </h2>
+         <span class="badge">
+          99.8% sync
+         </span>
+        </div>
+        <div class="kpi-value">
+         Rp 2.40
+         <small>
+          B pending
+         </small>
+        </div>
+        <div class="progress" style="--value:99.8%">
+         <span>
+         </span>
+        </div>
+        <p class="kpi-footer">
+         18 sales order dalam antrean
+         <br/>
+         <span class="mono">
+          DOC-20251024-8841
+         </span>
+        </p>
+       </article>
+      </section>
+      <section class="card">
+       <div class="card-heading">
+        <div>
+         <h2 class="heading-title">
+          Target vs. Realisasi Penjualan
+         </h2>
+         <p>
+          Realisasi bulanan dibandingkan dengan target perencanaan.
+         </p>
+        </div>
+        <div class="filter-field">
+         <label for="overview-chart-period">
+          Periode
+         </label>
+         <select data-chart-period="" id="overview-chart-period" onchange="drawMonthlyChart()">
+          <option selected="" value="year">
+           Jan – Des 2025
+          </option>
+          <option value="ytd">
+           Jan – Okt 2025
+          </option>
+          <option value="quarter">
+           Q3 2025
+          </option>
+         </select>
+        </div>
+       </div>
+       <div class="chart-wrap">
+        <canvas aria-label="Grafik target dan realisasi penjualan 2025 dalam miliar rupiah. Nilai tersedia pada tabel data di bawah." data-chart='{"months":["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"],"actual":[14.4,15.4,19.2,20.7,15.5,16.5,16.6,17.4,17.2,18.42,null,null],"plan":[14.2,15,17.63,18.73,15.8,15.99,16.5,16.71,16.9,17.5,17.8,20.2]}' data-chart-kind="monthly" role="img">
+        </canvas>
+        <p class="note" data-chart-error="" hidden="">
+         Chart.js tidak dapat dimuat dari CDN. Data tetap tersedia di tabel berikut.
+        </p>
+       </div>
+       <p class="chart-footnote">
+        Satuan: miliar rupiah. Oktober adalah MTD; realisasi November dan Desember belum tersedia.
+       </p>
+       <details class="chart-data" open="">
+        <summary>
+         Lihat data grafik
+        </summary>
+        <div data-chart-table="">
+         <div class="table-scroll">
+          <table>
+           <thead>
+            <tr>
+             <th scope="col">
+              Bulan 2025
+             </th>
+             <th scope="col">
+              Target (Miliar Rp)
+             </th>
+             <th scope="col">
+              Realisasi (Miliar Rp)
+             </th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+             <td>
+              Jan
+             </td>
+             <td>
+              14.20
+             </td>
+             <td>
+              14.40
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Feb
+             </td>
+             <td>
+              15.00
+             </td>
+             <td>
+              15.40
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Mar
+             </td>
+             <td>
+              17.63
+             </td>
+             <td>
+              19.20
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Apr
+             </td>
+             <td>
+              18.73
+             </td>
+             <td>
+              20.70
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Mei
+             </td>
+             <td>
+              15.80
+             </td>
+             <td>
+              15.50
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Jun
+             </td>
+             <td>
+              15.99
+             </td>
+             <td>
+              16.50
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Jul
+             </td>
+             <td>
+              16.50
+             </td>
+             <td>
+              16.60
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Agu
+             </td>
+             <td>
+              16.71
+             </td>
+             <td>
+              17.40
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Sep
+             </td>
+             <td>
+              16.90
+             </td>
+             <td>
+              17.20
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Okt (MTD)
+             </td>
+             <td>
+              17.50
+             </td>
+             <td>
+              18.42
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Nov
+             </td>
+             <td>
+              17.80
+             </td>
+             <td>
+              Belum tersedia
+             </td>
+            </tr>
+            <tr>
+             <td>
+              Des
+             </td>
+             <td>
+              20.20
+             </td>
+             <td>
+              Belum tersedia
+             </td>
+            </tr>
+           </tbody>
+          </table>
+         </div>
+        </div>
+        <p class="chart-footnote">
+         Target Jan–Sep dihitung dari nilai aktual dan persentase pencapaian pada HTML sumber.
+        </p>
+       </details>
+       <div class="region-grid">
+        <div class="region-card">
+         <div class="region-top">
+          <h3>
+           Jawa Tengah &amp; DIY
+          </h3>
+          <span class="badge">
+           107.4%
+          </span>
+         </div>
+         <p>
+          Aktual Rp 7.42 M · Target Rp 6.90 M
+         </p>
+         <div class="progress" style="--value:100%">
+          <span>
+          </span>
+         </div>
+        </div>
+        <div class="region-card">
+         <div class="region-top">
+          <h3>
+           Jawa Timur &amp; Madura
+          </h3>
+          <span class="badge">
+           104.8%
+          </span>
+         </div>
+         <p>
+          Aktual Rp 5.86 M · Target Rp 5.60 M
+         </p>
+         <div class="progress" style="--value:100%">
+          <span>
+          </span>
+         </div>
+        </div>
+        <div class="region-card">
+         <div class="region-top">
+          <h3>
+           Jawa Barat &amp; Banten
+          </h3>
+          <span class="badge warning">
+           98.9%
+          </span>
+         </div>
+         <p>
+          Aktual Rp 3.46 M · Target Rp 3.50 M
+         </p>
+         <div class="progress amber" style="--value:98.9%">
+          <span>
+          </span>
+         </div>
+        </div>
+        <div class="region-card">
+         <div class="region-top">
+          <h3>
+           Sumatera Bagian Selatan
+          </h3>
+          <span class="badge">
+           111.3%
+          </span>
+         </div>
+         <p>
+          Aktual Rp 1.68 M · Target Rp 1.50 M
+         </p>
+         <div class="progress" style="--value:100%">
+          <span>
+          </span>
+         </div>
+        </div>
+       </div>
+      </section>
+      <div class="split-grid">
+       <section class="card">
+        <div class="card-heading">
+         <div>
+          <h2 class="heading-title">
+           <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
+            </path>
+           </svg>
+           Armada &amp; Rute GPS
+          </h2>
+          <p>
+           Snapshot aktivitas distribusi.
+          </p>
+         </div>
+         <span class="badge neutral">
+          42 armada
+         </span>
+        </div>
+        <div class="fleet-stats">
+         <div class="fleet-stat">
+          <span>
+           Bergerak
+          </span>
+          <strong>
+           28 unit
+          </strong>
+         </div>
+         <div class="fleet-stat">
+          <span>
+           Idle
+          </span>
+          <strong>
+           8 unit
+          </strong>
+         </div>
+         <div class="fleet-stat">
+          <span>
+           Parkir DC
+          </span>
+          <strong>
+           4 unit
+          </strong>
+         </div>
+         <div class="fleet-stat">
+          <span>
+           Offline
+          </span>
+          <strong>
+           2 unit
+          </strong>
+         </div>
+        </div>
+        <div class="map-placeholder">
+         <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17">
+          </path>
+         </svg>
+         <div>
+          <strong>
+           Area Klaten &amp; Solo Baru
+          </strong>
+          <p>
+           Peta belum terhubung. Lokasi dan status armada tersedia pada tabel.
+          </p>
+         </div>
+        </div>
+        <div class="table-scroll">
+         <table data-filterable="">
+          <thead>
+           <tr>
+            <th scope="col">
+             Armada
+            </th>
+            <th scope="col">
+             Sales / Driver
+            </th>
+            <th scope="col">
+             Wilayah
+            </th>
+            <th scope="col">
+             Kecepatan
+            </th>
+            <th scope="col">
+             Baterai
+            </th>
+            <th scope="col">
+             Status
+            </th>
+           </tr>
+          </thead>
+          <tbody>
+           <tr>
+            <td>
+             <strong class="mono">
+              AD 8812 TD
+             </strong>
+             <span class="subtext">
+              GrandMax
+             </span>
+            </td>
+            <td>
+             Agus Wicaksono
+            </td>
+            <td>
+             Solo Baru, Grogol
+            </td>
+            <td class="numeric mono">
+             38 km/h
+            </td>
+            <td class="mono">
+             96%
+            </td>
+            <td>
+             <span class="badge blue">
+              Bergerak
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <strong class="mono">
+              B 9421 TEH
+             </strong>
+             <span class="subtext">
+              Blindvan
+             </span>
+            </td>
+            <td>
+             Bambang Susanto
+            </td>
+            <td>
+             Semarang Barat
+            </td>
+            <td class="numeric mono">
+             0 km/h
+            </td>
+            <td class="mono">
+             42%
+            </td>
+            <td>
+             <span class="badge warning">
+              Idle (Visits)
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <strong class="mono">
+              L 9010 DH
+             </strong>
+             <span class="subtext">
+              Canter Box
+             </span>
+            </td>
+            <td>
+             Rudi Hermawan
+            </td>
+            <td>
+             Gedangan, Sidoarjo
+            </td>
+            <td class="numeric mono">
+             45 km/h
+            </td>
+            <td class="mono">
+             88%
+            </td>
+            <td>
+             <span class="badge blue">
+              Bergerak
+             </span>
+            </td>
+           </tr>
+           <tr class="filter-empty" hidden="">
+            <td class="table-empty" colspan="6">
+             Tidak ada data yang sesuai. Ubah kata pencarian.
+            </td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </section>
+       <div class="stack">
+        <section class="card">
+         <div class="card-heading">
+          <div>
+           <h2 class="heading-title">
+            <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+             <path d="M20 7a8 8 0 0 0-14-2L3 8 M3 3v5h5 M4 17a8 8 0 0 0 14 2l3-3 M16 16h5v5">
+             </path>
+            </svg>
+            RO &amp; ROA Outlet Health
+           </h2>
+           <p>
+            Repeat order dan nilai rata-rata pesanan.
+           </p>
+          </div>
+         </div>
+         <div class="health-grid">
+          <div class="health-stat">
+           <span>
+            Active RO
+           </span>
+           <strong>
+            82.0%
+           </strong>
+           <small>
+            12,152 outlet
+           </small>
+          </div>
+          <div class="health-stat warning">
+           <span>
+            Warning
+           </span>
+           <strong>
+            12.0%
+           </strong>
+           <small>
+            1,778 outlet
+           </small>
+          </div>
+          <div class="health-stat danger">
+           <span>
+            Inactive
+           </span>
+           <strong>
+            6.0%
+           </strong>
+           <small>
+            890 outlet
+           </small>
+          </div>
+         </div>
+         <dl class="definition-list">
+          <div>
+           <dt>
+            Average RO Amount
+           </dt>
+           <dd>
+            Rp 1,480,000 / order
+           </dd>
+          </div>
+          <div>
+           <dt>
+            Repeat frequency
+           </dt>
+           <dd>
+            Setiap 9.4 hari
+           </dd>
+          </div>
+         </dl>
+        </section>
+        <section class="card">
+         <div class="card-heading">
+          <div>
+           <h2 class="heading-title">
+            NOO &amp; NOP Expansion
+           </h2>
+           <p>
+            Akuisisi outlet dan penetrasi produk.
+           </p>
+          </div>
+          <span class="badge">
+           MTD
+          </span>
+         </div>
+         <div class="target-row">
+          <div>
+           <strong>
+            New Open Outlet
+           </strong>
+           <span>
+            482 / 450
+           </span>
+          </div>
+          <div class="progress" style="--value:100%">
+           <span>
+           </span>
+          </div>
+          <small>
+           107.1% target · 482 CardCode valid
+          </small>
+         </div>
+         <div class="target-row">
+          <div>
+           <strong>
+            New Open Product
+           </strong>
+           <span>
+            1,840 / 2,000
+           </span>
+          </div>
+          <div class="progress" style="--value:92%">
+           <span>
+           </span>
+          </div>
+          <small>
+           92.0% outlet · Verifikasi ASM 100%
+          </small>
+         </div>
+        </section>
+       </div>
+      </div>
+      <section class="card">
+       <div aria-label="Master data" class="tabs">
+        <a class="button" href="master-sales.html">
+         <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 4H4v18h16V4h-4 M8 2h8v5H8z M8 12h8 M8 16h6">
+          </path>
+         </svg>
+         Sales Performance
+        </a>
+        <a class="button" href="outlets.html">
+         <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0">
+          </path>
+         </svg>
+         Outlet &amp; Coverage
+        </a>
+        <a class="button" href="products.html">
+         <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10">
+          </path>
+         </svg>
+         Produk &amp; SKU
+        </a>
+       </div>
+       <div tabindex="0">
+        <div>
+         <div class="table-scroll">
+          <table data-filterable="">
+           <thead>
+            <tr>
+             <th scope="col">
+              Sales / NPK
+             </th>
+             <th scope="col">
+              SAP SlpCode
+             </th>
+             <th scope="col">
+              Area
+             </th>
+             <th scope="col">
+              Target MTD
+             </th>
+             <th scope="col">
+              Aktual
+             </th>
+             <th scope="col">
+              Pencapaian
+             </th>
+             <th scope="col">
+              Calls
+             </th>
+             <th scope="col">
+              RO
+             </th>
+             <th scope="col">
+             </th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+             <td>
+              <div class="person">
+               <span class="avatar">
+                AW
+               </span>
+               <div>
+                <strong>
+                 Agus Wicaksono
+                </strong>
+                <span class="subtext">
+                 NPK-2210 · ASM: Joko S.
+                </span>
+               </div>
+              </div>
+             </td>
+             <td class="mono">
+              SLP-0142
+             </td>
+             <td>
+              Solo Raya
+              <span class="subtext">
+               Jateng &amp; DIY
+              </span>
+             </td>
+             <td class="numeric">
+              Rp 145.0 Jt
+             </td>
+             <td class="numeric">
+              Rp 158.2 Jt
+             </td>
+             <td>
+              <span class="badge">
+               109.1%
+              </span>
+             </td>
+             <td class="mono">
+              24 / 26
+             </td>
+             <td>
+              <span class="badge">
+               Active
+              </span>
+             </td>
+             <td>
+              <button class="detail-button" onclick='openPopup("sales:SLP-0142")'>
+               Detail
+              </button>
+             </td>
+            </tr>
+            <tr>
+             <td>
+              <div class="person">
+               <span class="avatar">
+                BS
+               </span>
+               <div>
+                <strong>
+                 Bambang Susanto
+                </strong>
+                <span class="subtext">
+                 NPK-1984 · ASM: Hendra T.
+                </span>
+               </div>
+              </div>
+             </td>
+             <td class="mono">
+              SLP-0089
+             </td>
+             <td>
+              Semarang Kota
+              <span class="subtext">
+               Jateng &amp; DIY
+              </span>
+             </td>
+             <td class="numeric">
+              Rp 160.0 Jt
+             </td>
+             <td class="numeric">
+              Rp 164.8 Jt
+             </td>
+             <td>
+              <span class="badge">
+               103.0%
+              </span>
+             </td>
+             <td class="mono">
+              22 / 24
+             </td>
+             <td>
+              <span class="badge">
+               Active
+              </span>
+             </td>
+             <td>
+              <button class="detail-button" onclick='openPopup("sales:SLP-0089")'>
+               Detail
+              </button>
+             </td>
+            </tr>
+            <tr>
+             <td>
+              <div class="person">
+               <span class="avatar">
+                RH
+               </span>
+               <div>
+                <strong>
+                 Rudi Hermawan
+                </strong>
+                <span class="subtext">
+                 NPK-2401 · ASM: David K.
+                </span>
+               </div>
+              </div>
+             </td>
+             <td class="mono">
+              SLP-0204
+             </td>
+             <td>
+              Sidoarjo Barat
+              <span class="subtext">
+               Jatim &amp; Madura
+              </span>
+             </td>
+             <td class="numeric">
+              Rp 130.0 Jt
+             </td>
+             <td class="numeric">
+              Rp 124.5 Jt
+             </td>
+             <td>
+              <span class="badge warning">
+               95.7%
+              </span>
+             </td>
+             <td class="mono">
+              19 / 24
+             </td>
+             <td>
+              <span class="badge warning">
+               Warning
+              </span>
+             </td>
+             <td>
+              <button class="detail-button" onclick='openPopup("sales:SLP-0204")'>
+               Detail
+              </button>
+             </td>
+            </tr>
+            <tr class="filter-empty" hidden="">
+             <td class="table-empty" colspan="9">
+              Tidak ada data yang sesuai. Ubah kata pencarian.
+             </td>
+            </tr>
+           </tbody>
+          </table>
+         </div>
+        </div>
+       </div>
+      </section>
+      <div class="equal-grid">
+       <section class="card">
+        <div class="card-heading">
+         <div>
+          <h2 class="heading-title">
+           <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 4H4v18h16V4h-4 M8 2h8v5H8z M8 12h8 M8 16h6">
+            </path>
+           </svg>
+           Sales Order SAP Terbaru
+          </h2>
+          <p>
+           3 transaksi pada snapshot 24 Oktober 2025.
+          </p>
+         </div>
+        </div>
+        <div class="table-scroll">
+         <table data-filterable="">
+          <thead>
+           <tr>
+            <th scope="col">
+             Dokumen SAP
+            </th>
+            <th scope="col">
+             Customer / Outlet
+            </th>
+            <th scope="col">
+             SlpCode
+            </th>
+            <th scope="col">
+             DocTotal
+            </th>
+            <th scope="col">
+             Status
+            </th>
+           </tr>
+          </thead>
+          <tbody>
+           <tr>
+            <td>
+             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0981")'>
+              SO-20251024-0981
+             </button>
+             <span class="subtext">
+              DocEntry 14209
+             </span>
+            </td>
+            <td>
+             <strong>
+              Toko Murah Rejeki
+             </strong>
+             <span class="subtext mono">
+              C-003411
+             </span>
+            </td>
+            <td class="mono">
+             SLP-0142
+            </td>
+            <td class="numeric">
+             Rp 8.420.000
+            </td>
+            <td>
+             <span class="badge">
+              Synced
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0980")'>
+              SO-20251024-0980
+             </button>
+             <span class="subtext">
+              DocEntry 14208
+             </span>
+            </td>
+            <td>
+             <strong>
+              Grosir Sembako Lestari
+             </strong>
+             <span class="subtext mono">
+              C-001290
+             </span>
+            </td>
+            <td class="mono">
+             SLP-0089
+            </td>
+            <td class="numeric">
+             Rp 16.850.000
+            </td>
+            <td>
+             <span class="badge">
+              Synced
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0979")'>
+              SO-20251024-0979
+             </button>
+             <span class="subtext">
+              DocEntry 14207
+             </span>
+            </td>
+            <td>
+             <strong>
+              Hotel Grand Candi Resto
+             </strong>
+             <span class="subtext mono">
+              C-008711
+             </span>
+            </td>
+            <td class="mono">
+             SLP-0089
+            </td>
+            <td class="numeric">
+             Rp 4.120.000
+            </td>
+            <td>
+             <span class="badge warning">
+              In Queue
+             </span>
+            </td>
+           </tr>
+           <tr class="filter-empty" hidden="">
+            <td class="table-empty" colspan="5">
+             Tidak ada data yang sesuai. Ubah kata pencarian.
+            </td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </section>
+       <section class="card">
+        <div class="card-heading">
+         <div>
+          <h2 class="heading-title">
+           <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6">
+            </path>
+           </svg>
+           Audit Radius GPS Kunjungan
+          </h2>
+          <p>
+           Validasi lokasi check-in dan check-out.
+          </p>
+         </div>
+         <span class="badge">
+          96.8% valid
+         </span>
+        </div>
+        <div class="table-scroll">
+         <table data-filterable="">
+          <thead>
+           <tr>
+            <th scope="col">
+             Sales / Rute
+            </th>
+            <th scope="col">
+             Outlet tujuan
+            </th>
+            <th scope="col">
+             Check-in / Out
+            </th>
+            <th scope="col">
+             Radius
+            </th>
+            <th scope="col">
+             Audit
+            </th>
+           </tr>
+          </thead>
+          <tbody>
+           <tr>
+            <td>
+             <strong>
+              Agus Wicaksono
+             </strong>
+             <span class="subtext mono">
+              Route #SR-04
+             </span>
+            </td>
+            <td>
+             Toko Berkah Abadi
+             <span class="subtext mono">
+              -7.581, 110.824
+             </span>
+            </td>
+            <td class="mono">
+             14:12 – 14:38
+             <span class="subtext">
+              WIB
+             </span>
+            </td>
+            <td class="numeric mono">
+             14 m
+            </td>
+            <td>
+             <span class="badge">
+              Valid Geo
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <strong>
+              Bambang Susanto
+             </strong>
+             <span class="subtext mono">
+              Route #SM-01
+             </span>
+            </td>
+            <td>
+             Super Indo Gajah Mada
+             <span class="subtext mono">
+              -6.982, 110.421
+             </span>
+            </td>
+            <td class="mono">
+             13:05 – 13:45
+             <span class="subtext">
+              WIB
+             </span>
+            </td>
+            <td class="numeric mono">
+             22 m
+            </td>
+            <td>
+             <span class="badge">
+              Valid Geo
+             </span>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <strong>
+              Rudi Hermawan
+             </strong>
+             <span class="subtext mono">
+              Route #SD-09
+             </span>
+            </td>
+            <td>
+             Kios Teh Pojok Jaya
+             <span class="subtext mono">
+              -7.448, 112.712
+             </span>
+            </td>
+            <td class="mono">
+             11:20 – 11:32
+             <span class="subtext">
+              WIB
+             </span>
+            </td>
+            <td class="numeric mono">
+             185 m
+            </td>
+            <td>
+             <span class="badge danger">
+              Deviasi Radius
+             </span>
+            </td>
+           </tr>
+           <tr class="filter-empty" hidden="">
+            <td class="table-empty" colspan="5">
+             Tidak ada data yang sesuai. Ubah kata pencarian.
+            </td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </section>
+      </div>
+     </div>
+    </div>
+    <footer>
+     <span>
+      © 2025 PT Kartini Teh Dandang
+     </span>
+     <span id="refresh-time">
+      Snapshot 24 Okt 2025 · Data statis
+     </span>
+    </footer>
+   </main>
+  </div>
+  <dialog id="detail-dialog">
+   <div class="dialog-header">
+    <h2 id="dialog-title">
+     Detail
+    </h2>
+    <button aria-label="Tutup detail" class="icon-button" data-icon="close" id="close-dialog" onclick="closePopup()">
+     <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 6l12 12 M18 6 6 18">
+      </path>
+     </svg>
+    </button>
+   </div>
+   <div id="dialog-content">
+   </div>
+   <button class="button" id="dialog-done" onclick="closePopup()">
+    Tutup
+   </button>
+  </dialog>
+  <template data-popup="sales:SLP-0142" data-title="Agus Wicaksono">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      NPK
+     </dt>
+     <dd>
+      2210
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SAP SlpCode
+     </dt>
+     <dd>
+      SLP-0142
+     </dd>
+    </div>
+    <div>
+     <dt>
+      ASM
+     </dt>
+     <dd>
+      Joko S.
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Area
+     </dt>
+     <dd>
+      Solo Raya
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Target MTD
+     </dt>
+     <dd>
+      Rp 145 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Actual MTD
+     </dt>
+     <dd>
+      Rp 158.2 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Achievement
+     </dt>
+     <dd>
+      109.1%
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Effective calls
+     </dt>
+     <dd>
+      24 / 26
+     </dd>
+    </div>
+    <div>
+     <dt>
+      RO status
+     </dt>
+     <dd>
+      Active
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="sales:SLP-0089" data-title="Bambang Susanto">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      NPK
+     </dt>
+     <dd>
+      1984
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SAP SlpCode
+     </dt>
+     <dd>
+      SLP-0089
+     </dd>
+    </div>
+    <div>
+     <dt>
+      ASM
+     </dt>
+     <dd>
+      Hendra T.
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Area
+     </dt>
+     <dd>
+      Semarang Kota
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Target MTD
+     </dt>
+     <dd>
+      Rp 160 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Actual MTD
+     </dt>
+     <dd>
+      Rp 164.8 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Achievement
+     </dt>
+     <dd>
+      103%
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Effective calls
+     </dt>
+     <dd>
+      22 / 24
+     </dd>
+    </div>
+    <div>
+     <dt>
+      RO status
+     </dt>
+     <dd>
+      Active
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="sales:SLP-0204" data-title="Rudi Hermawan">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      NPK
+     </dt>
+     <dd>
+      2401
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SAP SlpCode
+     </dt>
+     <dd>
+      SLP-0204
+     </dd>
+    </div>
+    <div>
+     <dt>
+      ASM
+     </dt>
+     <dd>
+      David K.
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Area
+     </dt>
+     <dd>
+      Sidoarjo Barat
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Target MTD
+     </dt>
+     <dd>
+      Rp 130 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Actual MTD
+     </dt>
+     <dd>
+      Rp 124.5 Jt
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Achievement
+     </dt>
+     <dd>
+      95.7%
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Effective calls
+     </dt>
+     <dd>
+      19 / 24
+     </dd>
+    </div>
+    <div>
+     <dt>
+      RO status
+     </dt>
+     <dd>
+      Warning
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="order:SO-20251024-0981" data-title="SO-20251024-0981">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      DocEntry
+     </dt>
+     <dd>
+      14209
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Outlet
+     </dt>
+     <dd>
+      Toko Murah Rejeki
+     </dd>
+    </div>
+    <div>
+     <dt>
+      CardCode
+     </dt>
+     <dd>
+      C-003411
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SlpCode
+     </dt>
+     <dd>
+      SLP-0142
+     </dd>
+    </div>
+    <div>
+     <dt>
+      DocTotal
+     </dt>
+     <dd>
+      Rp 8.420.000
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Status SAP
+     </dt>
+     <dd>
+      Synced
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="order:SO-20251024-0980" data-title="SO-20251024-0980">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      DocEntry
+     </dt>
+     <dd>
+      14208
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Outlet
+     </dt>
+     <dd>
+      Grosir Sembako Lestari
+     </dd>
+    </div>
+    <div>
+     <dt>
+      CardCode
+     </dt>
+     <dd>
+      C-001290
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SlpCode
+     </dt>
+     <dd>
+      SLP-0089
+     </dd>
+    </div>
+    <div>
+     <dt>
+      DocTotal
+     </dt>
+     <dd>
+      Rp 16.850.000
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Status SAP
+     </dt>
+     <dd>
+      Synced
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="order:SO-20251024-0979" data-title="SO-20251024-0979">
+   <dl class="definition-list">
+    <div>
+     <dt>
+      DocEntry
+     </dt>
+     <dd>
+      14207
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Outlet
+     </dt>
+     <dd>
+      Hotel Grand Candi Resto
+     </dd>
+    </div>
+    <div>
+     <dt>
+      CardCode
+     </dt>
+     <dd>
+      C-008711
+     </dd>
+    </div>
+    <div>
+     <dt>
+      SlpCode
+     </dt>
+     <dd>
+      SLP-0089
+     </dd>
+    </div>
+    <div>
+     <dt>
+      DocTotal
+     </dt>
+     <dd>
+      Rp 4.120.000
+     </dd>
+    </div>
+    <div>
+     <dt>
+      Status SAP
+     </dt>
+     <dd>
+      In Queue
+     </dd>
+    </div>
+   </dl>
+  </template>
+  <template data-popup="notifications" data-title="Pemberitahuan snapshot">
+   <p>
+    18 sales order tercatat dalam antrean SAP. Kunjungan Rudi Hermawan memiliki deviasi radius 185 meter.
+   </p>
+   <p class="note" style="margin:16px 0">
+    Data ini berasal dari snapshot 24 Oktober 2025, belum terhubung ke pemberitahuan langsung.
+   </p>
+  </template>
+ </body>
+</html>

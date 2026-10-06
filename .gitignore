@@ -1,0 +1,28 @@
+# Local backups, screenshots, and verification tools
+/.local/
+
+# Local backups of the exported HTML
+/index.original.html
+/index.before-rebuild.html
+
+# Screenshots generated during UI verification
+/preview.png
+/preview-desktop.png
+/preview-drilldown.png
+/preview-mobile.png
+/reference-drilldown.png
+
+# Temporary icon extraction and machine-specific verification script
+/icons.json
+/verify.cjs
+
+# Local dependencies and credentials
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
