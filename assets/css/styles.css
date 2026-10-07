@@ -1,7 +1,7 @@
 :root {
-  --green: #087f5b;
-  --green-dark: #063c2e;
-  --green-soft: #eaf8f1;
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-soft: #eff6ff;
   --ink: #1e293b;
   --muted: #65746f;
   --line: #e4ebe7;
@@ -41,7 +41,7 @@ a {
 }
 
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
-  outline: 3px solid #35b88a;
+  outline: 3px solid #60a5fa;
   outline-offset: 3px;
 }
 
@@ -109,7 +109,7 @@ button svg.icon {
   font-size: 10px;
   letter-spacing: 1.4px;
   font-weight: 700;
-  color: var(--green);
+  color: var(--primary);
   margin-bottom: 8px;
 }
 
@@ -131,8 +131,8 @@ button svg.icon {
   font-weight: 600;
   border-radius: 4px;
   white-space: nowrap;
-  color: var(--green);
-  background: var(--green-soft);
+  color: var(--primary);
+  background: var(--primary-soft);
 }
 
 .badge.warning {
@@ -163,7 +163,7 @@ button svg.icon {
   justify-content: center;
   border-radius: 50%;
   background: #d6efe2;
-  color: var(--green-dark);
+  color: var(--primary-dark);
   font-size: 12px;
   font-weight: 700;
   flex: none;
@@ -416,7 +416,7 @@ main {
   background: #fff;
   font-size: 12px;
   font-weight: 600;
-  color: var(--green-dark);
+  color: var(--primary-dark);
   white-space: nowrap;
 }
 
@@ -425,9 +425,9 @@ main {
 }
 
 .button.primary {
-  background: var(--green-dark);
+  background: var(--primary-dark);
   color: white;
-  border-color: var(--green-dark);
+  border-color: var(--primary-dark);
 }
 
 .button.primary:hover {
@@ -466,7 +466,7 @@ main {
 }
 
 .search-field:focus-within {
-  outline: 2px solid #35b88a;
+  outline: 2px solid #60a5fa;
   outline-offset: 2px;
 }
 
@@ -568,7 +568,7 @@ select {
 }
 
 .kpi-footer strong {
-  color: var(--green);
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -582,7 +582,7 @@ select {
 .progress span {
   display: block;
   height: 100%;
-  background: var(--green);
+  background: var(--primary);
   width: var(--value);
   max-width: 100%;
   border-radius: 3px;
@@ -613,7 +613,7 @@ select {
 }
 
 .card-heading .heading-title svg {
-  color: var(--green);
+  color: var(--primary);
 }
 
 .chart-wrap {
@@ -726,7 +726,7 @@ select {
   align-items: center;
   gap: 12px;
   margin-bottom: 18px;
-  color: var(--green-dark);
+  color: var(--primary-dark);
 }
 
 .map-placeholder svg {
@@ -801,7 +801,7 @@ td.numeric {
 .detail-button {
   background: transparent;
   border: 0;
-  color: var(--green);
+  color: var(--primary);
   font-size: 11px;
   font-weight: 600;
   padding: 8px;
@@ -818,10 +818,10 @@ td.numeric {
 }
 
 .health-stat {
-  background: var(--green-soft);
+  background: var(--primary-soft);
   padding: 12px;
   border-radius: 5px;
-  color: var(--green);
+  color: var(--primary);
 }
 
 .health-stat.warning {
@@ -917,7 +917,7 @@ td.numeric {
 }
 
 .tabs button[aria-selected="true"] {
-  background: var(--green-dark);
+  background: var(--primary-dark);
   color: white;
 }
 
@@ -955,14 +955,14 @@ td.numeric {
 .search-summary {
   margin-bottom: 16px;
   font-size: 12px;
-  color: var(--green);
+  color: var(--primary);
 }
 
 .note {
   padding: 12px 16px;
-  border: 1px solid #d8e8de;
-  background: #edf6f0;
-  color: #526e5e;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  color: #475569;
   font-size: 12px;
   border-radius: 5px;
 }
@@ -974,7 +974,7 @@ td.numeric {
 .chart-data summary {
   cursor: pointer;
   font-size: 11px;
-  color: var(--green);
+  color: var(--primary);
 }
 
 .chart-data table {
@@ -1023,7 +1023,7 @@ footer {
   max-width: calc(100vw - 48px);
   padding: 14px 18px;
   border-radius: 6px;
-  background: var(--green-dark);
+  background: var(--primary-dark);
   color: white;
   font-size: 13px;
   box-shadow: 0 8px 24px #0002;
@@ -1040,7 +1040,7 @@ dialog {
 }
 
 dialog::backdrop {
-  background: #052d2266;
+  background: #17223b66;
 }
 
 .dialog-header {
@@ -1087,7 +1087,7 @@ dialog p {
 .sidebar-backdrop {
   position: fixed;
   inset: 0;
-  background: #052d2270;
+  background: #17223b70;
   border: 0;
   z-index: 30;
 }
@@ -1507,9 +1507,9 @@ dialog p {
 }
 
 .drill-breadcrumbs button:last-of-type {
-  background: #087f5b;
+  background: #2563eb;
   color: #fff;
-  border-color: #087f5b;
+  border-color: #2563eb;
 }
 
 .drill-summary {
@@ -1652,8 +1652,55 @@ dialog p {
   }
 
   #nav-toggle:focus-visible ~ .workspace .menu-toggle {
-    outline: 3px solid #35b88a;
+    outline: 3px solid #60a5fa;
   }
 
 }
 
+/* Menjaga tampilan dashboard saat memakai Bootstrap. */
+h1, h2, h3 { font-weight: 600; }
+.breadcrumb { margin-bottom: 0; }
+.definition-list { margin-bottom: 0; }
+
+.product-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0 12px;
+}
+.product-filters > div { flex: 1; min-width: 180px; }
+.product-filters label { display: block; margin-bottom: 6px; font-size: 12px; }
+.product-filters select { width: 100%; }
+.product-chart-wrap { height: 470px; position: relative; margin-top: 16px; }
+.product-data { margin-top: 16px; }
+.product-data summary { color: var(--primary); font-size: 12px; cursor: pointer; }
+#product-sales .note a { color: var(--primary); text-decoration: underline; }
+@media (max-width: 720px) {
+  .product-filters { gap: 10px; }
+  .product-filters > div { min-width: 100%; }
+  .product-chart-wrap { height: 520px; }
+}
+
+.drill-breadcrumbs button { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.drill-breadcrumbs button span { background: #e3eaf3; color: #53657e; border-radius: 20px; padding: 2px 8px; font-size: 11px; }
+.drill-breadcrumbs button[aria-current="location"] { background: #2563eb; color: white; border-color: #2563eb; }
+.drill-breadcrumbs button[aria-current="location"] span { background: #1d4ed8; color: white; }
+.drill-summary .kpi-value { overflow-wrap: anywhere; }
+
+.product-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border: 1px solid #74808a;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+/* Hijau tetap menandai status outlet aktif. */
+.overview-chart-wrap { position:relative; height:300px; margin:20px 0; }
+.overview-data { margin-top:16px; }
+.overview-data summary { cursor:pointer; color:var(--primary); font-size:12px; padding:8px 0; }
+.overview-data .table-scroll { margin-top:12px; }
+@media(max-width:720px) { .overview-chart-wrap { height:320px; } }
+.health-stat:not(.warning):not(.danger) { background: #eaf8f1; color: #087f5b; }

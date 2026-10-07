@@ -10,8 +10,8 @@ teh-dandang/
 ├── dashboard OWNER/
 │   ├── index.html               # Owner Overview
 │   ├── sales.html               # Sales & Target
-│   ├── achievement.html         # Target vs Realisasi
-│   ├── drilldown.html           # Grafik Sales Drilldown
+│   ├── achievement.html         # Target vs Realisasi + drilldown
+│   ├── drilldown.html           # Pengalihan ke achievement.html
 │   ├── master-sales.html        # Master Sales & NPK
 │   ├── outlets.html             # Master Outlet / CardCode
 │   ├── products.html            # Master Produk & SKU
@@ -36,16 +36,6 @@ teh-dandang/
 └── README.md
 ```
 
-## Menjalankan web
-
-Dari folder proyek, jalankan server lokal:
-
-```powershell
-python -m http.server 8765 --bind 127.0.0.1
-```
-
-Buka <http://127.0.0.1:8765/> dan klik Buka Dashboard OWNER. Halaman juga bisa dibuka langsung dari `dashboard OWNER/index.html`. Koneksi internet diperlukan untuk memuat Chart.js dari CDN.
-
 ## Mengubah konten
 
 - Edit data dan teks pada HTML halaman terkait. Angka grafik tersimpan pada atribut `data-chart` di elemen canvas; sesuaikan bersama tabel dan ringkasan yang terkait.
@@ -56,3 +46,11 @@ Buka <http://127.0.0.1:8765/> dan klik Buka Dashboard OWNER. Halaman juga bisa d
 Data merupakan snapshot contoh 24 Oktober 2025. Belum ada koneksi backend SAP atau peta langsung. Detail produk/SKU yang belum tersedia ditampilkan sebagai status kosong.
 
 File web, aset, README, dan `.gitignore` perlu ikut commit. Isi `.local/` tidak ikut commit.
+
+## Bootstrap
+
+Bootstrap CSS 5.3.8 tersedia lewat CDN jsDelivr pada semua halaman. CSS proyek dimuat setelah Bootstrap. Gunakan class seperti `container`, `row`, `col`, `btn`, dan `form-control` saat menambahkan konten. JavaScript Bootstrap belum dimuat; fungsi JavaScript proyek tetap hanya chart, drilldown, popup, dan pencarian.
+
+## Grafik drilldown gabungan
+
+Halaman `dashboard OWNER/achievement.html` menggabungkan Target vs Realisasi dan drilldown dalam satu menu, dengan gaya batang aktual biru di atas target abu-abu. Halaman ini memakai satu grafik per level. Dropdown memilih Target vs Realisasi (Rp) atau Barang Terjual (Unit), serta semua barang atau produk tertentu. Pilihan tetap aktif saat menelusuri Nasional → Region → Area → Kabupaten → Kecamatan → Sales → Outlet → Produk. Breadcrumb dan tombol kembali membuka level sebelumnya; klik produk terakhir membuka popup detail. Data grafik ini adalah contoh statis, dengan total anak yang menjumlah ke total induk. Nama produk mengacu pada katalog resmi Teh Dandang.

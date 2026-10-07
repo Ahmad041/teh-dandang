@@ -1,5 +1,5 @@
 // JavaScript hanya untuk pencarian, popup, chart, dan drilldown.
-let currentChart = null;
+const chartInstances = new Map();
 let chartType = "vertical";
 
 function searchTables() {
@@ -7,6 +7,7 @@ function searchTables() {
   const tables = document.querySelectorAll("table[data-filterable]");
 
   for (const table of tables) {
+    if (keyword && table.closest('details')) table.closest('details').open = true;
     const rows = table.querySelectorAll("tbody tr:not(.filter-empty)");
     let total = 0;
 
@@ -45,8 +46,9 @@ function createChart(canvas, settings) {
     return;
   }
 
-  if (currentChart) currentChart.destroy();
-  currentChart = new Chart(canvas, settings);
+  const previous = chartInstances.get(canvas);
+  if (previous) previous.destroy();
+  chartInstances.set(canvas, new Chart(canvas, settings));
 }
 
 function drawMonthlyChart() {
@@ -78,7 +80,7 @@ function drawMonthlyChart() {
         {
           label: "Target / Plan",
           data: data.plan.slice(start, end),
-          backgroundColor: "#d8e2dd",
+          backgroundColor: "#dbe3ee",
           borderRadius: 3,
           grouped: false,
           barPercentage: 0.65,
@@ -87,7 +89,7 @@ function drawMonthlyChart() {
         {
           label: "Realisasi / Actual",
           data: data.actual.slice(start, end),
-          backgroundColor: "#10a578",
+          backgroundColor: "#2563eb",
           borderRadius: 3,
           grouped: false,
           barPercentage: 0.42,
@@ -125,20 +127,10 @@ function drawMonthlyChart() {
 
 function showDrill(name) {
   const nodes = document.querySelectorAll(".drill-node");
-  let selected = null;
-
-  for (const node of nodes) {
-    node.hidden = node.dataset.drillNode !== name;
-    if (!node.hidden) selected = node;
-  }
-
-  if (!selected) return;
-  if (currentChart) {
-    currentChart.destroy();
-    currentChart = null;
-  }
+  for (const node of nodes) node.hidden = node.dataset.drillNode !== name;
   drawDrillChart();
-  selected.querySelector(".drill-breadcrumbs button:last-of-type").focus();
+  const selected = document.querySelector(".drill-node:not([hidden])");
+  if (selected) selected.querySelector(".drill-breadcrumbs button:last-of-type").focus();
 }
 
 function changeChartType(type) {
@@ -146,79 +138,130 @@ function changeChartType(type) {
   drawDrillChart();
 }
 
+function drillNumbers(row, product) {
+  if (product === "all" || !row.products) return row;
+  return row.products[Number(product)];
+}
+
+function openDrillProduct(key) {
+  openPopup(key);
+  const node = document.querySelector(".drill-node:not([hidden])");
+  const rows = JSON.parse(node.querySelector("canvas").dataset.chart);
+  for (const row of rows) {
+    if (row.key === key) {
+      document.getElementById("popup-product-units").textContent = row.units.toLocaleString("id-ID") + " unit";
+      document.getElementById("popup-product-actual").textContent = "Rp " + row.actual.toLocaleString("id-ID");
+      document.getElementById("popup-product-target").textContent = "Rp " + row.target.toLocaleString("id-ID");
+    }
+  }
+}
+
 function drawDrillChart() {
   const node = document.querySelector(".drill-node:not([hidden])");
   if (!node) return;
   const canvas = node.querySelector("canvas");
-  if (!canvas) return;
-
   const rows = JSON.parse(canvas.dataset.chart);
-  const children = JSON.parse(canvas.dataset.children);
+  const mode = document.getElementById("drill-mode").value;
+  const product = document.getElementById("drill-product").value;
+  const terminal = canvas.dataset.terminal === "true";
   const labels = [];
   const actual = [];
   const target = [];
+  const keys = [];
+  const colors = [];
+  const borders = [];
+  const tableRows = node.querySelectorAll("[data-drill-row]");
 
-  for (const row of rows) {
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const hidden = terminal && product !== "all" && row.product !== Number(product);
+    tableRows[i].hidden = hidden;
+    if (hidden) continue;
+    const values = drillNumbers(row, product);
     labels.push(row.name);
-    actual.push(row.actual);
-    target.push(row.target);
+    actual.push(mode === "units" ? values.units : values.actual);
+    target.push(values.target);
+    keys.push(row.key);
+    colors.push(terminal ? row.color : "#2563eb");
+    borders.push(terminal ? row.color : "transparent");
+    tableRows[i].querySelector(".drill-target").textContent = "Rp " + values.target.toLocaleString("id-ID");
+    tableRows[i].querySelector(".drill-actual").textContent = "Rp " + values.actual.toLocaleString("id-ID");
+    tableRows[i].querySelector(".drill-units").textContent = values.units.toLocaleString("id-ID");
+    tableRows[i].querySelector(".drill-achievement").textContent = (values.actual / values.target * 100).toFixed(1) + "%";
   }
 
-  for (const button of node.querySelectorAll("[data-chart-type]")) {
-    button.setAttribute("aria-pressed", button.dataset.chartType === chartType);
-  }
+  const totals = drillNumbers(JSON.parse(node.dataset.summary), product);
+  node.querySelector('[data-total="target"]').textContent = "Rp " + (totals.target / 1000000).toFixed(2) + " Jt";
+  node.querySelector('[data-total="actual"]').textContent = "Rp " + (totals.actual / 1000000).toFixed(2) + " Jt";
+  node.querySelector('[data-total="units"]').textContent = totals.units.toLocaleString("id-ID") + " unit";
+  node.querySelector(".drill-filter-summary").textContent = document.querySelector("#drill-mode option:checked").textContent + " · " + document.querySelector("#drill-product option:checked").textContent + " · Data demo";
+  for (const button of node.querySelectorAll("[data-chart-type]")) button.setAttribute("aria-pressed", button.dataset.chartType === chartType);
+
+  const datasets = [{ label: mode === "units" ? "Barang Terjual (Unit)" : "Realisasi (Rp)", data: actual, backgroundColor: colors, borderColor: borders, borderWidth: terminal ? 1.5 : 0, borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 }];
+  if (mode === "revenue" && chartType !== "donut") datasets.push({ label: "Target (Rp)", data: target, backgroundColor: "#dbe3ee", borderColor: "#bac8da", borderWidth: 1, borderRadius: 3, grouped: false, barPercentage: 0.65, order: 2 });
 
   const settings = {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        { label: "Realisasi (Miliar Rp)", data: actual, backgroundColor: ["#10b981", "#4f46e5", "#f59e0b", "#06b6d4"], borderRadius: 5 },
-        { label: "Target (Miliar Rp)", data: target, backgroundColor: "#e2e8f0", borderColor: "#a3b5cc", borderWidth: 1, borderRadius: 5 }
-      ]
-    },
+    type: chartType === "donut" ? "doughnut" : "bar",
+    data: { labels: labels, datasets: datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      indexAxis: "x",
+      indexAxis: chartType === "horizontal" ? "y" : "x",
       plugins: {
         legend: { position: "top" },
-        tooltip: {
-          callbacks: {
-            label: function (item) {
-              let value = item.parsed.y;
-              if (chartType === "horizontal") value = item.parsed.x;
-              if (chartType === "donut") value = item.parsed;
-              return item.dataset.label + ": Rp " + value.toFixed(3) + " M";
-            }
-          }
-        }
+        tooltip: { callbacks: { label: function (item) {
+          let value = item.parsed.y;
+          if (chartType === "horizontal") value = item.parsed.x;
+          if (chartType === "donut") value = item.parsed;
+          return item.dataset.label + ": " + (mode === "revenue" ? "Rp " : "") + value.toLocaleString("id-ID") + (mode === "units" ? " unit" : "");
+        } } }
       },
-      scales: { y: { beginAtZero: true } },
       onClick: function (event, bars) {
-        if (bars.length > 0) showDrill(children[bars[0].index]);
+        if (bars.length === 0) return;
+        if (terminal) openDrillProduct(keys[bars[0].index]);
+        else showDrill(keys[bars[0].index]);
       }
     }
   };
-
-  if (chartType === "horizontal") {
-    settings.options.indexAxis = "y";
-    settings.options.scales = { x: { beginAtZero: true } };
+  if (chartType !== "donut") {
+    const axis = { beginAtZero: true, ticks: { callback: function (value) {
+      return mode === "units" ? value.toLocaleString("id-ID") : "Rp " + (value / 1000000).toFixed(1) + " Jt";
+    } } };
+    if (chartType === "horizontal") settings.options.scales = { x: axis };
+    else settings.options.scales = { y: axis };
   }
-
-  if (chartType === "donut") {
-    settings.type = "doughnut";
-    settings.data.datasets = [settings.data.datasets[0]];
-    delete settings.options.scales;
-  }
-
   createChart(canvas, settings);
 }
 
-// Data tabel grafik tetap bisa dibuka lewat elemen details HTML.
 if (typeof Chart !== "undefined") {
   for (const details of document.querySelectorAll(".chart-data")) details.open = false;
 }
 drawMonthlyChart();
 drawDrillChart();
+
+function drawOverviewCharts() {
+  for (const canvas of document.querySelectorAll('[data-overview-chart]')) {
+    const data = JSON.parse(canvas.dataset.overviewChart);
+    const donut = data.type === 'doughnut';
+    const options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: { legend: { position: 'bottom' } },
+      onClick: function (_event, elements) {
+        if (data.keys && elements.length) openPopup(data.keys[elements[0].index]);
+      }
+    };
+    if (donut) options.cutout = '65%';
+    else {
+      options.indexAxis = data.axis || 'x';
+      options.scales = {
+        [data.axis === 'y' ? 'x' : 'y']: { beginAtZero: true },
+        [data.axis === 'y' ? 'y' : 'x']: { grid: { display: false } }
+      };
+    }
+    createChart(canvas, { type: data.type, data: { labels: data.labels, datasets: data.datasets }, options });
+  }
+}
+drawOverviewCharts();

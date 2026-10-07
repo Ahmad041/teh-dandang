@@ -3,10 +3,11 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="#063c2e" name="theme-color"/>
+  <meta content="#2563eb" name="theme-color"/>
   <title>
-   Owner Overview | Teh Dandang OWNER
+   Dashboard Overview | Teh Dandang OWNER
   </title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet"/>
   <link href="../assets/css/styles.css" rel="stylesheet"/>
   <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js">
   </script>
@@ -41,7 +42,7 @@
     <span class="dot">
     </span>
     <span>
-     Snapshot SAP · 24 Okt 2025
+     Snapshot Data · 24 Okt 2025
     </span>
     <span class="demo-label">
      DEMO
@@ -58,16 +59,7 @@
        </path>
       </svg>
       <span>
-       Owner Overview
-      </span>
-     </a>
-     <a class="nav-link" data-view="sales" href="sales.html">
-      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-       <path d="M3 17l6-6 4 4 8-10 M15 5h6v6">
-       </path>
-      </svg>
-      <span>
-       Sales &amp; Target
+       Dashboard Overview
       </span>
      </a>
      <a class="nav-link" data-view="achievement" href="achievement.html">
@@ -77,15 +69,6 @@
       </svg>
       <span>
        Target vs Realisasi
-      </span>
-     </a>
-     <a class="nav-link" data-view="drilldown" href="drilldown.html">
-      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-       <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2">
-       </path>
-      </svg>
-      <span>
-       Grafik Sales Drilldown
       </span>
      </a>
     </section>
@@ -149,7 +132,7 @@
        </path>
       </svg>
       <span>
-       Sales Order SAP
+       Sales Order
       </span>
      </a>
      <a class="nav-link" data-view="visits" href="visits.html">
@@ -217,15 +200,6 @@
        Audit Radius Kunjungan
       </span>
      </a>
-     <a class="nav-link" data-view="integration" href="integration.html">
-      <svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-       <path d="M20 7a8 8 0 0 0-14-2L3 8 M3 3v5h5 M4 17a8 8 0 0 0 14 2l3-3 M16 16h5v5">
-       </path>
-      </svg>
-      <span>
-       Integrasi SAP S/4HANA
-      </span>
-     </a>
     </section>
    </nav>
    <div class="sidebar-profile">
@@ -257,7 +231,7 @@
        /
       </span>
       <strong id="breadcrumb">
-       Owner Overview
+       Dashboard Overview
       </strong>
      </span>
     </div>
@@ -285,7 +259,7 @@
        TEH DANDANG / DISTRIBUTION INTELLIGENCE
       </p>
       <h1 id="page-title">
-       Executive Overview
+       Dashboard Overview
       </h1>
       <p class="muted" id="page-description">
        Ringkasan penjualan, cakupan outlet, dan aktivitas distribusi.
@@ -308,14 +282,14 @@
     </div>
     <noscript>
      <style>
-      .chart-wrap { height: auto; } .chart-wrap canvas { display: none; } .toolbar, #notification-button { display: none; }
+      .chart-wrap { height: auto; } .chart-wrap canvas, .overview-chart-wrap canvas { display: none; } .toolbar, #notification-button { display: none; }
      </style>
      <p class="note">
       Data dashboard tersedia sebagai HTML statis. JavaScript diperlukan untuk chart, drilldown, pencarian, dan popup.
      </p>
     </noscript>
     <div id="views">
-     <div class="view" data-label="Owner Overview" data-title="Executive Overview" data-view="overview">
+     <div class="view" data-label="Dashboard Overview" data-title="Dashboard Overview" data-view="overview">
       <section aria-label="Ringkasan kinerja" class="kpi-grid">
        <article class="card kpi">
         <div class="kpi-header">
@@ -407,31 +381,15 @@
        </article>
        <article class="card kpi">
         <div class="kpi-header">
-         <h2 class="kpi-label">
-          SAP Integration
-          <br/>
-          Queue
-         </h2>
-         <span class="badge">
-          99.8% sync
-         </span>
+         <h2 class="kpi-label">Monitoring GPS</h2>
+         <span class="badge neutral">Data contoh</span>
         </div>
-        <div class="kpi-value">
-         Rp 2.40
-         <small>
-          B pending
-         </small>
-        </div>
-        <div class="progress" style="--value:99.8%">
-         <span>
-         </span>
-        </div>
+        <div class="kpi-value">40 <small>/ 42 armada online</small></div>
+        <div class="progress" style="--value:95.2%"><span></span></div>
         <p class="kpi-footer">
-         18 sales order dalam antrean
-         <br/>
-         <span class="mono">
-          DOC-20251024-8841
-         </span>
+         <strong>28 bergerak · 8 idle · 4 parkir</strong><br/>
+         2 armada offline · Snapshot 24 Oktober 2025<br/>
+         <a href="#overview-gps">Lihat grafik GPS</a> · <a href="gps.html">Buka monitoring GPS</a>
         </p>
        </article>
       </section>
@@ -713,7 +671,7 @@
             <path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
             </path>
            </svg>
-           Armada &amp; Rute GPS
+           <span id="overview-gps">Armada &amp; Rute GPS</span>
           </h2>
           <p>
            Snapshot aktivitas distribusi.
@@ -771,7 +729,7 @@
           </p>
          </div>
         </div>
-        <div class="table-scroll">
+        <div class="overview-chart-wrap"><canvas role="img" aria-label="Status seluruh 42 armada. Data detail memuat 3 contoh armada." data-overview-chart='{"type": "doughnut", "labels": ["Bergerak", "Idle", "Parkir DC", "Offline"], "datasets": [{"label": "Armada (unit)", "data": [28, 8, 4, 2], "backgroundColor": ["#2563eb", "#f59e0b", "#10b981", "#94a3b8"]}], "note": "Status seluruh 42 armada. Data detail memuat 3 contoh armada."}'></canvas><p data-chart-error hidden>Grafik belum tersedia. Buka data detail di bawah.</p></div><p class="chart-footnote">Status seluruh 42 armada. Data detail memuat 3 contoh armada.</p><details class="chart-data overview-data"><summary>Lihat data detail</summary><div class="table-scroll">
          <table data-filterable="">
           <thead>
            <tr>
@@ -884,7 +842,7 @@
            </tr>
           </tbody>
          </table>
-        </div>
+        </div></details>
        </section>
        <div class="stack">
         <section class="card">
@@ -1033,7 +991,7 @@
        </div>
        <div tabindex="0">
         <div>
-         <div class="table-scroll">
+         <div class="overview-chart-wrap"><canvas role="img" aria-label="Target dan realisasi 3 sales (juta rupiah). Klik batang untuk detail sales." data-overview-chart='{"type": "bar", "axis": "y", "labels": ["Agus Wicaksono", "Bambang Susanto", "Rudi Hermawan"], "datasets": [{"label": "Target MTD (Rp Jt)", "data": [145, 160, 130], "backgroundColor": "#dbe3ee"}, {"label": "Realisasi (Rp Jt)", "data": [158.2, 164.8, 124.5], "backgroundColor": "#2563eb"}], "keys": ["sales:SLP-0142", "sales:SLP-0089", "sales:SLP-0204"], "note": "Target dan realisasi 3 sales (juta rupiah). Klik batang untuk detail sales."}'></canvas><p data-chart-error hidden>Grafik belum tersedia. Buka data detail di bawah.</p></div><p class="chart-footnote">Target dan realisasi 3 sales (juta rupiah). Klik batang untuk detail sales.</p><details class="chart-data overview-data"><summary>Lihat data detail</summary><div class="table-scroll">
           <table data-filterable="">
            <thead>
             <tr>
@@ -1041,7 +999,7 @@
               Sales / NPK
              </th>
              <th scope="col">
-              SAP SlpCode
+              Kode Sales
              </th>
              <th scope="col">
               Area
@@ -1223,7 +1181,7 @@
             </tr>
            </tbody>
           </table>
-         </div>
+         </div></details>
         </div>
        </div>
       </section>
@@ -1236,130 +1194,113 @@
             <path d="M8 4H4v18h16V4h-4 M8 2h8v5H8z M8 12h8 M8 16h6">
             </path>
            </svg>
-           Sales Order SAP Terbaru
+           Sales Order Terbaru
           </h2>
           <p>
            3 transaksi pada snapshot 24 Oktober 2025.
           </p>
          </div>
         </div>
-        <div class="table-scroll">
+        <div class="overview-chart-wrap"><canvas role="img" aria-label="Nilai 3 order terbaru (juta rupiah). Klik batang untuk detail." data-overview-chart='{"type": "bar", "axis": "y", "labels": ["Toko Murah Rejeki", "Grosir Sembako Lestari", "Hotel Grand Candi Resto"], "datasets": [{"label": "Nilai order (Rp Jt)", "data": [8.42, 16.85, 4.12], "backgroundColor": ["#2563eb", "#2563eb", "#2563eb"]}], "keys": ["order:SO-20251024-0981", "order:SO-20251024-0980", "order:SO-20251024-0979"], "note": "Nilai 3 order terbaru (juta rupiah). Klik batang untuk detail."}'></canvas><p data-chart-error hidden>Grafik belum tersedia. Buka data detail di bawah.</p></div><p class="chart-footnote">Nilai 3 order terbaru (juta rupiah). Klik batang untuk detail.</p><details class="chart-data overview-data"><summary>Lihat data detail</summary><div class="table-scroll">
          <table data-filterable="">
-          <thead>
-           <tr>
-            <th scope="col">
-             Dokumen SAP
+<thead>
+<tr>
+<th scope="col">
+             Nomor Order
             </th>
-            <th scope="col">
+<th scope="col">
              Customer / Outlet
             </th>
-            <th scope="col">
+<th scope="col">
              SlpCode
             </th>
-            <th scope="col">
+<th scope="col">
              DocTotal
             </th>
-            <th scope="col">
-             Status
-            </th>
-           </tr>
-          </thead>
-          <tbody>
-           <tr>
-            <td>
-             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0981")'>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<button class="detail-button mono" onclick='openPopup("order:SO-20251024-0981")'>
               SO-20251024-0981
              </button>
-             <span class="subtext">
+<span class="subtext">
               DocEntry 14209
              </span>
-            </td>
-            <td>
-             <strong>
+</td>
+<td>
+<strong>
               Toko Murah Rejeki
              </strong>
-             <span class="subtext mono">
+<span class="subtext mono">
               C-003411
              </span>
-            </td>
-            <td class="mono">
+</td>
+<td class="mono">
              SLP-0142
             </td>
-            <td class="numeric">
+<td class="numeric">
              Rp 8.420.000
             </td>
-            <td>
-             <span class="badge">
-              Synced
-             </span>
-            </td>
-           </tr>
-           <tr>
-            <td>
-             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0980")'>
+</tr>
+<tr>
+<td>
+<button class="detail-button mono" onclick='openPopup("order:SO-20251024-0980")'>
               SO-20251024-0980
              </button>
-             <span class="subtext">
+<span class="subtext">
               DocEntry 14208
              </span>
-            </td>
-            <td>
-             <strong>
+</td>
+<td>
+<strong>
               Grosir Sembako Lestari
              </strong>
-             <span class="subtext mono">
+<span class="subtext mono">
               C-001290
              </span>
-            </td>
-            <td class="mono">
+</td>
+<td class="mono">
              SLP-0089
             </td>
-            <td class="numeric">
+<td class="numeric">
              Rp 16.850.000
             </td>
-            <td>
-             <span class="badge">
-              Synced
-             </span>
-            </td>
-           </tr>
-           <tr>
-            <td>
-             <button class="detail-button mono" onclick='openPopup("order:SO-20251024-0979")'>
+</tr>
+<tr>
+<td>
+<button class="detail-button mono" onclick='openPopup("order:SO-20251024-0979")'>
               SO-20251024-0979
              </button>
-             <span class="subtext">
+<span class="subtext">
               DocEntry 14207
              </span>
-            </td>
-            <td>
-             <strong>
+</td>
+<td>
+<strong>
               Hotel Grand Candi Resto
              </strong>
-             <span class="subtext mono">
+<span class="subtext mono">
               C-008711
              </span>
-            </td>
-            <td class="mono">
+</td>
+<td class="mono">
              SLP-0089
             </td>
-            <td class="numeric">
+<td class="numeric">
              Rp 4.120.000
             </td>
-            <td>
-             <span class="badge warning">
-              In Queue
-             </span>
-            </td>
-           </tr>
-           <tr class="filter-empty" hidden="">
-            <td class="table-empty" colspan="5">
+</tr>
+<tr class="filter-empty" hidden="">
+<td class="table-empty" colspan="4">
              Tidak ada data yang sesuai. Ubah kata pencarian.
             </td>
-           </tr>
-          </tbody>
-         </table>
-        </div>
+</tr>
+</tbody>
+</table>
+        </div></details>
        </section>
        <section class="card">
         <div class="card-heading">
@@ -1379,7 +1320,7 @@
           96.8% valid
          </span>
         </div>
-        <div class="table-scroll">
+        <div class="overview-chart-wrap"><canvas role="img" aria-label="Radius 3 contoh kunjungan. Warna mengikuti status audit pada data detail." data-overview-chart='{"type": "bar", "axis": "y", "labels": ["Agus Wicaksono", "Bambang Susanto", "Rudi Hermawan"], "datasets": [{"label": "Radius check-in (meter)", "data": [14, 22, 185], "backgroundColor": ["#10b981", "#10b981", "#ef4444"]}], "note": "Radius 3 contoh kunjungan. Warna mengikuti status audit pada data detail."}'></canvas><p data-chart-error hidden>Grafik belum tersedia. Buka data detail di bawah.</p></div><p class="chart-footnote">Radius 3 contoh kunjungan. Warna mengikuti status audit pada data detail.</p><details class="chart-data overview-data"><summary>Lihat data detail</summary><div class="table-scroll">
          <table data-filterable="">
           <thead>
            <tr>
@@ -1498,7 +1439,7 @@
            </tr>
           </tbody>
          </table>
-        </div>
+        </div></details>
        </section>
       </div>
      </div>
@@ -1543,7 +1484,7 @@
     </div>
     <div>
      <dt>
-      SAP SlpCode
+      Kode Sales
      </dt>
      <dd>
       SLP-0142
@@ -1619,7 +1560,7 @@
     </div>
     <div>
      <dt>
-      SAP SlpCode
+      Kode Sales
      </dt>
      <dd>
       SLP-0089
@@ -1695,7 +1636,7 @@
     </div>
     <div>
      <dt>
-      SAP SlpCode
+      Kode Sales
      </dt>
      <dd>
       SLP-0204
@@ -1801,14 +1742,6 @@
       Rp 8.420.000
      </dd>
     </div>
-    <div>
-     <dt>
-      Status SAP
-     </dt>
-     <dd>
-      Synced
-     </dd>
-    </div>
    </dl>
   </template>
   <template data-popup="order:SO-20251024-0980" data-title="SO-20251024-0980">
@@ -1851,14 +1784,6 @@
      </dt>
      <dd>
       Rp 16.850.000
-     </dd>
-    </div>
-    <div>
-     <dt>
-      Status SAP
-     </dt>
-     <dd>
-      Synced
      </dd>
     </div>
    </dl>
@@ -1905,19 +1830,11 @@
       Rp 4.120.000
      </dd>
     </div>
-    <div>
-     <dt>
-      Status SAP
-     </dt>
-     <dd>
-      In Queue
-     </dd>
-    </div>
    </dl>
   </template>
   <template data-popup="notifications" data-title="Pemberitahuan snapshot">
    <p>
-    18 sales order tercatat dalam antrean SAP. Kunjungan Rudi Hermawan memiliki deviasi radius 185 meter.
+    Kunjungan Rudi Hermawan memiliki deviasi radius 185 meter.
    </p>
    <p class="note" style="margin:16px 0">
     Data ini berasal dari snapshot 24 Oktober 2025, belum terhubung ke pemberitahuan langsung.
