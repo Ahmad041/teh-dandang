@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-50 text-slate-800">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk & SKU Teh Dandang - Sales Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            dark: '#052d22'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 flex flex-col lg:flex-row overflow-hidden" x-data="{ sidebarOpen: window.innerWidth >= 1024, filterCategory: 'all' }">
+
+    <!-- Mobile Backdrop Overlay -->
+    <div 
+        x-show="sidebarOpen" 
+        @click="sidebarOpen = false" 
+        x-cloak
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 lg:hidden transition-opacity"
+    ></div>
+
+    <!-- Sidebar Khusus SALES -->
+    <aside 
+        class="bg-white border-r border-slate-200/80 w-64 flex-shrink-0 flex flex-col transition-all duration-300 z-40 fixed lg:static inset-y-0 left-0 shadow-xl lg:shadow-xs"
+        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20'"
+    >
+        <div class="h-16 px-5 border-b border-slate-100 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 overflow-hidden">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0 text-white shadow-sm">
+                    <i data-lucide="cup-soda" class="w-5 h-5"></i>
+                </div>
+                <div class="leading-tight transition-opacity duration-200" x-show="sidebarOpen">
+                    <span class="font-display font-bold text-base text-slate-900 tracking-tight block">TEH DANDANG</span>
+                    <span class="text-[9px] tracking-wider text-emerald-700 font-bold uppercase block">Sales Dashboard Portal</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="mx-3 my-3 p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/80 flex items-center justify-between" x-show="sidebarOpen">
+            <div class="flex items-center space-x-3 overflow-hidden">
+                <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0 shadow-xs text-xs">
+                    EP
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-slate-900 truncate">Eko Prasetyo</p>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Sales Motoris
+                        </span>
+                        <span class="text-[10px] text-slate-500 font-mono">NPK: S006</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+            <div class="pt-2 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                Menu Utama Sales
+            </div>
+            
+            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Ringkasan Kinerja (Overview)</span>
+            </a>
+
+            <a href="drilldown.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="bar-chart-2" class="w-4 h-4 mr-3 flex-shrink-0 text-emerald-600"></i>
+                <span x-show="sidebarOpen">Grafik Drilldown Penjualan</span>
+            </a>
+
+            <a href="visits.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="calendar-check" class="w-4 h-4 mr-3 flex-shrink-0 text-cyan-600"></i>
+                <span x-show="sidebarOpen">Rute Kunjungan & GPS</span>
+            </a>
+
+            <a href="orders.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="shopping-cart" class="w-4 h-4 mr-3 flex-shrink-0 text-indigo-600"></i>
+                <span x-show="sidebarOpen">Sales Order & Nota</span>
+            </a>
+
+            <a href="products.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all bg-emerald-600 text-white shadow-md shadow-emerald-200 font-bold">
+                <i data-lucide="package" class="w-4 h-4 mr-3 flex-shrink-0 text-white"></i>
+                <span x-show="sidebarOpen">Katalog Produk & SKU</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                Akses Portal Lain
+            </div>
+
+            <a href="../dashboard OWNER/index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                <i data-lucide="shield" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
+                <span x-show="sidebarOpen">Buka Portal Owner</span>
+            </a>
+
+            <a href="../index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                <i data-lucide="arrow-left-circle" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
+                <span x-show="sidebarOpen">Pilih Portal Awal</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+        <header class="h-16 bg-white border-b border-slate-200/80 px-4 md:px-6 flex items-center justify-between z-20 shadow-xs">
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-900">Katalog Resmi:</span>
+                    <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                        PT Kartini Teh Dandang Indonesia
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="drilldown.html" class="text-xs text-emerald-700 font-bold hover:underline">
+                    Lihat Omset Penjualan per SKU &rarr;
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-3 sm:p-5 md:p-6 space-y-5 min-w-0 w-full max-w-full">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                <div>
+                    <h1 class="text-xl font-bold font-display text-slate-900">
+                        Katalog Produk Resmi &amp; Stok SKU Lapangan
+                    </h1>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        Daftar harga jual grosir/eceran resmi, stok tersedia di Gudang DC Boyolali, dan paket promo aktif untuk toko.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                        5 SKU Unggulan Aktif
+                    </span>
+                </div>
+            </div>
+
+            <!-- Grid 5 Produk Resmi Teh Dandang -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- Produk 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">BEST SELLER</span>
+                            <span class="text-xs font-mono text-slate-400">SKU-TD-001</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mt-2">Teh Dandang 2in1 25g (Sachet)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Perpaduan teh tubruk wangi melati dan gula murni siap seduh, produk terlaris di warung kelontong & pasar.</p>
+                        
+                        <div class="bg-slate-50 rounded-xl p-3 mt-4 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Harga Grosir / Karton:</span>
+                                <strong class="text-slate-900">Rp 120.000 (10 Renceng)</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">HET Eceran Toko:</span>
+                                <strong class="text-emerald-700">Rp 1.500 / Sachet</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Stok Ready DC Boyolali:</span>
+                                <strong class="text-slate-800">1.450 Karton</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-bold text-emerald-600">Promo: Beli 10 Karton Gratis 1 Renceng</span>
+                        <a href="orders.html" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700">Order</a>
+                    </div>
+                </div>
+
+                <!-- Produk 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">MODERN TRADE</span>
+                            <span class="text-xs font-mono text-slate-400">SKU-TD-002</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mt-2">Teh Dandang Celup Black Tea</h3>
+                        <p class="text-xs text-slate-500 mt-1">Teh celup berkualitas aroma khas kebun teh Indonesia isi 25 kantong higienis dengan amplop foil.</p>
+                        
+                        <div class="bg-slate-50 rounded-xl p-3 mt-4 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Harga Grosir / Slop:</span>
+                                <strong class="text-slate-900">Rp 85.000 (10 Kotak)</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">HET Eceran Toko:</span>
+                                <strong class="text-emerald-700">Rp 9.500 / Kotak</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Stok Ready DC Boyolali:</span>
+                                <strong class="text-slate-800">820 Slop</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-bold text-blue-600">Fokus: Swalayan & Toko Modern</span>
+                        <a href="orders.html" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700">Order</a>
+                    </div>
+                </div>
+
+                <!-- Produk 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">AROMA KHAS</span>
+                            <span class="text-xs font-mono text-slate-400">SKU-TD-003</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mt-2">Teh Dandang Hijau Jasmine 40g</h3>
+                        <p class="text-xs text-slate-500 mt-1">Teh wangi melati tubruk legendaris dengan cita rasa sepet-manis-kental (Nasgitel) khas Jawa Tengah.</p>
+                        
+                        <div class="bg-slate-50 rounded-xl p-3 mt-4 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Harga Grosir / Pak:</span>
+                                <strong class="text-slate-900">Rp 95.000 (10 Slop)</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">HET Eceran Toko:</span>
+                                <strong class="text-emerald-700">Rp 3.000 / Bungkus</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Stok Ready DC Boyolali:</span>
+                                <strong class="text-slate-800">1.100 Pak</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-bold text-emerald-600">Favorit: Warung Makan & Angkringan</span>
+                        <a href="orders.html" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700">Order</a>
+                    </div>
+                </div>
+
+                <!-- Produk 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">HOREKA BULK</span>
+                            <span class="text-xs font-mono text-slate-400">SKU-TD-004</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mt-2">Teh Dandang Loose Leaf 500g</h3>
+                        <p class="text-xs text-slate-500 mt-1">Kemasan besar ekonomis untuk keperluan hotel, restoran, katering, dan pedagang es teh jumbo.</p>
+                        
+                        <div class="bg-slate-50 rounded-xl p-3 mt-4 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Harga Grosir / Bal:</span>
+                                <strong class="text-slate-900">Rp 150.000 (5 Kg)</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">HET Eceran Toko:</span>
+                                <strong class="text-emerald-700">Rp 18.000 / Pak 500g</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Stok Ready DC Boyolali:</span>
+                                <strong class="text-slate-800">430 Bal</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-bold text-amber-700">Segmen: Booth Franchise Es Teh Solo</span>
+                        <a href="orders.html" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700">Order</a>
+                    </div>
+                </div>
+
+                <!-- Produk 5 -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">READY TO DRINK</span>
+                            <span class="text-xs font-mono text-slate-400">SKU-TD-005</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mt-2">Teh Dandang Botol RTD 350ml</h3>
+                        <p class="text-xs text-slate-500 mt-1">Minuman teh melati segar dalam botol PET siap minum dingin, disukai pelajar dan penikmat perjalanan.</p>
+                        
+                        <div class="bg-slate-50 rounded-xl p-3 mt-4 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Harga Grosir / Dus:</span>
+                                <strong class="text-slate-900">Rp 72.000 (24 Botol)</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">HET Eceran Toko:</span>
+                                <strong class="text-emerald-700">Rp 3.500 / Botol</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Stok Ready DC Boyolali:</span>
+                                <strong class="text-slate-800">650 Dus</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-bold text-purple-700">Margin Toko: 16.7% per Botol</span>
+                        <a href="orders.html" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700">Order</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

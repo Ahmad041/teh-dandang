@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-50 text-slate-800">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Order (SAP) - Teh Dandang</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 flex flex-col lg:flex-row overflow-hidden" x-data="{ sidebarOpen: window.innerWidth >= 1024, searchOrder: '' }">
+
+    <!-- Mobile Backdrop Overlay -->
+    <div 
+        x-show="sidebarOpen" 
+        @click="sidebarOpen = false" 
+        x-cloak
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 lg:hidden transition-opacity"
+    ></div>
+
+    <!-- Sidebar Khusus SALES (Persis seperti di screenshot acuan) -->
+    <aside 
+        class="bg-white border-r border-slate-200/80 w-64 flex-shrink-0 flex flex-col transition-all duration-300 z-40 fixed lg:static inset-y-0 left-0 shadow-xl lg:shadow-xs"
+        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20'"
+    >
+        <div class="h-16 px-5 border-b border-slate-100 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 overflow-hidden">
+                <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0 text-white shadow-sm">
+                    <i data-lucide="cup-soda" class="w-5 h-5"></i>
+                </div>
+                <div class="leading-tight transition-opacity duration-200" x-show="sidebarOpen">
+                    <span class="font-display font-bold text-base text-slate-900 tracking-tight block">TEH DANDANG</span>
+                    <span class="text-[9px] tracking-wider text-slate-400 font-bold uppercase block">Sales Force Management</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="mx-3 my-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between" x-show="sidebarOpen">
+            <div class="flex items-center space-x-3 overflow-hidden">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center flex-shrink-0 shadow-xs text-xs">
+                    EP
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-slate-900 truncate">Eko Prasetyo</p>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                        Sales Field
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+            <div class="pt-2 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                DASHBOARD
+            </div>
+            
+            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="user" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Sales Dashboard</span>
+            </a>
+
+            <a href="drilldown.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="bar-chart-2" class="w-4 h-4 mr-3 flex-shrink-0 text-emerald-600"></i>
+                <span x-show="sidebarOpen">Grafik Drilldown 7 Level</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                TRACKING
+            </div>
+
+            <a href="live-tracking.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="radio" class="w-4 h-4 mr-3 flex-shrink-0 text-cyan-600"></i>
+                <span x-show="sidebarOpen">Live Tracking GPS</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                REPORT
+            </div>
+
+            <a href="report.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Reporting Center</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                MASTER DATA
+            </div>
+
+            <a href="outlets.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="store" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Outlet (SAP OCRD)</span>
+            </a>
+
+            <a href="routes.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="route" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Master Route</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                TRANSAKSI
+            </div>
+
+            <a href="visits.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="clipboard-check" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">Sales Visit GPS</span>
+            </a>
+
+            <a href="orders.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all bg-blue-600 text-white shadow-md shadow-blue-200 font-bold">
+                <i data-lucide="shopping-cart" class="w-4 h-4 mr-3 flex-shrink-0 text-white"></i>
+                <span x-show="sidebarOpen">Sales Order (SAP)</span>
+            </a>
+
+            <a href="noo.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="user-plus" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">NOO (New Outlet)</span>
+            </a>
+
+            <a href="nop.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="box" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">NOP (New Product)</span>
+            </a>
+
+            <a href="ro.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="repeat" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
+                <span x-show="sidebarOpen">RO / ROA</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
+                PORTAL ACCESS
+            </div>
+
+            <a href="../dashboard OWNER/index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                <i data-lucide="shield" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
+                <span x-show="sidebarOpen">Portal Owner</span>
+            </a>
+
+            <a href="../index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+                <i data-lucide="arrow-left-circle" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
+                <span x-show="sidebarOpen">Pilih Portal Awal</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+        <header class="h-16 bg-white border-b border-slate-200/80 px-4 md:px-6 flex items-center justify-between z-20 shadow-xs">
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-900">Sales Order Transaksi:</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">
+                        SAP S/4HANA ORDR Synced
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 shadow-sm transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>+ Input Nota Baru</span>
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-3 sm:p-5 md:p-6 space-y-5 min-w-0 w-full max-w-full">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                <div>
+                    <h1 class="text-xl font-bold font-display text-slate-900 flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-blue-600"></i> Sales Order (SAP) — Manajemen Faktur &amp; Nota
+                    </h1>
+                    <p class="text-xs text-slate-500 mt-0.5">Daftar transaksi pesanan produk Teh Dandang rute Boyolali - Cepogo (Total: Rp 7.409.780 hari ini)</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                        Status ERP: 100% Synced
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tabel Riwayat Nota Order -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <h3 class="text-sm font-bold text-slate-900">Daftar Faktur Pesanan Lapangan</h3>
+                    
+                    <div class="w-full sm:w-64">
+                        <input type="text" x-model="searchOrder" placeholder="Cari nomor SO atau toko..." class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-800 rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500 font-medium">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="py-3 px-4">Nomor Order / DocEntry</th>
+                                <th class="py-3 px-4">Customer Outlet</th>
+                                <th class="py-3 px-4">Item Produk Utama</th>
+                                <th class="py-3 px-4">Waktu Order</th>
+                                <th class="py-3 px-4">Total Nilai Transaksi</th>
+                                <th class="py-3 px-4">Term Pembayaran</th>
+                                <th class="py-3 px-4 text-center">Status Kirim</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4">
+                                    <strong class="font-mono text-slate-900 block">SO-20251024-0981</strong>
+                                    <span class="text-[10px] text-slate-400 font-mono">DocEntry: 14209</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="font-bold text-slate-900 block">Toko Berkah Utama</span>
+                                    <span class="text-[10px] font-mono text-slate-400">CardCode: C10001</span>
+                                </td>
+                                <td class="py-3 px-4 font-medium">Teh Dandang 2in1 (2 Karton)</td>
+                                <td class="py-3 px-4 font-mono text-slate-500">24 Okt 2025, 08:30</td>
+                                <td class="py-3 px-4 font-bold text-emerald-700">Rp 219.780</td>
+                                <td class="py-3 px-4 font-semibold text-slate-600">Tunai (Lunas)</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                        Diterima Toko
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4">
+                                    <strong class="font-mono text-slate-900 block">SO-20251024-0980</strong>
+                                    <span class="text-[10px] text-slate-400 font-mono">DocEntry: 14208</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="font-bold text-slate-900 block">Minimarket Sederhana</span>
+                                    <span class="text-[10px] font-mono text-slate-400">CardCode: C10004</span>
+                                </td>
+                                <td class="py-3 px-4 font-medium">Teh Celup &amp; RTD Botol (10 Dus)</td>
+                                <td class="py-3 px-4 font-mono text-slate-500">24 Okt 2025, 10:25</td>
+                                <td class="py-3 px-4 font-bold text-emerald-700">Rp 1.480.000</td>
+                                <td class="py-3 px-4 font-semibold text-slate-600">Transfer Bank</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                        Diterima Toko
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4">
+                                    <strong class="font-mono text-slate-900 block">SO-20251024-0979</strong>
+                                    <span class="text-[10px] text-slate-400 font-mono">DocEntry: 14207</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="font-bold text-slate-900 block">Toko Berkah Cepogo</span>
+                                    <span class="text-[10px] font-mono text-slate-400">CardCode: C10005</span>
+                                </td>
+                                <td class="py-3 px-4 font-medium">Grosir Teh Sachet 2in1 (35 Bal)</td>
+                                <td class="py-3 px-4 font-mono text-slate-500">24 Okt 2025, 11:35</td>
+                                <td class="py-3 px-4 font-bold text-emerald-700">Rp 4.250.000</td>
+                                <td class="py-3 px-4 font-semibold text-slate-600">TOP 14 Hari</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                        Diterima Toko
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4">
+                                    <strong class="font-mono text-slate-900 block">SO-20251024-0978</strong>
+                                    <span class="text-[10px] text-slate-400 font-mono">DocEntry: 14206</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="font-bold text-slate-900 block">UD Rezeki Subur</span>
+                                    <span class="text-[10px] font-mono text-slate-400">CardCode: C10003</span>
+                                </td>
+                                <td class="py-3 px-4 font-medium">Teh Hijau Jasmine 40g (15 Pak)</td>
+                                <td class="py-3 px-4 font-mono text-slate-500">24 Okt 2025, 13:10</td>
+                                <td class="py-3 px-4 font-bold text-emerald-700">Rp 1.460.000</td>
+                                <td class="py-3 px-4 font-semibold text-slate-600">Tunai (COD)</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border bg-amber-50 text-amber-700 border-amber-200">
+                                        Menunggu Kirim
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
