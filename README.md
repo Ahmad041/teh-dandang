@@ -54,3 +54,35 @@ Bootstrap CSS 5.3.8 tersedia lewat CDN jsDelivr pada semua halaman. CSS proyek d
 ## Grafik drilldown gabungan
 
 Halaman `dashboard OWNER/achievement.html` menggabungkan Target vs Realisasi dan drilldown dalam satu menu, dengan gaya batang aktual biru di atas target abu-abu. Halaman ini memakai satu grafik per level. Dropdown memilih Target vs Realisasi (Rp) atau Barang Terjual (Unit), serta semua barang atau produk tertentu. Pilihan tetap aktif saat menelusuri Nasional → Region → Area → Kabupaten → Kecamatan → Sales → Outlet → Produk. Breadcrumb dan tombol kembali membuka level sebelumnya; klik produk terakhir membuka popup detail. Data grafik ini adalah contoh statis, dengan total anak yang menjumlah ke total induk. Nama produk mengacu pada katalog resmi Teh Dandang.
+
+## Dashboard ADMIN PUSAT
+
+Folder `dashboard ADMIN PUSAT/` meniru menu role Admin Pusat di prototipe PHP (Laravel), dengan gaya yang sama seperti dashboard OWNER (`styles.css` dan `app.js`). Tambahan khusus:
+
+- `assets/css/admin-pusat.css` untuk gaya tambahan halaman Admin Pusat.
+- `assets/js/admin-pusat.js` untuk filter tabel, grafik drilldown 7 level, dan filter Area Dashboard.
+
+Tahap 1 (Monitoring & Analytics):
+
+| Halaman | Padanan di PHP |
+|---|---|
+| `index.html` | Executive Dashboard (`/dashboard/executive`) |
+| `sales-dashboard.html` | Sales Dashboard (`/dashboard/sales`) |
+| `area.html` | Area Dashboard (`/dashboard/area`) |
+| `drilldown.html` | Grafik Drilldown 7 Level (`/dashboard/drilldown`) |
+| `early-warning.html` | Risk & Fraud / Early Warning (`/dashboard/early-warning`) |
+
+Tahap 2 (Master Data):
+
+| Halaman | Padanan di PHP |
+|---|---|
+| `master-sales.html` | Sales Directory (`/master/sales`) |
+| `sales-detail.html?npk=S006` | Detail Sales (`/master/sales/{npk}`) |
+| `master-outlet.html` | Outlet SAP OCRD (`/master/outlet`) |
+| `outlet-detail.html?code=C10001` | Detail Outlet (`/master/outlet/{code}`) |
+| `master-product.html` | Product SAP OITM (`/master/product`) |
+| `master-area.html` | Area Hierarki (`/master/area`) |
+| `master-route.html` | Master Route (`/master/route`) |
+| `master-vehicle.html` | Fleet Concox GT06N (`/master/vehicle`) |
+
+Menu lain (Tracking, Report, Transaksi, Administration) sudah tampil di sidebar dengan label "soon" dan dibuat di tahap berikutnya.
