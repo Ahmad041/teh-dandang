@@ -96,10 +96,102 @@ function drillGenerateItems(parentLabel, isLowest) {
 function initDrill() {
   const source = document.getElementById("drill-data");
   if (!source) return;
+  if (window.AF) {
+    // data Region 1-5 (revisi 13 Okt): level teratas = wilayah, bisa per bulan
+    const q = new URLSearchParams(location.search);
+    const month = Math.min(9, Math.max(0, Number(q.get("bulan") || 9)));
+    const sel = document.getElementById("drill-month");
+    sel.innerHTML = window.AF.D.trend.labels.map(function (l, i) { return '<option value="' + i + '"' + (i === month ? " selected" : "") + ">" + l + " 2026</option>"; }).join("");
+    document.getElementById("drill-month-field").hidden = false;
+    window.drillState = [buildAFTree(month)];
+    const reg = q.get("wilayah");
+    if (reg && window.AF.REGION[reg]) drillDown(window.AF.REGION[reg].name);
+    else renderDrill();
+    return;
+  }
   const data = JSON.parse(source.textContent);
   window.drillDefaultSku = data.defaultSku;
   window.drillState = [data.tree];
   renderDrill();
+}
+
+function setDrillMonth(value) {
+  const path = window.drillState.map(function (n) { return n.title; });
+  window.drillState = [buildAFTree(Number(value))];
+  // pertahankan posisi drill sejauh label masih ada
+  const labels = window.drillPath || [];
+  for (const label of labels) {
+    const node = drillCurrent();
+    if (node.children && node.children[label]) window.drillState.push(node.children[label]);
+    else break;
+  }
+  const q = new URLSearchParams(location.search);
+  q.set("bulan", value);
+  history.replaceState(null, "", location.pathname + "?" + q.toString());
+  renderDrill();
+  return path;
+}
+
+function buildAFTree(month) {
+  const AF = window.AF, D = AF.D, t = D.trend;
+  const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16", "#f97316", "#14b8a6", "#6366f1"];
+  const mName = t.labels[month] + " 2026";
+  function factor(o, m) {
+    if (m < 0) return t.lastYear[0] / t.actual[9];
+    // variasi per toko per bulan (stabil) supaya growth tiap baris berbeda
+    const n = 1 + (((o.seq || 0) * 31 + m * 17) % 21 - 10) / 100;
+    return t.actual[m] / t.actual[9] * D.monthNoise[o.region][m] * (m === 9 ? 1 : n);
+  }
+  function tfactor(m) { return t.target[m] / t.target[9]; }
+  function sum(outlets, m) {
+    let a = 0, tg = 0;
+    for (const o of outlets) { a += AF.outletActual(o) * factor(o, m); tg += o.target * tfactor(Math.max(m, 0)); }
+    return { a: a, t: tg };
+  }
+  function item(label, outlets, i) {
+    const now = sum(outlets, month), prev = sum(outlets, month - 1);
+    const ach = now.t ? now.a / now.t * 100 : 0;
+    return { label: label, target: Math.round(now.t), actual: Math.round(now.a), achievement: ach, growth: prev.a ? (now.a / prev.a - 1) * 100 : 0,
+      statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length] };
+  }
+  function node(title, levelName, depth, groups, childFn) {
+    const n = { title: title, levelName: levelName, depth: depth, items: [], children: {} };
+    groups.forEach(function (g, i) {
+      n.items.push(item(g.label, g.outlets, i));
+      if (childFn) n.children[g.label] = childFn(g);
+    });
+    if (!childFn) n.isLowest = true;
+    return n;
+  }
+  function productNode(o) {
+    const n = { title: "Toko: " + o.name + " · " + mName, levelName: "Produk SKU", depth: 7, isLowest: true, items: [] };
+    D.products.forEach(function (p, i) {
+      const f = factor(o, month);
+      const a = o.units[p.code] * p.price * f;
+      const share = AF.outletActual(o) ? o.units[p.code] * p.price / AF.outletActual(o) : 1 / D.products.length;
+      const tg = o.target * tfactor(month) * share;
+      const prevA = o.units[p.code] * p.price * factor(o, month - 1);
+      const ach = tg ? a / tg * 100 : 0;
+      n.items.push({ label: p.name, target: Math.round(tg), actual: Math.round(a), achievement: ach, growth: prevA ? (a / prevA - 1) * 100 : 0,
+        statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length] });
+    });
+    return n;
+  }
+  const by = function (list, key, id) { return list.filter(function (o) { return o[key] === id; }); };
+  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.regions.map(function (r) { return { label: r.name, id: r.code, outlets: by(D.outlets, "region", r.code) }; }), function (rg) {
+    return node(rg.label + " · " + mName, "Wilayah", 2, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
+      return node("Area " + ag.label + " · " + mName, "Area", 3, D.kecamatan.filter(function (k) { return k.area === ag.id; }).map(function (k) { return { label: "Kec. " + k.name, id: k.id, outlets: by(ag.outlets, "kecamatan", k.id) }; }), function (kg) {
+        return node(kg.label + " · " + mName, "Kecamatan", 4, D.sales.filter(function (s) { return s.kecamatan === kg.id; }).map(function (s) { return { label: "Sales: " + s.name, id: s.id, outlets: by(kg.outlets, "sales", s.id) }; }), function (sg) {
+          const segs = ["GT", "MT", "HOREKA"].filter(function (s) { return sg.outlets.some(function (o) { return o.segment === s; }); });
+          return node(sg.label + " · " + mName, "Salesperson", 5, segs.map(function (s) { return { label: "Segmen " + s, id: s, outlets: by(sg.outlets, "segment", s) }; }), function (seg) {
+            return node(sg.label + " · " + seg.label + " · " + mName, "Segmen", 6, seg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; }), function (og) {
+              return productNode(og.o);
+            });
+          });
+        });
+      });
+    });
+  });
 }
 
 function drillCurrent() {
@@ -145,6 +237,11 @@ function setDrillChartType(type) {
 }
 
 function renderDrill() {
+  window.drillPath = window.drillState.slice(1).map(function (n, i) {
+    const parent = window.drillState[i];
+    for (const k in (parent.children || {})) if (parent.children[k] === n) return k;
+    return null;
+  }).filter(Boolean);
   const node = drillCurrent();
   const items = node.items || [];
   const lowest = drillIsLowest();
@@ -167,11 +264,9 @@ function renderDrill() {
   document.getElementById("drill-count").textContent = items.length + " item data";
   document.getElementById("drill-total-actual").textContent = formatRupiah(totalActual);
   document.getElementById("drill-achievement").textContent = "Capaian: " + (totalTarget ? (totalActual / totalTarget * 100).toFixed(1) : 0) + "%";
-  document.getElementById("drill-status").textContent = lowest ? "Level terbawah (Produk SKU)" : "Level " + depth + " (bisa diklik)";
+  if (document.getElementById("drill-status")) document.getElementById("drill-status").textContent = lowest ? "Level terbawah (Produk SKU)" : "Level " + depth + " (bisa diklik)";
   document.getElementById("drill-chart-title").textContent = "Grafik Penjualan: " + node.title;
-  document.getElementById("drill-instruction").textContent = lowest
-    ? "Ini adalah level terbawah (Rincian Produk SKU). Anda sudah melihat detail paling spesifik."
-    : "Klik batang grafik atau tombol Drill Down untuk masuk ke level " + (depth + 1) + ".";
+  document.getElementById("drill-instruction").textContent = lowest ? "Level terbawah" : "Klik batang untuk turun ke level " + (depth + 1);
 
   for (const button of document.querySelectorAll("[data-drill-type]")) button.setAttribute("aria-pressed", button.dataset.drillType === drillChartType);
 
@@ -182,9 +277,12 @@ function renderDrill() {
   body.innerHTML = rows.map(function (i) {
     const growth = (i.growth > 0 ? "+" : "") + i.growth.toFixed(1) + "%";
     const action = lowest ? '<span class="subtext">Level terbawah</span>' : '<button class="detail-button" onclick="drillDown(' + escapeHtml(JSON.stringify(i.label)) + ')">Drill Down</button>';
+    const gap = i.actual - i.target;
+    const share = totalActual ? i.actual / totalActual * 100 : 0;
     return '<tr class="drill-row"><td><strong>' + escapeHtml(i.label) + '</strong></td><td class="numeric">' + formatRupiah(i.target) + '</td><td class="numeric">' + formatRupiah(i.actual) +
-      '</td><td class="numeric mono">' + i.achievement.toFixed(1) + '%</td><td class="numeric mono">' + growth + "</td><td>" + drillStatusBadge(i) + "</td><td>" + action + "</td></tr>";
-  }).join("") || '<tr><td class="table-empty" colspan="7">Tidak ada data yang sesuai. Ubah kata pencarian.</td></tr>';
+      '</td><td class="numeric mono ' + (gap >= 0 ? "up-text" : "down-text") + '">' + (gap >= 0 ? "+" : "−") + formatRupiah(Math.abs(gap)) + '</td><td class="numeric mono">' + share.toFixed(1) +
+      '%</td><td class="numeric mono">' + i.achievement.toFixed(1) + '%</td><td class="numeric mono ' + (i.growth >= 0 ? "up-text" : "down-text") + '">' + (i.growth >= 0 ? "▲ " : "▼ ") + growth.replace(/^[+-]/, "") + "</td><td>" + drillStatusBadge(i) + "</td><td>" + action + "</td></tr>";
+  }).join("") || '<tr><td class="table-empty" colspan="9">Tidak ada data yang sesuai. Ubah kata pencarian.</td></tr>';
 
   const canvas = document.getElementById("drill-chart");
   const horizontal = drillChartType === "horizontal";
@@ -194,10 +292,10 @@ function renderDrill() {
   const actual = items.map(function (i) { return i.actual / 1000000; });
   const target = items.map(function (i) { return i.target / 1000000; });
   const datasets = donut
-    ? [{ label: "Realisasi (Juta Rp)", data: actual, backgroundColor: colors }]
+    ? [{ label: "Aktual (Juta Rp)", data: actual, backgroundColor: colors }]
     : [
-      { label: "Realisasi (Juta Rp)", data: actual, backgroundColor: colors, borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
-      { label: "Target (Juta Rp)", data: target, backgroundColor: "#dbe3ee", borderColor: "#bac8da", borderWidth: 1, borderRadius: 3, grouped: false, barPercentage: 0.65, order: 2 }
+      { label: "Aktual (Juta Rp)", data: actual, backgroundColor: colors, borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
+      { label: "Target (Juta Rp)", data: target, backgroundColor: "#dbe3ee", borderColor: "#bac8da", borderWidth: 1, borderRadius: 3, grouped: false, barPercentage: 0.65, order: 2, valueLabel: false }
     ];
   const options = {
     responsive: true,
@@ -214,47 +312,17 @@ function renderDrill() {
       } } }
     },
     onClick: function (_event, elements) {
-      const card = canvas.closest(".card");
       if (elements.length && !lowest) drillDown(labels[elements[0].index]);
-      else if (!card.classList.contains("is-expanded")) expandChartCard(card);
     }
   };
   if (donut) options.cutout = "60%";
   else {
     const axis = { beginAtZero: true, ticks: { callback: function (v) { return "Rp " + v.toLocaleString("id-ID") + " Jt"; } } };
     options.scales = horizontal ? { x: axis } : { y: axis };
+    labelRoom(options);
   }
+  options.plugins.valueLabels = { format: function (v) { return Math.round(v).toLocaleString("id-ID"); } };
   createChart(canvas, { type: donut ? "doughnut" : "bar", data: { labels: labels, datasets: datasets }, options: options });
-  renderDrillExpandDetail(node, items, totalTarget, totalActual, lowest);
-}
-
-function renderDrillExpandDetail(node, items, totalTarget, totalActual, lowest) {
-  const box = document.getElementById("drill-expand-detail");
-  if (!box || !items.length) return;
-  const sorted = items.slice().sort(function (a, b) { return b.achievement - a.achievement; });
-  const best = sorted[0];
-  const worst = sorted[sorted.length - 1];
-  const below = items.filter(function (i) { return i.achievement < 100; });
-  const pct = totalTarget ? totalActual / totalTarget * 100 : 0;
-  const note = node.title + ": realisasi " + formatRupiah(totalActual) + " dari target " + formatRupiah(totalTarget) + " (" + pct.toFixed(1) + "%). " +
-    best.label + " paling tinggi (" + best.achievement.toFixed(1) + "%)" + (items.length > 1 ? ", " + worst.label + " paling rendah (" + worst.achievement.toFixed(1) + "%)" : "") + ". " +
-    (below.length ? below.length + " dari " + items.length + " item masih di bawah target." : "Semua item sudah mencapai target.");
-  const stats = [["Total target", formatRupiah(totalTarget)], ["Total realisasi", formatRupiah(totalActual)], ["Capaian", pct.toFixed(1) + "%"],
-    ["Selisih", (totalActual >= totalTarget ? "+" : "−") + formatRupiah(Math.abs(totalActual - totalTarget))], ["Tertinggi", best.label], ["Di bawah target", below.length + " item"]];
-  const rows = items.map(function (i) {
-    const share = totalActual ? i.actual / totalActual * 100 : 0;
-    const gap = i.actual - i.target;
-    const action = lowest ? "" : '<button class="detail-button" onclick="drillDown(' + escapeHtml(JSON.stringify(i.label)) + ')">Drill Down</button>';
-    return '<tr><td><span class="swatch" style="background:' + (i.color || "#2563eb") + '"></span><strong>' + escapeHtml(i.label) + '</strong></td><td class="numeric">' + formatRupiah(i.target) +
-      '</td><td class="numeric">' + formatRupiah(i.actual) + '</td><td class="numeric mono">' + (gap >= 0 ? "+" : "−") + formatRupiah(Math.abs(gap)) +
-      '</td><td class="numeric mono">' + share.toFixed(1) + '%</td><td>' + drillStatusBadge(i) + ' <span class="mono">' + i.achievement.toFixed(1) + '%</span></td><td class="numeric mono">' +
-      (i.growth > 0 ? "+" : "") + i.growth.toFixed(1) + "%</td><td>" + action + "</td></tr>";
-  }).join("");
-  box.innerHTML = '<p class="expand-note">' + escapeHtml(note) + "</p>" +
-    '<div class="popup-stats expand-stats">' + stats.map(function (s) { return "<div><span>" + s[0] + "</span><strong>" + escapeHtml(s[1]) + "</strong></div>"; }).join("") + "</div>" +
-    '<span class="popup-label">Data level ' + escapeHtml(node.levelName) + " (" + items.length + " item)</span>" +
-    '<div class="table-scroll"><table><thead><tr><th scope="col">Nama</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Selisih</th><th scope="col">Porsi</th><th scope="col">Capaian</th><th scope="col">Growth</th><th scope="col">Aksi</th></tr></thead><tbody>' +
-    rows + "</tbody></table></div>";
 }
 
 /* ---------- Area Dashboard (Region → Area → Kabupaten → Kecamatan) ---------- */
@@ -371,43 +439,149 @@ function renderArea() {
   document.getElementById("area-rows").innerHTML = rows.join("") || '<tr><td class="table-empty" colspan="6">Tidak ada kecamatan.</td></tr>';
 }
 
-initDrill();
+document.addEventListener("DOMContentLoaded", initDrill);
 initArea();
 
-/* ---------- Grafik Executive (legend & center label seperti versi PHP) ---------- */
-function drawAdminCharts() {
-  for (const canvas of document.querySelectorAll("canvas[data-admin-chart]")) {
-    const cfg = JSON.parse(canvas.dataset.adminChart);
-    const donut = cfg.type === "doughnut";
-    const options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      plugins: { legend: cfg.legend ? { position: cfg.legend, align: "end", labels: { boxWidth: 10, font: { size: 10 } } } : { display: false } },
-      onClick: function (_event, elements) {
-        const card = canvas.closest(".card");
-        if (!card.classList.contains("is-expanded")) expandChartCard(card);
-        else if (cfg.popup && elements.length) openPopup(cfg.popup);
-      }
-    };
-    if (donut) options.cutout = "72%";
-    else options.scales = {
-      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
-      y: { beginAtZero: true, max: cfg.yMax, ticks: { font: { size: 10 } }, grid: { color: "#f1f5f9" } }
-    };
-    createChart(canvas, { type: cfg.type, data: { labels: cfg.labels, datasets: cfg.datasets }, options: options });
-  }
+/* ---------- Angka langsung di grafik (tanpa perlu hover) ---------- */
+function compactNumber(v) {
+  const a = Math.abs(v);
+  if (a >= 1e9) return (v / 1e9).toLocaleString("id-ID", { maximumFractionDigits: 2 }) + " M";
+  if (a >= 1e6) return (v / 1e6).toLocaleString("id-ID", { maximumFractionDigits: 1 }) + " jt";
+  if (a >= 1e5) return (v / 1e3).toLocaleString("id-ID", { maximumFractionDigits: 0 }) + " rb";
+  return Number(v).toLocaleString("id-ID", { maximumFractionDigits: 2 });
 }
 
-function kpiKey(event, key) {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    openPopup(key);
+const valueLabelPlugin = {
+  id: "valueLabels",
+  afterDatasetsDraw: function (chart, _args, opts) {
+    if (opts && opts.display === false) return;
+    const ctx = chart.ctx;
+    const horizontal = chart.options.indexAxis === "y";
+    const fmt = (opts && opts.format) || compactNumber;
+    ctx.save();
+    ctx.font = "600 11px 'Segoe UI', Arial, sans-serif";
+    chart.data.datasets.forEach(function (ds, di) {
+      if (ds.valueLabel === false || !chart.isDatasetVisible(di)) return;
+      const meta = chart.getDatasetMeta(di);
+      if (meta.type === "doughnut" || meta.type === "pie") {
+        const total = ds.data.reduce(function (s, v) { return s + (Number(v) || 0); }, 0);
+        meta.data.forEach(function (arc, i) {
+          const v = Number(ds.data[i]) || 0;
+          if (!total || v / total < .05) return;
+          const p = arc.tooltipPosition();
+          ctx.fillStyle = "#fff";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(fmt(v), p.x, p.y);
+        });
+        return;
+      }
+      if (meta.type !== "bar") return;
+      const stacked = !!ds.stack;
+      meta.data.forEach(function (bar, i) {
+        const v = Number(ds.data[i]);
+        if (!v) return;
+        const text = fmt(v);
+        const w = ctx.measureText(text).width;
+        if (stacked) {
+          const size = horizontal ? Math.abs(bar.x - bar.base) : Math.abs(bar.base - bar.y);
+          if (size < (horizontal ? w + 6 : 14)) return;
+          ctx.fillStyle = "#fff";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(text, horizontal ? (bar.x + bar.base) / 2 : bar.x, horizontal ? bar.y : (bar.y + bar.base) / 2);
+          return;
+        }
+        ctx.fillStyle = "#0f172a";
+        if (horizontal) {
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          ctx.fillText(text, bar.x + 4, bar.y);
+        } else {
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText(text, bar.x, bar.y - 3);
+        }
+      });
+    });
+    ctx.restore();
   }
+};
+if (window.Chart) Chart.register(valueLabelPlugin);
+
+// Ruang di ujung batang supaya angka tidak terpotong.
+function labelRoom(options) {
+  const horizontal = options.indexAxis === "y";
+  options.layout = { padding: horizontal ? { right: 44 } : { top: 18 } };
+  return options;
 }
+
+/* ---------- Grafik Admin Pusat ---------- */
+function drawAdminChart(canvas) {
+  const cfg = JSON.parse(canvas.dataset.adminChart);
+  const donut = cfg.type === "doughnut";
+  const horizontal = cfg.axis === "y";
+  const card = canvas.closest(".card");
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    indexAxis: horizontal ? "y" : "x",
+    plugins: {
+      legend: cfg.legend ? { position: cfg.legend, align: "end", labels: { boxWidth: 10, color: "#334155", font: { size: 12 } } } : { display: false },
+      valueLabels: cfg.labelUnit ? { format: function (v) { return Number(v).toLocaleString("id-ID", { maximumFractionDigits: 2 }) + cfg.labelUnit; } } : {}
+    },
+    onHover: function (event, elements) {
+      event.native.target.style.cursor = elements.length && cfg.clickHref ? "pointer" : (card && card.dataset.href ? "pointer" : "default");
+    },
+    onClick: function (_event, elements) {
+      if (elements.length && cfg.clickHref) {
+        const i = elements[0].index;
+        location.href = cfg.clickHref.replace("{i}", cfg.clickValues ? cfg.clickValues[i] : i);
+        return;
+      }
+      if (card && card.dataset.href) location.href = card.dataset.href;
+    }
+  };
+  if (donut) options.cutout = "62%";
+  else {
+    const valueAxis = { beginAtZero: true, max: cfg.yMax, ticks: { color: "#475569", font: { size: 11 } }, grid: { color: "#eef2f7" } };
+    const catAxis = { grid: { display: false }, ticks: { color: "#1e293b", font: { size: 12 } } };
+    options.scales = horizontal ? { x: valueAxis, y: catAxis } : { x: catAxis, y: valueAxis };
+    labelRoom(options);
+  }
+  createChart(canvas, { type: cfg.type, data: { labels: cfg.labels, datasets: cfg.datasets }, options: options });
+}
+
+function drawAdminCharts() {
+  for (const canvas of document.querySelectorAll("canvas[data-admin-chart]")) drawAdminChart(canvas);
+}
+
+// Ganti data grafik (mis. setelah filter berubah).
+function refreshAdminChart(canvas, cfg) {
+  canvas.dataset.adminChart = JSON.stringify(cfg);
+  drawAdminChart(canvas);
+}
+
+// Kartu yang bisa diklik (data-href): klik di mana saja selain tautan, grafik, atau peta.
+document.addEventListener("click", function (event) {
+  const card = event.target.closest(".card-click[data-href]");
+  if (!card || event.target.closest("a, button, select, input, canvas, .sales-map")) return;
+  location.href = card.dataset.href;
+});
+document.addEventListener("keydown", function (event) {
+  if (event.key !== "Enter") return;
+  const card = event.target.closest && event.target.closest(".card-click[data-href]");
+  if (card && event.target === card) location.href = card.dataset.href;
+});
+
+// Baris tabel yang bisa diklik
+document.addEventListener("click", function (event) {
+  const row = event.target.closest("tr[data-href]");
+  if (row && !event.target.closest("a, button")) location.href = row.dataset.href;
+});
 
 drawAdminCharts();
-setupExpandableCharts();
 
 /* ---------- Detail Sales & Detail Outlet (dibaca dari ?npk= / ?code=) ---------- */
 function rupiahFull(value) {
@@ -496,99 +670,9 @@ initSalesDetail();
 initOutletDetail();
 
 // Sembunyikan kolom pencarian di halaman yang tidak punya tabel untuk dicari.
-if (!document.querySelector("table[data-filterable]") && !document.getElementById("drill-data")) {
+if (!document.querySelector("table[data-filterable]") && !document.getElementById("drill-data") && !document.getElementById("live-map")) {
   const toolbar = document.querySelector(".toolbar");
   if (toolbar) toolbar.hidden = true;
-}
-
-/* ---------- Klik grafik: kartu membesar + detail + tabel data ---------- */
-function formatChartValue(value, unit) {
-  const text = Number(value).toLocaleString("id-ID", { maximumFractionDigits: 2 });
-  return unit === "Miliar Rp" ? "Rp " + text + " M" : unit === "% bobot" ? text + "%" : text + (unit ? " " + unit : "");
-}
-
-function buildChartDetail(cfg) {
-  const unit = cfg.unit || "";
-  const labels = cfg.labels;
-  const sets = cfg.datasets;
-  let stats = [];
-  let head = "<th scope=\"col\">Label</th>";
-  let rows = "";
-
-  if (cfg.type === "doughnut") {
-    const data = sets[0].data;
-    const total = data.reduce(function (a, b) { return a + b; }, 0);
-    const maxIndex = data.indexOf(Math.max.apply(null, data));
-    stats = [["Total", formatChartValue(total, unit)], ["Terbesar", labels[maxIndex]], ["Porsi terbesar", (data[maxIndex] / total * 100).toFixed(1) + "%"]];
-    head += "<th scope=\"col\">Nilai</th><th scope=\"col\">Porsi</th>";
-    rows = labels.map(function (label, i) {
-      return '<tr><td><span class="swatch" style="background:' + sets[0].backgroundColor[i] + '"></span>' + escapeHtml(label) + '</td><td class="numeric mono">' +
-        formatChartValue(data[i], unit) + '</td><td class="numeric mono">' + (data[i] / total * 100).toFixed(1) + "%</td></tr>";
-    }).join("");
-  } else {
-    const actual = sets[0].data;
-    const target = cfg.targetIndex !== undefined ? sets[cfg.targetIndex].data : null;
-    const sum = actual.reduce(function (a, b) { return a + b; }, 0);
-    const maxIndex = actual.indexOf(Math.max.apply(null, actual));
-    const minIndex = actual.indexOf(Math.min.apply(null, actual));
-    const last = actual.length - 1;
-    stats = [["Total " + sets[0].label, formatChartValue(sum, unit)], ["Rata-rata", formatChartValue(sum / actual.length, unit)],
-      ["Tertinggi", labels[maxIndex] + " · " + formatChartValue(actual[maxIndex], unit)], ["Terendah", labels[minIndex] + " · " + formatChartValue(actual[minIndex], unit)]];
-    if (target) stats.push(["Pencapaian " + labels[last], (actual[last] / target[last] * 100).toFixed(1) + "%"]);
-    head += sets.map(function (d) { return '<th scope="col">' + escapeHtml(d.label) + "</th>"; }).join("");
-    if (target) head += '<th scope="col">Capaian</th>';
-    rows = labels.map(function (label, i) {
-      let cells = sets.map(function (d) { return '<td class="numeric mono">' + formatChartValue(d.data[i], unit) + "</td>"; }).join("");
-      if (target) {
-        const pct = actual[i] / target[i] * 100;
-        cells += '<td><span class="badge ' + (pct >= 100 ? "" : pct >= 90 ? "warning" : "danger") + '">' + pct.toFixed(1) + "%</span></td>";
-      }
-      return "<tr><td><strong>" + escapeHtml(label) + "</strong></td>" + cells + "</tr>";
-    }).join("");
-  }
-
-  const statHtml = stats.map(function (s) { return "<div><span>" + s[0] + "</span><strong>" + escapeHtml(s[1]) + "</strong></div>"; }).join("");
-  return '<div class="expand-detail" hidden>' +
-    (cfg.detail ? '<p class="expand-note">' + escapeHtml(cfg.detail) + "</p>" : "") +
-    '<div class="popup-stats expand-stats">' + statHtml + "</div>" +
-    '<span class="popup-label">Data grafik' + (unit ? " (" + unit + ")" : "") + "</span>" +
-    '<div class="table-scroll"><table><thead><tr>' + head + "</tr></thead><tbody>" + rows + "</tbody></table></div>" +
-    (cfg.popup ? '<div class="card-link"><button class="detail-button" onclick=\'openPopup("' + cfg.popup + '")\'>Lihat detail lengkap</button></div>' : "") +
-    "</div>";
-}
-
-function setupExpandableCharts() {
-  for (const canvas of document.querySelectorAll("canvas[data-admin-chart]")) {
-    const card = canvas.closest(".card");
-    if (!card || card.dataset.expandReady) continue;
-    const cfg = JSON.parse(canvas.dataset.adminChart);
-    card.dataset.expandReady = "true";
-    card.classList.add("chart-card");
-    card.insertAdjacentHTML("afterbegin",
-      '<button type="button" class="expand-toggle" aria-label="Perbesar grafik dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
-      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
-    card.insertAdjacentHTML("beforeend", buildChartDetail(cfg));
-    canvas.title = "Klik untuk memperbesar dan melihat data";
-  }
-  const drillCanvas = document.getElementById("drill-chart");
-  const drillCard = drillCanvas && drillCanvas.closest(".card");
-  if (drillCard && !drillCard.dataset.expandReady) {
-    drillCard.dataset.expandReady = "true";
-    drillCard.classList.add("chart-card", "always-toggle");
-    drillCard.insertAdjacentHTML("afterbegin",
-      '<button type="button" class="expand-toggle" aria-label="Perbesar grafik dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
-      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
-    drillCanvas.title = "Klik batang untuk drill down, klik area kosong untuk memperbesar";
-  }
-  const mapEl = document.getElementById("sales-map");
-  const mapCard = mapEl && mapEl.closest(".card");
-  if (mapCard && !mapCard.dataset.expandReady) {
-    mapCard.dataset.expandReady = "true";
-    mapCard.classList.add("chart-card");
-    mapCard.insertAdjacentHTML("afterbegin",
-      '<button type="button" class="expand-toggle" aria-label="Perbesar peta dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
-      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
-  }
 }
 
 /* ---------- Peta persebaran sales (Leaflet) ---------- */
@@ -625,74 +709,7 @@ function initSalesMap() {
   window.salesMap = map;
   window.salesMapBounds = L.latLngBounds(points);
   map.fitBounds(window.salesMapBounds, { padding: [30, 30] });
-  map.on("click", function () {
-    const card = el.closest(".card");
-    if (!card.classList.contains("is-expanded")) expandChartCard(card);
-  });
 }
 
 document.addEventListener("DOMContentLoaded", initSalesMap);
 
-function toggleChartCard(card) {
-  if (card.classList.contains("is-expanded")) collapseChartCard(card);
-  else expandChartCard(card);
-}
-
-function resizeChartsIn(card, showLegend) {
-  const drillCanvas = card.querySelector("#drill-chart");
-  if (drillCanvas && chartInstances.get(drillCanvas)) chartInstances.get(drillCanvas).resize();
-  if (window.salesMap && card.contains(document.getElementById("sales-map"))) {
-    window.salesMap.invalidateSize();
-    window.salesMap.fitBounds(window.salesMapBounds, { padding: [30, 30] });
-  }
-  for (const canvas of card.querySelectorAll("canvas[data-admin-chart]")) {
-    const chart = chartInstances.get(canvas);
-    if (!chart) continue;
-    const cfg = JSON.parse(canvas.dataset.adminChart);
-    chart.options.plugins.legend = showLegend && cfg.type !== "doughnut"
-      ? { display: true, position: "top", labels: { boxWidth: 12, font: { size: 12 } } }
-      : (cfg.legend ? { position: cfg.legend, align: "end", labels: { boxWidth: 10, font: { size: 10 } } } : { display: false });
-    chart.resize();
-    chart.update();
-  }
-}
-
-function expandChartCard(card) {
-  const open = document.querySelector(".card.is-expanded");
-  if (open && open !== card) collapseChartCard(open);
-  let backdrop = document.getElementById("expand-backdrop");
-  if (!backdrop) {
-    backdrop = document.createElement("div");
-    backdrop.id = "expand-backdrop";
-    backdrop.className = "expand-backdrop";
-    backdrop.addEventListener("click", function () {
-      const current = document.querySelector(".card.is-expanded");
-      if (current) collapseChartCard(current);
-    });
-    document.body.appendChild(backdrop);
-  }
-  backdrop.hidden = false;
-  card.classList.add("is-expanded");
-  card.querySelector(".expand-detail").hidden = false;
-  document.body.classList.add("has-expanded-card");
-  requestAnimationFrame(function () { resizeChartsIn(card, true); });
-  if (window.salesMap && card.contains(document.getElementById("sales-map"))) window.salesMap.scrollWheelZoom.enable();
-  card.querySelector(".expand-toggle").focus();
-}
-
-function collapseChartCard(card) {
-  card.classList.remove("is-expanded");
-  card.querySelector(".expand-detail").hidden = true;
-  const backdrop = document.getElementById("expand-backdrop");
-  if (backdrop) backdrop.hidden = true;
-  document.body.classList.remove("has-expanded-card");
-  requestAnimationFrame(function () { resizeChartsIn(card, false); });
-  if (window.salesMap && card.contains(document.getElementById("sales-map"))) window.salesMap.scrollWheelZoom.disable();
-}
-
-document.addEventListener("keydown", function (event) {
-  if (event.key !== "Escape") return;
-  if (document.getElementById("detail-dialog") && document.getElementById("detail-dialog").open) return;
-  const current = document.querySelector(".card.is-expanded");
-  if (current) collapseChartCard(current);
-});
