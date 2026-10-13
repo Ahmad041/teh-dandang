@@ -61,13 +61,15 @@
      <div class="view dash">
       <section class="card filter-card" aria-label="Filter dashboard"><div id="filter-bar"></div></section>
       <section aria-label="Ringkasan KPI" class="kpi-grid six" id="exec-kpis"></section>
-      <section class="card map-card card-click" data-keep-filter="" data-base="peta-outlet.html" data-href="peta-outlet.html" tabindex="0" role="link" aria-label="Buka peta outlet">
+      <div class="dash-row half">
+       <section class="card map-card card-click" data-keep-filter="" data-base="peta-outlet.html" data-href="peta-outlet.html" tabindex="0" role="link" aria-label="Buka peta outlet">
        <div class="card-heading"><div><h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg>Peta Outlet</h2></div><span class="badge neutral" id="scope-label"></span></div>
        <div class="sales-map tall" id="sales-map" role="img" aria-label="Peta sebaran outlet dengan penanda NOO dan NOP."><p class="map-fallback">Memuat peta…</p></div>
        <div class="map-legend" id="map-legend"></div></section>
-      <section class="card card-click" data-href="tren-penjualan.html" tabindex="0" role="link" aria-label="Buka tren penjualan">
+       <section class="card card-click" data-href="tren-penjualan.html" tabindex="0" role="link" aria-label="Buka tren penjualan">
        <div class="card-heading"><div><h2 class="heading-title">Tren Penjualan</h2><p>Aktual vs target, miliar Rp</p></div></div>
        <div class="admin-chart wide"><canvas id="trend-chart" role="img" aria-label="Tren aktual penjualan, target, dan tahun lalu per bulan." data-admin-chart='{"type": "bar", "labels": [], "datasets": [{"label": "", "data": [], "backgroundColor": []}]}'></canvas><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div></section>
+      </div>
       <div class="dash-row r2">
        <section class="card card-click" data-keep-filter="" data-base="ro-item.html" data-href="ro-item.html" tabindex="0" role="link" aria-label="Buka detail item RO">
        <div class="card-heading"><div><h2 class="heading-title">Produk Paling Laku</h2><p>Unit terjual</p></div></div>
