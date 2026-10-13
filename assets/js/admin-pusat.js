@@ -214,7 +214,9 @@ function renderDrill() {
       } } }
     },
     onClick: function (_event, elements) {
+      const card = canvas.closest(".card");
       if (elements.length && !lowest) drillDown(labels[elements[0].index]);
+      else if (!card.classList.contains("is-expanded")) expandChartCard(card);
     }
   };
   if (donut) options.cutout = "60%";
@@ -223,6 +225,36 @@ function renderDrill() {
     options.scales = horizontal ? { x: axis } : { y: axis };
   }
   createChart(canvas, { type: donut ? "doughnut" : "bar", data: { labels: labels, datasets: datasets }, options: options });
+  renderDrillExpandDetail(node, items, totalTarget, totalActual, lowest);
+}
+
+function renderDrillExpandDetail(node, items, totalTarget, totalActual, lowest) {
+  const box = document.getElementById("drill-expand-detail");
+  if (!box || !items.length) return;
+  const sorted = items.slice().sort(function (a, b) { return b.achievement - a.achievement; });
+  const best = sorted[0];
+  const worst = sorted[sorted.length - 1];
+  const below = items.filter(function (i) { return i.achievement < 100; });
+  const pct = totalTarget ? totalActual / totalTarget * 100 : 0;
+  const note = node.title + ": realisasi " + formatRupiah(totalActual) + " dari target " + formatRupiah(totalTarget) + " (" + pct.toFixed(1) + "%). " +
+    best.label + " paling tinggi (" + best.achievement.toFixed(1) + "%)" + (items.length > 1 ? ", " + worst.label + " paling rendah (" + worst.achievement.toFixed(1) + "%)" : "") + ". " +
+    (below.length ? below.length + " dari " + items.length + " item masih di bawah target." : "Semua item sudah mencapai target.");
+  const stats = [["Total target", formatRupiah(totalTarget)], ["Total realisasi", formatRupiah(totalActual)], ["Capaian", pct.toFixed(1) + "%"],
+    ["Selisih", (totalActual >= totalTarget ? "+" : "−") + formatRupiah(Math.abs(totalActual - totalTarget))], ["Tertinggi", best.label], ["Di bawah target", below.length + " item"]];
+  const rows = items.map(function (i) {
+    const share = totalActual ? i.actual / totalActual * 100 : 0;
+    const gap = i.actual - i.target;
+    const action = lowest ? "" : '<button class="detail-button" onclick="drillDown(' + escapeHtml(JSON.stringify(i.label)) + ')">Drill Down</button>';
+    return '<tr><td><span class="swatch" style="background:' + (i.color || "#2563eb") + '"></span><strong>' + escapeHtml(i.label) + '</strong></td><td class="numeric">' + formatRupiah(i.target) +
+      '</td><td class="numeric">' + formatRupiah(i.actual) + '</td><td class="numeric mono">' + (gap >= 0 ? "+" : "−") + formatRupiah(Math.abs(gap)) +
+      '</td><td class="numeric mono">' + share.toFixed(1) + '%</td><td>' + drillStatusBadge(i) + ' <span class="mono">' + i.achievement.toFixed(1) + '%</span></td><td class="numeric mono">' +
+      (i.growth > 0 ? "+" : "") + i.growth.toFixed(1) + "%</td><td>" + action + "</td></tr>";
+  }).join("");
+  box.innerHTML = '<p class="expand-note">' + escapeHtml(note) + "</p>" +
+    '<div class="popup-stats expand-stats">' + stats.map(function (s) { return "<div><span>" + s[0] + "</span><strong>" + escapeHtml(s[1]) + "</strong></div>"; }).join("") + "</div>" +
+    '<span class="popup-label">Data level ' + escapeHtml(node.levelName) + " (" + items.length + " item)</span>" +
+    '<div class="table-scroll"><table><thead><tr><th scope="col">Nama</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Selisih</th><th scope="col">Porsi</th><th scope="col">Capaian</th><th scope="col">Growth</th><th scope="col">Aksi</th></tr></thead><tbody>' +
+    rows + "</tbody></table></div>";
 }
 
 /* ---------- Area Dashboard (Region → Area → Kabupaten → Kecamatan) ---------- */
@@ -353,7 +385,9 @@ function drawAdminCharts() {
       animation: false,
       plugins: { legend: cfg.legend ? { position: cfg.legend, align: "end", labels: { boxWidth: 10, font: { size: 10 } } } : { display: false } },
       onClick: function (_event, elements) {
-        if (cfg.popup && elements.length) openPopup(cfg.popup);
+        const card = canvas.closest(".card");
+        if (!card.classList.contains("is-expanded")) expandChartCard(card);
+        else if (cfg.popup && elements.length) openPopup(cfg.popup);
       }
     };
     if (donut) options.cutout = "72%";
@@ -373,6 +407,7 @@ function kpiKey(event, key) {
 }
 
 drawAdminCharts();
+setupExpandableCharts();
 
 /* ---------- Detail Sales & Detail Outlet (dibaca dari ?npk= / ?code=) ---------- */
 function rupiahFull(value) {
@@ -465,3 +500,199 @@ if (!document.querySelector("table[data-filterable]") && !document.getElementByI
   const toolbar = document.querySelector(".toolbar");
   if (toolbar) toolbar.hidden = true;
 }
+
+/* ---------- Klik grafik: kartu membesar + detail + tabel data ---------- */
+function formatChartValue(value, unit) {
+  const text = Number(value).toLocaleString("id-ID", { maximumFractionDigits: 2 });
+  return unit === "Miliar Rp" ? "Rp " + text + " M" : unit === "% bobot" ? text + "%" : text + (unit ? " " + unit : "");
+}
+
+function buildChartDetail(cfg) {
+  const unit = cfg.unit || "";
+  const labels = cfg.labels;
+  const sets = cfg.datasets;
+  let stats = [];
+  let head = "<th scope=\"col\">Label</th>";
+  let rows = "";
+
+  if (cfg.type === "doughnut") {
+    const data = sets[0].data;
+    const total = data.reduce(function (a, b) { return a + b; }, 0);
+    const maxIndex = data.indexOf(Math.max.apply(null, data));
+    stats = [["Total", formatChartValue(total, unit)], ["Terbesar", labels[maxIndex]], ["Porsi terbesar", (data[maxIndex] / total * 100).toFixed(1) + "%"]];
+    head += "<th scope=\"col\">Nilai</th><th scope=\"col\">Porsi</th>";
+    rows = labels.map(function (label, i) {
+      return '<tr><td><span class="swatch" style="background:' + sets[0].backgroundColor[i] + '"></span>' + escapeHtml(label) + '</td><td class="numeric mono">' +
+        formatChartValue(data[i], unit) + '</td><td class="numeric mono">' + (data[i] / total * 100).toFixed(1) + "%</td></tr>";
+    }).join("");
+  } else {
+    const actual = sets[0].data;
+    const target = cfg.targetIndex !== undefined ? sets[cfg.targetIndex].data : null;
+    const sum = actual.reduce(function (a, b) { return a + b; }, 0);
+    const maxIndex = actual.indexOf(Math.max.apply(null, actual));
+    const minIndex = actual.indexOf(Math.min.apply(null, actual));
+    const last = actual.length - 1;
+    stats = [["Total " + sets[0].label, formatChartValue(sum, unit)], ["Rata-rata", formatChartValue(sum / actual.length, unit)],
+      ["Tertinggi", labels[maxIndex] + " · " + formatChartValue(actual[maxIndex], unit)], ["Terendah", labels[minIndex] + " · " + formatChartValue(actual[minIndex], unit)]];
+    if (target) stats.push(["Pencapaian " + labels[last], (actual[last] / target[last] * 100).toFixed(1) + "%"]);
+    head += sets.map(function (d) { return '<th scope="col">' + escapeHtml(d.label) + "</th>"; }).join("");
+    if (target) head += '<th scope="col">Capaian</th>';
+    rows = labels.map(function (label, i) {
+      let cells = sets.map(function (d) { return '<td class="numeric mono">' + formatChartValue(d.data[i], unit) + "</td>"; }).join("");
+      if (target) {
+        const pct = actual[i] / target[i] * 100;
+        cells += '<td><span class="badge ' + (pct >= 100 ? "" : pct >= 90 ? "warning" : "danger") + '">' + pct.toFixed(1) + "%</span></td>";
+      }
+      return "<tr><td><strong>" + escapeHtml(label) + "</strong></td>" + cells + "</tr>";
+    }).join("");
+  }
+
+  const statHtml = stats.map(function (s) { return "<div><span>" + s[0] + "</span><strong>" + escapeHtml(s[1]) + "</strong></div>"; }).join("");
+  return '<div class="expand-detail" hidden>' +
+    (cfg.detail ? '<p class="expand-note">' + escapeHtml(cfg.detail) + "</p>" : "") +
+    '<div class="popup-stats expand-stats">' + statHtml + "</div>" +
+    '<span class="popup-label">Data grafik' + (unit ? " (" + unit + ")" : "") + "</span>" +
+    '<div class="table-scroll"><table><thead><tr>' + head + "</tr></thead><tbody>" + rows + "</tbody></table></div>" +
+    (cfg.popup ? '<div class="card-link"><button class="detail-button" onclick=\'openPopup("' + cfg.popup + '")\'>Lihat detail lengkap</button></div>' : "") +
+    "</div>";
+}
+
+function setupExpandableCharts() {
+  for (const canvas of document.querySelectorAll("canvas[data-admin-chart]")) {
+    const card = canvas.closest(".card");
+    if (!card || card.dataset.expandReady) continue;
+    const cfg = JSON.parse(canvas.dataset.adminChart);
+    card.dataset.expandReady = "true";
+    card.classList.add("chart-card");
+    card.insertAdjacentHTML("afterbegin",
+      '<button type="button" class="expand-toggle" aria-label="Perbesar grafik dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
+      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
+    card.insertAdjacentHTML("beforeend", buildChartDetail(cfg));
+    canvas.title = "Klik untuk memperbesar dan melihat data";
+  }
+  const drillCanvas = document.getElementById("drill-chart");
+  const drillCard = drillCanvas && drillCanvas.closest(".card");
+  if (drillCard && !drillCard.dataset.expandReady) {
+    drillCard.dataset.expandReady = "true";
+    drillCard.classList.add("chart-card", "always-toggle");
+    drillCard.insertAdjacentHTML("afterbegin",
+      '<button type="button" class="expand-toggle" aria-label="Perbesar grafik dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
+      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
+    drillCanvas.title = "Klik batang untuk drill down, klik area kosong untuk memperbesar";
+  }
+  const mapEl = document.getElementById("sales-map");
+  const mapCard = mapEl && mapEl.closest(".card");
+  if (mapCard && !mapCard.dataset.expandReady) {
+    mapCard.dataset.expandReady = "true";
+    mapCard.classList.add("chart-card");
+    mapCard.insertAdjacentHTML("afterbegin",
+      '<button type="button" class="expand-toggle" aria-label="Perbesar peta dan tampilkan data" onclick="toggleChartCard(this.closest(\'.card\'))">' +
+      '<span class="expand-open">Perbesar</span><span class="expand-close">Tutup ✕</span></button>');
+  }
+}
+
+/* ---------- Peta persebaran sales (Leaflet) ---------- */
+function achColor(ach) {
+  return ach >= 90 ? "#10b981" : ach >= 75 ? "#f59e0b" : "#ef4444";
+}
+
+function initSalesMap() {
+  const el = document.getElementById("sales-map");
+  const source = document.getElementById("sales-map-data");
+  if (!el || !source) return;
+  if (typeof L === "undefined") {
+    el.querySelector(".map-fallback").textContent = "Peta tidak dapat dimuat (perlu koneksi internet). Data tetap ada di tabel saat kartu diperbesar.";
+    return;
+  }
+  const regions = JSON.parse(source.textContent);
+  el.innerHTML = "";
+  const map = L.map(el, { scrollWheelZoom: false, attributionControl: true });
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(map);
+  const points = [];
+  for (const r of regions) {
+    const color = achColor(r.ach);
+    const marker = L.circleMarker([r.lat, r.lng], {
+      radius: 8 + r.sales / 25, color: color, weight: 2, fillColor: color, fillOpacity: .35
+    }).addTo(map);
+    marker.bindTooltip(r.code + " · " + r.ach + "%", { permanent: true, direction: "top", className: "map-label" });
+    marker.bindPopup("<strong>" + escapeHtml(r.name) + "</strong><br/>Achievement: <b>" + r.ach + "%</b><br/>Sales online: " + r.online + " / " + r.sales +
+      "<br/>Visit: " + r.visit + "% · New Outlet: " + r.outlet + "%<br/>Score: " + r.score);
+    points.push([r.lat, r.lng]);
+  }
+  window.salesMap = map;
+  window.salesMapBounds = L.latLngBounds(points);
+  map.fitBounds(window.salesMapBounds, { padding: [30, 30] });
+  map.on("click", function () {
+    const card = el.closest(".card");
+    if (!card.classList.contains("is-expanded")) expandChartCard(card);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initSalesMap);
+
+function toggleChartCard(card) {
+  if (card.classList.contains("is-expanded")) collapseChartCard(card);
+  else expandChartCard(card);
+}
+
+function resizeChartsIn(card, showLegend) {
+  const drillCanvas = card.querySelector("#drill-chart");
+  if (drillCanvas && chartInstances.get(drillCanvas)) chartInstances.get(drillCanvas).resize();
+  if (window.salesMap && card.contains(document.getElementById("sales-map"))) {
+    window.salesMap.invalidateSize();
+    window.salesMap.fitBounds(window.salesMapBounds, { padding: [30, 30] });
+  }
+  for (const canvas of card.querySelectorAll("canvas[data-admin-chart]")) {
+    const chart = chartInstances.get(canvas);
+    if (!chart) continue;
+    const cfg = JSON.parse(canvas.dataset.adminChart);
+    chart.options.plugins.legend = showLegend && cfg.type !== "doughnut"
+      ? { display: true, position: "top", labels: { boxWidth: 12, font: { size: 12 } } }
+      : (cfg.legend ? { position: cfg.legend, align: "end", labels: { boxWidth: 10, font: { size: 10 } } } : { display: false });
+    chart.resize();
+    chart.update();
+  }
+}
+
+function expandChartCard(card) {
+  const open = document.querySelector(".card.is-expanded");
+  if (open && open !== card) collapseChartCard(open);
+  let backdrop = document.getElementById("expand-backdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "expand-backdrop";
+    backdrop.className = "expand-backdrop";
+    backdrop.addEventListener("click", function () {
+      const current = document.querySelector(".card.is-expanded");
+      if (current) collapseChartCard(current);
+    });
+    document.body.appendChild(backdrop);
+  }
+  backdrop.hidden = false;
+  card.classList.add("is-expanded");
+  card.querySelector(".expand-detail").hidden = false;
+  document.body.classList.add("has-expanded-card");
+  requestAnimationFrame(function () { resizeChartsIn(card, true); });
+  if (window.salesMap && card.contains(document.getElementById("sales-map"))) window.salesMap.scrollWheelZoom.enable();
+  card.querySelector(".expand-toggle").focus();
+}
+
+function collapseChartCard(card) {
+  card.classList.remove("is-expanded");
+  card.querySelector(".expand-detail").hidden = true;
+  const backdrop = document.getElementById("expand-backdrop");
+  if (backdrop) backdrop.hidden = true;
+  document.body.classList.remove("has-expanded-card");
+  requestAnimationFrame(function () { resizeChartsIn(card, false); });
+  if (window.salesMap && card.contains(document.getElementById("sales-map"))) window.salesMap.scrollWheelZoom.disable();
+}
+
+document.addEventListener("keydown", function (event) {
+  if (event.key !== "Escape") return;
+  if (document.getElementById("detail-dialog") && document.getElementById("detail-dialog").open) return;
+  const current = document.querySelector(".card.is-expanded");
+  if (current) collapseChartCard(current);
+});
