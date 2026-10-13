@@ -85,4 +85,11 @@ Tahap 2 (Master Data):
 | `master-route.html` | Master Route (`/master/route`) |
 | `master-vehicle.html` | Fleet Concox GT06N (`/master/vehicle`) |
 
-Menu lain (Tracking, Report, Transaksi, Administration) sudah tampil di sidebar dengan label "soon" dan dibuat di tahap berikutnya.
+Revisi 13 Oktober (papan tulis "Dashboard Admin Pusat"):
+
+- `index.html` (Executive): filter global periode (default 30 hari terakhir, bisa pilih tanggal) + wilayah → area → toko; 6 KPI berwarna sesuai target (Volume Penjualan, Effective Call, NOO, NOP, Outlet ROA, Item RO); peta outlet NOO/NOP lebar di atas; tren penjualan (klik bulan → drilldown 7 level bulan itu); produk paling laku; kesehatan outlet (gabungan outlet health + at risk).
+- Halaman detail KPI (klik kartu): `penjualan.html`, `effective-call.html`, `noo.html`, `nop.html`, `roa.html`, `ro-item.html`. Filter ikut terbawa lewat URL.
+- `live-tracking.html`: posisi kendaraan sales (simulasi, update tiap 5 detik).
+- Data contoh bersama ada di `assets/js/admin-data.js` (Region 1–5 → area → kecamatan → sales → toko), diolah oleh `assets/js/admin-filter.js`.
+
+Menu lain (Report, Transaksi, Administration) sudah tampil di sidebar dengan label "soon" dan dibuat di tahap berikutnya.
