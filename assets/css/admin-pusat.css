@@ -555,3 +555,210 @@ main {
 .page-heading .heading-actions .button {
   white-space: nowrap;
 }
+
+/* ===== Kartu grafik yang bisa diperbesar ===== */
+.chart-card {
+  position: relative;
+}
+
+.chart-card canvas[data-admin-chart] {
+  cursor: zoom-in;
+}
+
+.expand-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--primary-dark);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 3px 10px;
+  opacity: 0;
+  transition: opacity .15s;
+}
+
+.chart-card:hover .expand-toggle,
+.expand-toggle:focus-visible,
+.chart-card.is-expanded .expand-toggle {
+  opacity: 1;
+}
+
+.expand-toggle .expand-close,
+.chart-card.is-expanded .expand-toggle .expand-open {
+  display: none;
+}
+
+.chart-card.is-expanded .expand-toggle .expand-close {
+  display: inline;
+}
+
+.chart-card > .card-heading > .badge,
+.chart-card > .card-heading > div + * {
+  margin-right: 74px;
+}
+
+.expand-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #0f172a66;
+  z-index: 60;
+}
+
+.card.is-expanded {
+  position: fixed;
+  inset: 4vh 4vw;
+  z-index: 61;
+  overflow-y: auto;
+  padding: 24px 28px;
+  box-shadow: 0 24px 60px #0f172a40;
+  animation: expand-in .18s ease-out;
+}
+
+.card.is-expanded .card-heading .heading-title {
+  font-size: 18px;
+}
+
+.card.is-expanded .card-heading p {
+  font-size: 13px;
+}
+
+.card.is-expanded .admin-chart,
+.card.is-expanded .admin-chart.tall,
+.card.is-expanded .admin-chart.donut {
+  height: 46vh;
+  min-height: 300px;
+  flex: none;
+}
+
+.card.is-expanded canvas[data-admin-chart] {
+  cursor: pointer;
+}
+
+.card.is-expanded .chart-center strong {
+  font-size: 34px;
+}
+
+.card.is-expanded .stat-list {
+  display: none;
+}
+
+.expand-detail {
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.expand-note {
+  font-size: 13px;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+
+.expand-stats {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+body.has-expanded-card {
+  overflow: hidden;
+}
+
+@keyframes expand-in {
+  from { transform: scale(.97); opacity: .4; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 720px) {
+  .card.is-expanded {
+    inset: 0;
+    border-radius: 0;
+    padding: 18px 16px;
+  }
+
+  .expand-toggle {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.is-expanded {
+    animation: none;
+  }
+}
+
+.expand-detail th:not(:first-child) {
+  text-align: right;
+}
+
+/* ===== Peta persebaran sales ===== */
+.sales-map {
+  position: relative;
+  z-index: 0;
+  height: 210px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #eef2f7;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.map-fallback {
+  padding: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.map-legend i {
+  margin-right: 4px;
+}
+
+.map-label {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+}
+
+.card.is-expanded .sales-map {
+  height: 52vh;
+  min-height: 320px;
+  cursor: grab;
+}
+
+/* Drilldown: kartu grafik bisa diperbesar */
+.chart-card.always-toggle .expand-toggle {
+  opacity: 1;
+  top: 18px;
+  right: 18px;
+}
+
+.chart-card.always-toggle > .card-heading {
+  padding-right: 96px;
+}
+
+.card.is-expanded .drill-chart-wrap {
+  height: 50vh;
+  min-height: 320px;
+}
+
+.chart-card #drill-chart {
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .chart-card.always-toggle > .card-heading {
+    padding-right: 0;
+    padding-top: 28px;
+  }
+}
