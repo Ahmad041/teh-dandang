@@ -1,0 +1,168 @@
+{
+  "rewrites": [
+    {
+      "source": "/kesehatan-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/area",
+      "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
+    },
+    {
+      "source": "/asset",
+      "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
+    },
+    {
+      "source": "/drilldown",
+      "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
+    },
+    {
+      "source": "/early-warning",
+      "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
+    },
+    {
+      "source": "/effective-call",
+      "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
+    },
+    {
+      "source": "/expiry",
+      "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
+    },
+    {
+      "source": "/fleet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
+    },
+    {
+      "source": "/admin-pusat",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/live-tracking",
+      "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/master-area",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
+    },
+    {
+      "source": "/master-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/master-product",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
+    },
+    {
+      "source": "/master-route",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
+    },
+    {
+      "source": "/master-sales",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
+    },
+    {
+      "source": "/master-vehicle",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/noo",
+      "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
+    },
+    {
+      "source": "/nop",
+      "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
+    },
+    {
+      "source": "/notifikasi",
+      "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
+    },
+    {
+      "source": "/outlet-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/penjualan",
+      "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
+    },
+    {
+      "source": "/peta-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/ro-item",
+      "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
+    },
+    {
+      "source": "/roa",
+      "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
+    },
+    {
+      "source": "/sales-dashboard",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
+    },
+    {
+      "source": "/sales-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/tren-penjualan",
+      "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/owner",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/achievement",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/audit",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/gps",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/owner-master-sales",
+      "destination": "/dashboard%20OWNER/master-sales.html"
+    },
+    {
+      "source": "/owner-noo",
+      "destination": "/dashboard%20OWNER/noo.html"
+    },
+    {
+      "source": "/owner-nop",
+      "destination": "/dashboard%20OWNER/nop.html"
+    },
+    {
+      "source": "/orders",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/outlets",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/products",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/regions",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/ro",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/vehicles",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/visits",
+      "destination": "/dashboard%20OWNER/visits.html"
+    }
+  ]
+}
