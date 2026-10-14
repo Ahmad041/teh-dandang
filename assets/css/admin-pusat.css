@@ -1555,3 +1555,10 @@ table tbody tr[data-href]:hover td { background: #f8fafc; }
 .kpi .kpi-top { margin: 2px 0 2px; align-items: center; justify-content: flex-start; }
 .kpi-link .kpi-label { padding-right: 26px; }
 .stat-list li strong .delta { margin-left: 6px; font-size: 11px; padding: 1px 6px; }
+
+/* Peta + Tren satu baris (50:50) */
+.dash-row.half { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dash-row.half > .card { display: flex; flex-direction: column; }
+.dash-row.half .sales-map.tall { height: 340px; }
+.dash-row.half .admin-chart.wide { flex: 1; height: auto; min-height: 340px; }
+@media (max-width: 1100px) { .dash-row.half { grid-template-columns: 1fr; } }
