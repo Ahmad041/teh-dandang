@@ -8,6 +8,7 @@
   <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet"/>
   <link href="../assets/css/styles.css?v=bold_red" rel="stylesheet"/>
   <link href="../assets/css/admin-pusat.css?v=bold_red" rel="stylesheet"/>
+  <link href="../assets/css/dandang-theme.css" rel="stylesheet"/>
   <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
   <script defer="" src="../assets/js/app.js"></script>
   <script defer="" src="../assets/js/admin-pusat.js"></script>
@@ -69,8 +70,8 @@
       <section class="card" id="trend-section" aria-label="Tren Penjualan">
        <div class="card-heading">
         <div>
-         <h2 class="heading-title">Tren Penjualan</h2>
-         <p>Aktual vs target, miliar Rp — klik periode untuk drilldown</p>
+         <h2 class="heading-title" id="trend-title">Tren Penjualan</h2>
+         <p id="trend-subtitle">Aktual vs target, miliar Rp — klik periode untuk drilldown</p>
         </div>
         <div class="chart-controls">
          <div class="btn-group-sm" id="trend-grain-toggles" role="group" aria-label="Pilih rentang tren">
@@ -88,6 +89,17 @@
          </button>
         </div>
        </div>
+
+       <!-- Breadcrumbs & Navigasi Drill Down dalam Grafik Tren -->
+       <div class="trend-drill-nav" id="trend-drill-nav" hidden>
+        <button type="button" class="trend-drill-back-btn" id="trend-drill-back-btn" onclick="trendDrillBack()" title="Kembali 1 level">
+          <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5 M12 19l-7-7 7-7"></path></svg>
+          <span>Kembali</span>
+        </button>
+        <nav class="trend-drill-crumbs" id="trend-drill-crumbs" aria-label="Hierarki Drilldown"></nav>
+        <button type="button" class="trend-drill-reset-btn" id="trend-drill-reset-btn" onclick="trendDrillReset()" title="Reset ke Tren Bulanan">Reset Bulanan</button>
+       </div>
+
        <div class="admin-chart wide"><canvas id="trend-chart" role="img" aria-label="Tren aktual penjualan, target, dan tahun lalu."></canvas><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div>
       </section>
 
@@ -197,6 +209,105 @@
        </div>
       </section>
 
+       <!-- ================= SEKSI PERINGATAN OPERASIONAL & RISIKO ================= -->
+       <section class="card" id="exec-risk-section">
+        <div class="card-heading">
+         <div>
+          <h2 class="heading-title">
+           <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg>
+           Peringatan Operasional &amp; Manajemen Risiko
+          </h2>
+          <p>Pemantauan sales bermasalah, outlet tidak aktif, deviasi GPS armada, alert prioritas tinggi, dan SLA breach.</p>
+         </div>
+         <a class="button ghost" href="early-warning.html">Lihat Semua Alert &rarr;</a>
+        </div>
+        <div class="risk-summary-grid">
+         <a class="risk-summary-card danger" href="sales-dashboard.html">
+          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Sales Bermasalah</span></div>
+          <strong class="risk-count">18</strong>
+          <span class="risk-meta">EC &lt; 80% / Target Rendah</span>
+         </a>
+         <a class="risk-summary-card danger" href="kesehatan-outlet.html?status=Inactive">
+          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Outlet Tidak Aktif</span></div>
+          <strong class="risk-count">256</strong>
+          <span class="risk-meta">&gt; 60 hari tidak repeat order</span>
+         </a>
+         <a class="risk-summary-card warning" href="live-tracking.html">
+          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Penyimpangan Kendaraan</span></div>
+          <strong class="risk-count">7</strong>
+          <span class="risk-meta">Deviasi rute GPS &gt; 3 km</span>
+         </a>
+         <a class="risk-summary-card danger" href="early-warning.html">
+          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Alert Prioritas Tinggi</span></div>
+          <strong class="risk-count">47</strong>
+          <span class="risk-meta">12 Critical + 35 High alert</span>
+         </a>
+         <a class="risk-summary-card warning" href="early-warning.html">
+          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Kasus Melewati SLA</span></div>
+          <strong class="risk-count">9</strong>
+          <span class="risk-meta">Eskalasi terbuka &gt; 24 jam</span>
+         </a>
+        </div>
+       </section>
+
+       <!-- ================= SEKSI KLASIFIKASI AREA: MERAH & KUNING ================= -->
+       <section class="card" id="exec-area-health-section">
+        <div class="card-heading">
+         <div>
+          <h2 class="heading-title">
+           <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg>
+           Kinerja &amp; Klasifikasi Wilayah Pasar
+          </h2>
+          <p>Deteksi dini area merah (kritis belum capai target) dan area kuning (potensi pasar yang perlu dikembangkan).</p>
+         </div>
+         <a class="button ghost" href="area.html">Buka Area Dashboard &rarr;</a>
+        </div>
+        <div class="area-category-grid">
+         <div class="area-cat-col red-col">
+          <div class="area-cat-head">
+           <span class="cat-pill pill-red">AREA MERAH (KRITIS)</span>
+           <span class="cat-desc">Penjualan rendah &amp; target belum tercapai</span>
+          </div>
+          <div class="area-status-card card-red">
+           <div class="area-status-top">
+            <strong>Kota &amp; Kab. Cirebon</strong>
+            <span class="badge danger">Capaian: 67%</span>
+           </div>
+           <p class="area-status-body">Aktual: Rp 1,00 M / Target: Rp 1,50 M (Minus Rp 500 Jt). Growth: -5.0%, RO: 68%, EC: 75%.</p>
+           <div class="area-status-action">
+            <span class="area-tag">Rekomendasi: Evaluasi rute sales, restrukturisasi jadwal kunjungan &amp; program diskon aktivasi toko.</span>
+           </div>
+          </div>
+         </div>
+         <div class="area-cat-col yellow-col">
+          <div class="area-cat-head">
+           <span class="cat-pill pill-yellow">AREA KUNING (POTENSIAL)</span>
+           <span class="cat-desc">Potensi pasar besar yang perlu dikembangkan</span>
+          </div>
+          <div class="area-status-card card-yellow">
+           <div class="area-status-top">
+            <strong>Bandung Raya</strong>
+            <span class="badge warning">Capaian: 80%</span>
+           </div>
+           <p class="area-status-body">Aktual: Rp 1,60 M / Target: Rp 2,00 M. Growth: +2.0%, RO: 77%, EC: 89%. Penetrasi outlet baru (NOO) tinggi namun varian belum merata.</p>
+           <div class="area-status-action">
+            <span class="area-tag">Peluang: Ekspansi varian SKU Teh Dandang Celup &amp; penguatan distribusi grosir.</span>
+           </div>
+          </div>
+          <div class="area-status-card card-yellow" style="margin-top:8px">
+           <div class="area-status-top">
+            <strong>Banyuwangi &amp; Jember</strong>
+            <span class="badge warning">Capaian: 82%</span>
+           </div>
+           <p class="area-status-body">Aktual: Rp 2,05 M / Target: Rp 2,50 M. Growth: +3.2%, RO: 78%, EC: 86%. Basis mitra bertumbuh tapi frekuensi order lambat.</p>
+           <div class="area-status-action">
+            <span class="area-tag">Peluang: Percepat siklus repeat order mingguan &amp; insentif bundling produk.</span>
+           </div>
+          </div>
+         </div>
+        </div>
+       </section>
+
 
      </div>
     </div>
@@ -206,3 +317,5 @@
 
  </body>
 </html>
+
+

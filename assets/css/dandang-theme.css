@@ -1,0 +1,556 @@
+/*
+ * ============================================================
+ * DANDANG BRAND THEME — selaras dengan warna merah bold website
+ * Terinspirasi dari header merah #E31E24 di tehdandang.com
+ * ============================================================
+ */
+
+/* ── 1. Design Tokens ─────────────────────────────────────── */
+:root {
+  /* Merah Dandang utama (sesuai website) */
+  --dan-red:        #E31E24;
+  --dan-red-dark:   #C91820;
+  --dan-red-deep:   #A9141B;
+  --dan-red-rich:   #8B0E13;   /* merah tua pekat */
+  --dan-maroon:     #570B10;
+  --dan-maroon-deep:#3D070B;
+  --dan-maroon-dark:#260407;
+
+  /* Tints */
+  --dan-red-10:     #FFF1F1;
+  --dan-red-20:     #FFDADA;
+  --dan-red-30:     #FCA5A5;
+
+  /* Surface / neutral */
+  --dan-white:      #FFFFFF;
+  --dan-bg:         #F8FAFC;
+  --dan-line:       #E2E8F0;
+  --dan-ink:        #0F172A;
+  --dan-muted:      #475569;
+
+  /* Font */
+  --dan-font: 'Segoe UI', 'Inter', Arial, sans-serif;
+}
+
+/* ── 2. Global font upgrade ───────────────────────────────── */
+body {
+  font-family: var(--dan-font) !important;
+  background: var(--dan-bg) !important;
+}
+
+/* ── 3. SIDEBAR — merah solid seperti header website ──────── */
+.sidebar {
+  width: 256px !important;
+  background: #E31E24 !important;
+  box-shadow: 4px 0 24px rgba(163, 20, 27, 0.35) !important;
+  border-right: 0 !important;
+}
+
+/* Hapus garis dekoratif atas */
+.sidebar::before {
+  display: none !important;
+}
+
+/* ── Brand area ────────────────────────────────────────────── */
+.brand {
+  padding: 20px 18px 16px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  position: relative;
+}
+
+.brand::after {
+  display: none !important;
+}
+
+.brand strong {
+  font-size: 14px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+
+.brand small {
+  font-size: 9px !important;
+  letter-spacing: 2px !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  text-transform: uppercase !important;
+}
+
+.brand-mark {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35),
+              0 0 0 2px rgba(255, 255, 255, 0.15) !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* ── Connection / Demo badge ───────────────────────────────── */
+.connection {
+  margin: 12px 14px 0 !important;
+  padding: 7px 10px !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.connection .dot {
+  background: #22c55e !important;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6) !important;
+}
+
+.demo-label {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+  padding: 1px 6px !important;
+  border-radius: 3px !important;
+  font-size: 8px !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ── Nav groups ──────────────────────────────────────────── */
+nav {
+  padding: 8px 10px 16px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent !important;
+}
+
+.nav-group {
+  margin-top: 20px !important;
+}
+
+.nav-group:first-child {
+  margin-top: 14px !important;
+}
+
+.nav-group h2 {
+  font-size: 9px !important;
+  letter-spacing: 1.8px !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  padding: 0 8px !important;
+  margin-bottom: 6px !important;
+}
+
+/* ── Nav links ──────────────────────────────────────────── */
+.nav-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 38px !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
+  margin-bottom: 2px !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.82) !important;
+  transition: all 0.18s ease !important;
+  position: relative !important;
+}
+
+.nav-link svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  flex-shrink: 0 !important;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.nav-link:hover svg {
+  color: #ffffff !important;
+}
+
+/* Active nav link — putih bold kontras dengan merah gelap sidebar */
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #C91820 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+.nav-link.active svg {
+  color: #C91820 !important;
+}
+
+/* Count badge di sidebar */
+.nav-link .count {
+  margin-left: auto !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #fff !important;
+  padding: 2px 7px !important;
+  border-radius: 12px !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.nav-link.active .count {
+  background: rgba(201, 24, 32, 0.15) !important;
+  color: #C91820 !important;
+}
+
+/* Pending nav link */
+.nav-link.is-pending {
+  opacity: 0.45 !important;
+}
+
+/* ── Sidebar Profile ────────────────────────────────────── */
+.sidebar-profile {
+  padding: 14px 16px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  gap: 10px !important;
+}
+
+.sidebar-profile strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.sidebar-profile small {
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  letter-spacing: 0.3px !important;
+}
+
+.sidebar-profile .avatar {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #C91820 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ── 4. WORKSPACE layout adjust ─────────────────────────── */
+.workspace {
+  margin-left: 256px !important;
+}
+
+/* ── 5. TOPBAR — lebih merah, lebih brand ──────────────── */
+.topbar {
+  height: 62px !important;
+  background: #FFFFFF !important;
+  border-bottom: 2px solid #E31E24 !important;
+  box-shadow: 0 2px 12px rgba(227, 30, 36, 0.1) !important;
+  padding: 0 24px !important;
+}
+
+.breadcrumb {
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+.breadcrumb span {
+  color: #E31E24 !important;
+  margin: 0 8px !important;
+}
+
+.breadcrumb strong {
+  color: #0F172A !important;
+  font-weight: 600 !important;
+}
+
+.topbar .badge {
+  background: #E31E24 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+}
+
+/* Icon buttons di topbar */
+.icon-button {
+  border-color: #e2e8f0 !important;
+  color: #C91820 !important;
+}
+
+.icon-button:hover {
+  background: #FFF1F1 !important;
+  border-color: #fca5a5 !important;
+  color: #E31E24 !important;
+}
+
+/* Notif dot */
+.notif-dot {
+  background: #E31E24 !important;
+  box-shadow: 0 0 0 2px #fff !important;
+}
+
+/* Avatar topbar */
+.topbar .avatar.small {
+  background: #C91820 !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  border: 2px solid rgba(227, 30, 36, 0.2) !important;
+}
+
+/* ── 6. PAGE HEADING ───────────────────────────────────── */
+.page-heading {
+  background: #FFF5F5 !important;
+  border: 1px solid #FFDADA !important;
+  border-radius: 12px !important;
+  border-left: 4px solid #E31E24 !important;
+  padding: 20px 22px !important;
+}
+
+.page-heading h1 {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.eyebrow {
+  color: #E31E24 !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.8px !important;
+}
+
+/* ── 7. CARDS ──────────────────────────────────────────── */
+.card {
+  border-radius: 12px !important;
+  border: 1px solid #e8edf5 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 14px rgba(0,0,0,0.03) !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07) !important;
+}
+
+.card-click:hover,
+.card-click:focus-visible {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 28px rgba(227, 30, 36, 0.15) !important;
+  border-color: #fca5a5 !important;
+}
+
+.card-heading .heading-title svg {
+  color: #E31E24 !important;
+}
+
+/* ── 8. KPI Cards ──────────────────────────────────────── */
+.kpi {
+  border-radius: 10px !important;
+}
+
+/* ── 9. BUTTONS ────────────────────────────────────────── */
+.button.primary {
+  background: #E31E24 !important;
+  border-color: #C91820 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+
+.button.primary:hover {
+  background: #C91820 !important;
+  box-shadow: none !important;
+}
+
+.button:not(.primary):hover {
+  background: #FFF1F1 !important;
+  border-color: #fca5a5 !important;
+  color: #C91820 !important;
+}
+
+/* ── 10. TOGGLE BUTTONS ─────────────────────────────────── */
+.btn-toggle.active {
+  background: #E31E24 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.btn-toggle:hover:not(.active) {
+  background: #FFF1F1 !important;
+  color: #991b1b !important;
+}
+
+/* ── 11. FILTER BAR ─────────────────────────────────────── */
+.filter-card {
+  background: #FFF5F5 !important;
+  border-color: #FFDADA !important;
+}
+
+.filter-bar select,
+.filter-bar input[type="date"],
+.filter-bar .filter-field select {
+  border-color: #FFDADA !important;
+  border-radius: 8px !important;
+}
+
+.dp-trigger {
+  border-color: #FFDADA !important;
+}
+
+.dp-trigger:hover,
+.dp-trigger[aria-expanded="true"] {
+  border-color: #E31E24 !important;
+  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.12) !important;
+}
+
+.dp-day.start,
+.dp-day.end {
+  background: #E31E24 !important;
+  color: #fff !important;
+}
+
+.dp-presets button.active {
+  background: #E31E24 !important;
+  border-color: #C91820 !important;
+  color: #fff !important;
+}
+
+/* ── 12. TABLES ─────────────────────────────────────────── */
+th {
+  background: #FFF5F5 !important;
+  color: #7f1d1d !important;
+}
+
+tbody tr:hover td {
+  background: #FFF9F9 !important;
+}
+
+/* ── 13. PERFORMER section ──────────────────────────────── */
+.rank-top .performer-rank {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+}
+
+.rank-top .rank-1 {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  box-shadow: none !important;
+}
+
+.rank-bottom .performer-rank {
+  background: #FFF1F1 !important;
+  color: #E31E24 !important;
+}
+
+/* ── 14. MAP CARD ───────────────────────────────────────── */
+.sales-map {
+  border-radius: 10px !important;
+  border-color: #FFDADA !important;
+}
+
+/* ── 15. TABS ───────────────────────────────────────────── */
+.tabs button[aria-selected="true"] {
+  background: #E31E24 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* ── 16. CHART CONTROLS ─────────────────────────────────── */
+.chart-switcher button[aria-pressed="true"] {
+  background: #E31E24 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* ── 17. DRILL BREADCRUMBS ──────────────────────────────── */
+.drill-breadcrumbs button:last-of-type {
+  background: #E31E24 !important;
+  color: #fff !important;
+  border-color: #C91820 !important;
+}
+
+/* ── 18. DRILLDOWN PROMPT ───────────────────────────────── */
+.exec-drill-prompt svg {
+  color: #E31E24 !important;
+  opacity: 0.25 !important;
+}
+
+/* ── 19. TOAST ──────────────────────────────────────────── */
+.toast {
+  background: #C91820 !important;
+}
+
+/* ── 20. FOOTER ─────────────────────────────────────────── */
+footer {
+  border-top-color: #FFDADA !important;
+}
+
+footer a:hover {
+  color: #E31E24 !important;
+}
+
+/* ── 21. Mobile responsive ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .workspace {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    padding: 0 16px !important;
+    height: 56px !important;
+  }
+
+  .page-heading {
+    padding: 16px 18px !important;
+  }
+}
+
+/* ── 22. Micro animations ───────────────────────────────── */
+@keyframes dan-slide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-link {
+  animation: dan-slide-in 0.25s ease both !important;
+}
+
+/* Stagger nav links */
+.nav-link:nth-child(1)  { animation-delay: 0.03s !important; }
+.nav-link:nth-child(2)  { animation-delay: 0.06s !important; }
+.nav-link:nth-child(3)  { animation-delay: 0.09s !important; }
+.nav-link:nth-child(4)  { animation-delay: 0.12s !important; }
+.nav-link:nth-child(5)  { animation-delay: 0.15s !important; }
+.nav-link:nth-child(6)  { animation-delay: 0.18s !important; }
+.nav-link:nth-child(7)  { animation-delay: 0.21s !important; }
+.nav-link:nth-child(8)  { animation-delay: 0.24s !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link { animation: none !important; }
+}
+
+/* ── 23. Focus ring — branded ────────────────────────────── */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(227, 30, 36, 0.5) !important;
+  outline-offset: 3px !important;
+}
+
+/* ── 24. Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFDADA;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E31E24;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

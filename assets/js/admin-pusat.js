@@ -73,7 +73,7 @@ function escapeHtml(text) {
 }
 
 /* ---------- Grafik Drilldown 7 Level ---------- */
-const DRILL_LEVELS = ["Nasional", "Region", "Area", "Kabupaten", "Kecamatan", "Salesperson", "Outlet (SKU)", "Produk SKU"];
+const DRILL_LEVELS = ["Wilayah", "Daerah", "Area", "Salesperson", "Segmen", "Toko", "Produk SKU"];
 let drillChartType = "bar";
 
 function drillStatusBadge(item) {
@@ -178,13 +178,13 @@ function buildAFTree(month) {
     return n;
   }
   const by = function (list, key, id) { return list.filter(function (o) { return o[key] === id; }); };
-  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.regions.map(function (r) { return { label: r.name, id: r.code, outlets: by(D.outlets, "region", r.code) }; }), function (rg) {
-    return node(rg.label + " · " + mName, "Wilayah", 2, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
-      return node("Area " + ag.label + " · " + mName, "Area", 3, D.kecamatan.filter(function (k) { return k.area === ag.id; }).map(function (k) { return { label: "Kec. " + k.name, id: k.id, outlets: by(ag.outlets, "kecamatan", k.id) }; }), function (kg) {
-        return node(kg.label + " · " + mName, "Kecamatan", 4, D.sales.filter(function (s) { return s.kecamatan === kg.id; }).map(function (s) { return { label: "Sales: " + s.name, id: s.id, outlets: by(kg.outlets, "sales", s.id) }; }), function (sg) {
+  return node("Wilayah · " + mName, "Wilayah", 1, D.regions.map(function (r) { return { label: r.name, id: r.code, outlets: by(D.outlets, "region", r.code) }; }), function (rg) {
+    return node(rg.label + " · " + mName, "Daerah", 2, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
+      return node(ag.label + " · " + mName, "Area", 3, D.kecamatan.filter(function (k) { return k.area === ag.id; }).map(function (k) { return { label: "Kec. " + k.name, id: k.id, outlets: by(ag.outlets, "kecamatan", k.id) }; }), function (kg) {
+        return node(kg.label + " · " + mName, "Salesperson", 4, D.sales.filter(function (s) { return s.kecamatan === kg.id; }).map(function (s) { return { label: "Sales: " + s.name, id: s.id, outlets: by(kg.outlets, "sales", s.id) }; }), function (sg) {
           const segs = ["GT", "MT", "HOREKA"].filter(function (s) { return sg.outlets.some(function (o) { return o.segment === s; }); });
-          return node(sg.label + " · " + mName, "Salesperson", 5, segs.map(function (s) { return { label: "Segmen " + s, id: s, outlets: by(sg.outlets, "segment", s) }; }), function (seg) {
-            return node(sg.label + " · " + seg.label + " · " + mName, "Segmen", 6, seg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; }), function (og) {
+          return node(sg.label + " · " + mName, "Segmen", 5, segs.map(function (s) { return { label: "Segmen " + s, id: s, outlets: by(sg.outlets, "segment", s) }; }), function (seg) {
+            return node(sg.label + " · " + seg.label + " · " + mName, "Toko", 6, seg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; }), function (og) {
               return productNode(og.o);
             });
           });

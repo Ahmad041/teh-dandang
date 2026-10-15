@@ -1944,4 +1944,294 @@ table tbody tr[data-href]:hover td { background: #f8fafc; }
   color: var(--muted);
 }
 
+/* ── In-Chart Drilldown Breadcrumb Nav ─────────────────── */
+.trend-drill-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: #FFF5F5;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  animation: fadeInDrill 0.2s ease-in-out;
+}
+@keyframes fadeInDrill {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.trend-drill-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.trend-drill-back-btn:hover {
+  background: #E31E24;
+  border-color: #E31E24;
+  color: #ffffff;
+}
+.trend-drill-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.trend-crumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.trend-crumb-item:hover {
+  background: rgba(227, 30, 36, 0.08);
+  color: #E31E24;
+}
+.trend-crumb-item.active {
+  background: linear-gradient(135deg, #E31E24 0%, #C91820 100%);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: default;
+  box-shadow: 0 1px 3px rgba(227, 30, 36, 0.3);
+}
+.trend-crumb-item small {
+  opacity: 0.85;
+  font-size: 10px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.trend-crumb-separator {
+  color: #94A3B8;
+  font-size: 12px;
+  user-select: none;
+}
+.trend-drill-reset-btn {
+  background: none;
+  border: 1px dashed #CBD5E1;
+  color: #64748B;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.trend-drill-reset-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+/* Executive KPI 8 Cards Grid */
+#exec-kpis.kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 1200px) {
+  #exec-kpis.kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  #exec-kpis.kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Executive Risk & Early Warning Summary */
+.risk-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+@media (max-width: 1024px) {
+  .risk-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .risk-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.risk-summary-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+.risk-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+.risk-summary-card.danger {
+  border-left: 4px solid #ef4444;
+  background: #fff8f8;
+}
+.risk-summary-card.danger:hover {
+  border-color: #ef4444;
+}
+.risk-summary-card.warning {
+  border-left: 4px solid #f59e0b;
+  background: #fffdf5;
+}
+.risk-summary-card.warning:hover {
+  border-color: #f59e0b;
+}
+
+.risk-card-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.risk-summary-card.danger .risk-icon {
+  color: #ef4444;
+  font-size: 16px;
+}
+.risk-summary-card.warning .risk-icon {
+  color: #f59e0b;
+  font-size: 16px;
+}
+.risk-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.risk-count {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+.risk-summary-card.danger .risk-count {
+  color: #dc2626;
+}
+.risk-summary-card.warning .risk-count {
+  color: #d97706;
+}
+.risk-meta {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+/* Area Category Section (Merah & Kuning) */
+.area-category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+@media (max-width: 900px) {
+  .area-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.area-cat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.area-cat-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cat-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.pill-red {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+.pill-yellow {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.cat-desc {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.area-status-card {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+.area-status-card.card-red {
+  background: linear-gradient(180deg, #fffafa 0%, #fff5f5 100%);
+  border-color: #fecaca;
+  border-left: 4px solid #ef4444;
+}
+.area-status-card.card-yellow {
+  background: linear-gradient(180deg, #fffdf8 0%, #fefce8 100%);
+  border-color: #fef08a;
+  border-left: 4px solid #f59e0b;
+}
+
+.area-status-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.area-status-top strong {
+  font-size: 14px;
+  color: #0f172a;
+}
+.area-status-body {
+  font-size: 12px;
+  color: #334155;
+  margin: 0 0 8px 0;
+  line-height: 1.45;
+}
+.area-status-action {
+  font-size: 11px;
+  color: #475569;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+
 

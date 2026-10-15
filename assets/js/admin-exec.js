@@ -6,12 +6,89 @@
   let trendGrain = "monthly";
   let trendType = "bar";
   let trendDrillActive = false;
+  let trendDrillStack = [];
   let regionChartType = "doughnut";
   let performerTab = "toko";
   let lastExecState = null;
   let lastOutlets = null;
   let lastInfo = null;
   let lastItems = null;
+
+  function setTrendDrillActive(active) {
+    trendDrillActive = active;
+    const drillBtn = document.getElementById("trend-drill-btn");
+    if (drillBtn) {
+      drillBtn.classList.toggle("active", active);
+      drillBtn.setAttribute("aria-pressed", active);
+      const span = drillBtn.querySelector("span");
+      if (span) span.textContent = active ? "Drill Down: Aktif" : "Drill Down";
+    }
+  }
+
+  function trendDrillToMonth(idx) {
+    if (typeof buildAFTree !== "function") return;
+    const month = Math.min(9, Math.max(0, Number(idx) || 0));
+    const tree = buildAFTree(month);
+    const monthLabel = (D.trend && D.trend.labels && D.trend.labels[month] ? D.trend.labels[month] : "Bulan " + (month + 1)) + " 2026";
+    trendDrillStack = [{
+      levelName: "Wilayah",
+      title: monthLabel,
+      node: tree,
+      monthIndex: month
+    }];
+    setTrendDrillActive(true);
+    renderTrendChart(lastExecState);
+    syncExecDrilldown();
+  }
+
+  function trendDrillBack() {
+    if (trendDrillStack.length > 1) {
+      trendDrillStack.pop();
+      renderTrendChart(lastExecState);
+      syncExecDrilldown();
+    } else {
+      trendDrillReset();
+    }
+  }
+
+  function trendDrillReset() {
+    trendDrillStack = [];
+    setTrendDrillActive(false);
+    const nav = document.getElementById("trend-drill-nav");
+    if (nav) nav.hidden = true;
+    const titleEl = document.getElementById("trend-title");
+    if (titleEl) titleEl.textContent = "Tren Penjualan";
+    const subEl = document.getElementById("trend-subtitle");
+    if (subEl) subEl.textContent = "Aktual vs target, miliar Rp — klik periode untuk drilldown";
+    renderTrendChart(lastExecState);
+    if (typeof execDrillReset === "function") execDrillReset();
+  }
+
+  function trendDrillJump(index) {
+    if (index >= 0 && index < trendDrillStack.length) {
+      trendDrillStack = trendDrillStack.slice(0, index + 1);
+      renderTrendChart(lastExecState);
+      syncExecDrilldown();
+    }
+  }
+
+  function syncExecDrilldown() {
+    if (trendDrillStack.length > 0) {
+      execDrillState = trendDrillStack.map(function (s) { return s.node; });
+      renderExecDrill();
+    } else {
+      execDrillState = null;
+      const placeholder = document.getElementById("exec-drilldown-placeholder");
+      const content = document.getElementById("exec-drilldown-content");
+      if (placeholder) placeholder.hidden = false;
+      if (content) content.hidden = true;
+    }
+  }
+
+  window.trendDrillBack = trendDrillBack;
+  window.trendDrillReset = trendDrillReset;
+  window.trendDrillJump = trendDrillJump;
+  window.trendDrillToMonth = trendDrillToMonth;
 
   function scopeKey(state) { return state.region + "|" + state.area + "|" + state.outlet; }
   function short(name) { return name.replace("Teh Dandang ", ""); }
@@ -153,7 +230,17 @@
       kpiCard({ href: "roa.html", label: "Outlet Repeat Order", value: AF.num(roOutletActual) + "<small> / " + AF.num(roOutletTarget) + "</small>",
         dl: AF.delta(roOutletActual, prevRoOutletActual), prevRange: pr,
         bar: roOutletPct, statusPct: roOutletPct,
-        sub: "<b>" + AF.pct(roOutletPct) + "</b> dari target" })
+        sub: "<b>" + AF.pct(roOutletPct) + "</b> dari target" }),
+      // 7. Jumlah Sales Force Aktif
+      kpiCard({ href: "master-sales.html", label: "Sales Force Aktif", value: AF.num(D.sales.length) + "<small> Sales</small>",
+        dl: { dir: "flat", text: "0,0%" }, prevRange: pr,
+        bar: 100, statusPct: 100,
+        sub: "<b>" + AF.num(D.sales.length) + "</b> salesman di 5 Region" }),
+      // 8. Basis Mitra & Outlet Aktif
+      kpiCard({ href: "kesehatan-outlet.html", label: "Mitra Outlet Aktif", value: AF.num(m.active) + "<small> / " + AF.num(m.outlets) + "</small>",
+        dl: AF.delta(m.active, p.active), prevRange: pr,
+        bar: m.outlets ? m.active / m.outlets * 100 : 0, statusPct: m.outlets ? m.active / m.outlets * 100 : 0,
+        sub: "<b>" + AF.pct(m.outlets ? m.active / m.outlets * 100 : 0) + "</b> rasio outlet aktif" })
     ].join("");
 
     // Peta
@@ -210,6 +297,99 @@
     const canvas = document.getElementById("trend-chart");
     if (!canvas) return;
 
+    const nav = document.getElementById("trend-drill-nav");
+    const crumbs = document.getElementById("trend-drill-crumbs");
+    const titleEl = document.getElementById("trend-title");
+    const subEl = document.getElementById("trend-subtitle");
+
+    // Jika sedang dalam mode drilldown (Bulan -> Wilayah -> Daerah -> Area)
+    if (trendDrillStack.length > 0) {
+      if (nav) nav.hidden = false;
+      const currentStep = trendDrillStack[trendDrillStack.length - 1];
+      const node = currentStep.node;
+      const items = node.items || [];
+      const lowest = !!node.isLowest || (node.depth || 1) >= 7;
+
+      // Update breadcrumbs
+      if (crumbs) {
+        let html = '<button type="button" class="trend-crumb-item" onclick="trendDrillReset()">Semua Bulan</button>';
+        trendDrillStack.forEach(function (s, i) {
+          const isLast = i === trendDrillStack.length - 1;
+          html += '<span class="trend-crumb-separator">/</span>';
+          if (isLast) {
+            html += '<span class="trend-crumb-item active">' + AF.esc(s.title) + ' <small>(' + AF.esc(s.levelName) + ')</small></span>';
+          } else {
+            html += '<button type="button" class="trend-crumb-item" onclick="trendDrillJump(' + i + ')">' + AF.esc(s.title) + ' <small>(' + AF.esc(s.levelName) + ')</small></button>';
+          }
+        });
+        crumbs.innerHTML = html;
+      }
+
+      // Update Judul & Subjudul kartu
+      if (titleEl) {
+        if (node.levelName === "Wilayah") titleEl.textContent = "Tren Penjualan — " + currentStep.title;
+        else titleEl.textContent = currentStep.title + " · " + trendDrillStack[0].title;
+      }
+      if (subEl) {
+        if (node.levelName === "Wilayah") subEl.textContent = "Level Wilayah — Klik salah satu batang Wilayah untuk melihat Daerah";
+        else if (node.levelName === "Daerah") subEl.textContent = "Level Daerah — Klik salah satu Daerah untuk melihat Area";
+        else if (node.levelName === "Area") subEl.textContent = "Level Area — Rincian kecamatan / distribusi di " + currentStep.title;
+        else subEl.textContent = "Tingkat " + (node.levelName || "Detail");
+      }
+
+      const labels = items.map(function (i) { return i.label; });
+      const actualM = items.map(function (i) { return Number((i.actual / 1e9).toFixed(3)); });
+      const targetM = items.map(function (i) { return Number((i.target / 1e9).toFixed(3)); });
+      const colors = items.map(function (i) { return i.color || "#E31E24"; });
+
+      const datasets = trendType === "line" ? [
+        { type: "line", label: "Aktual Penjualan (Miliar Rp)", data: actualM, borderColor: "#E31E24", backgroundColor: "rgba(227, 30, 36, 0.12)", fill: true, borderWidth: 3, pointRadius: 4, pointBackgroundColor: "#E31E24", tension: .3, order: 1 },
+        { type: "line", label: "Target (Miliar Rp)", data: targetM, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 2 }
+      ] : [
+        { type: "bar", label: "Aktual Penjualan (Miliar Rp)", data: actualM, backgroundColor: colors, borderRadius: 6, maxBarThickness: 52, order: 2 },
+        { type: "line", label: "Target (Miliar Rp)", data: targetM, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 }
+      ];
+
+      refreshAdminChart(canvas, {
+        type: trendType,
+        legend: "top",
+        labels: labels,
+        datasets: datasets
+      });
+
+      setTimeout(function () {
+        if (canvas && canvas._chart) {
+          canvas._chart.options.onClick = function (_e, elements) {
+            if (elements.length && !lowest) {
+              const idx = elements[0].index;
+              const clickedItem = items[idx];
+              if (clickedItem && node.children && node.children[clickedItem.label]) {
+                const nextChild = node.children[clickedItem.label];
+                trendDrillStack.push({
+                  levelName: nextChild.levelName,
+                  title: clickedItem.label,
+                  node: nextChild,
+                  monthIndex: trendDrillStack[0].monthIndex
+                });
+                renderTrendChart(lastExecState);
+                syncExecDrilldown();
+              }
+            }
+          };
+          canvas._chart.options.onHover = function (e, elements) {
+            e.native.target.style.cursor = elements.length && !lowest ? "pointer" : "default";
+          };
+          canvas._chart.update("none");
+        }
+      }, 100);
+      return;
+    }
+
+    // Tampilan normal tanpa drilldown (Bulanan / Mingguan / Harian)
+    if (nav) nav.hidden = true;
+    if (titleEl) titleEl.textContent = "Tren Penjualan";
+    if (subEl) subEl.textContent = "Aktual vs target, miliar Rp — klik periode untuk drilldown";
+
     let labels, actual, target, lastYear;
     if (trendGrain === "daily") {
       labels = ["30 Sep", "1 Okt", "2 Okt", "3 Okt", "4 Okt", "5 Okt", "6 Okt", "7 Okt", "8 Okt", "9 Okt", "10 Okt", "11 Okt", "12 Okt", "13 Okt"];
@@ -252,10 +432,15 @@
         canvas._chart.options.onClick = function (_e, elements) {
           if (elements.length) {
             const idx = elements[0].index;
-            openExecDrilldown(trendGrain === "monthly" ? idx : 9);
-            const drillSec = document.getElementById("exec-drilldown-section");
-            if (drillSec) drillSec.scrollIntoView({ behavior: "smooth" });
+            if (trendGrain === "monthly") {
+              trendDrillToMonth(idx);
+            } else {
+              openExecDrilldown(9);
+            }
           }
+        };
+        canvas._chart.options.onHover = function (e, elements) {
+          e.native.target.style.cursor = elements.length ? "pointer" : "default";
         };
         canvas._chart.update("none");
       }
@@ -264,7 +449,7 @@
     // Cek URL param ?drillbulan= jika ada
     const qp = new URLSearchParams(location.search);
     const dBulan = qp.get("drillbulan");
-    if (dBulan !== null) openExecDrilldown(Number(dBulan));
+    if (dBulan !== null) trendDrillToMonth(Number(dBulan));
   }
 
   // ================================================================ KONTRIBUSI PENJUALAN PER WILAYAH
@@ -451,7 +636,11 @@
         grainBtns.forEach(function (b) { b.classList.remove("active"); });
         btn.classList.add("active");
         trendGrain = btn.dataset.grain;
-        if (lastExecState) renderTrendChart(lastExecState);
+        if (trendDrillStack.length > 0) {
+          trendDrillReset();
+        } else if (lastExecState) {
+          renderTrendChart(lastExecState);
+        }
       };
     });
 
@@ -470,15 +659,10 @@
     const drillBtn = document.getElementById("trend-drill-btn");
     if (drillBtn) {
       drillBtn.onclick = function () {
-        trendDrillActive = !trendDrillActive;
-        drillBtn.classList.toggle("active", trendDrillActive);
-        drillBtn.setAttribute("aria-pressed", trendDrillActive);
-        const span = drillBtn.querySelector("span");
-        if (span) span.textContent = trendDrillActive ? "Drill Down: Aktif" : "Drill Down";
-        const drillSec = document.getElementById("exec-drilldown-section");
-        if (trendDrillActive && drillSec) {
-          openExecDrilldown(9);
-          drillSec.scrollIntoView({ behavior: "smooth" });
+        if (trendDrillStack.length > 0) {
+          trendDrillReset();
+        } else {
+          trendDrillToMonth(0); // Drilldown mulai dari Januari
         }
       };
     }
@@ -531,16 +715,30 @@
     let child = node.children && node.children[label];
     if (!child) child = { title: label, levelName: "Detail", depth: (node.depth || 1) + 1, isLowest: true, items: node.items.slice(0, 5) };
     execDrillState.push(child);
+    if (trendDrillStack.length > 0) {
+      trendDrillStack.push({ levelName: child.levelName, title: label, node: child, monthIndex: trendDrillStack[0].monthIndex });
+      renderTrendChart(lastExecState);
+    }
     renderExecDrill();
   }
 
   function execDrillBack() {
-    if (execDrillState && execDrillState.length > 1) execDrillState.pop();
+    if (execDrillState && execDrillState.length > 1) {
+      execDrillState.pop();
+      if (trendDrillStack.length > 1) {
+        trendDrillStack.pop();
+        renderTrendChart(lastExecState);
+      }
+    }
     renderExecDrill();
   }
 
   function execDrillReset() {
     if (execDrillState) execDrillState = execDrillState.slice(0, 1);
+    if (trendDrillStack.length > 1) {
+      trendDrillStack = trendDrillStack.slice(0, 1);
+      renderTrendChart(lastExecState);
+    }
     renderExecDrill();
   }
 
