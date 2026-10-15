@@ -134,7 +134,7 @@ function setDrillMonth(value) {
 
 function buildAFTree(month) {
   const AF = window.AF, D = AF.D, t = D.trend;
-  const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16", "#f97316", "#14b8a6", "#6366f1"];
+  const COLORS = ["#E31E24", "#C91820", "#f59e0b", "#10b981", "#8b5cf6", "#ec4899", "#f97316", "#84cc16", "#14b8a6", "#6366f1"];
   const mName = t.labels[month] + " 2026";
   function factor(o, m) {
     if (m < 0) return t.lastYear[0] / t.actual[9];
@@ -288,7 +288,7 @@ function renderDrill() {
   const horizontal = drillChartType === "horizontal";
   const donut = drillChartType === "donut";
   const labels = items.map(function (i) { return i.label; });
-  const colors = items.map(function (i) { return i.color || "#2563eb"; });
+  const colors = items.map(function (i) { return i.color || "#E31E24"; });
   const actual = items.map(function (i) { return i.actual / 1000000; });
   const target = items.map(function (i) { return i.target / 1000000; });
   const datasets = donut
@@ -519,7 +519,7 @@ function labelRoom(options) {
 /* ---------- Grafik Admin Pusat ---------- */
 function drawAdminChart(canvas) {
   const cfg = JSON.parse(canvas.dataset.adminChart);
-  const donut = cfg.type === "doughnut";
+  const donut = cfg.type === "doughnut" || cfg.type === "pie";
   const horizontal = cfg.axis === "y";
   const card = canvas.closest(".card");
   const options = {

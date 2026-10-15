@@ -48,7 +48,8 @@
   ];
   const PRESET = {};
   for (const p of PRESETS) PRESET[p[0]] = { key: p[0], label: p[1], range: p[2] };
-  const DEFAULT_PRESET = "1m";
+  const DEFAULT_PRESET = "1m"; // Default: 30 hari terakhir (sesuai revisi dashboard)
+
   const OLD = { "7": "7d", "30": "1m", "90": "3m", "ytd": "ytd" };
 
   function fmtDate(d) {
