@@ -1569,3 +1569,16 @@ table tbody tr[data-href]:hover td { background: #f8fafc; }
 .toko-table tbody tr:hover td { background: #f8fafc; }
 .toko-table tbody tr.selected td { background: var(--primary-soft); }
 .toko-table .delta { font-size: 11px; }
+
+/* Peta Outlet: tabel wilayah + buka toko NOO/NOP */
+#map-groups .group-row td { background: #fff; }
+#map-groups .group-row[aria-expanded="true"] td { background: var(--primary-soft); }
+#map-groups .chev { width: 24px; height: 24px; margin-right: 6px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--muted); line-height: 1; transition: transform .15s; }
+#map-groups .chev:hover { border-color: var(--primary); color: var(--primary); }
+#map-groups .group-row[aria-expanded="true"] .chev { transform: rotate(90deg); color: var(--primary); border-color: var(--primary); }
+#map-groups .group-name { border: 0; background: none; padding: 0; font-weight: 700; color: var(--ink); cursor: pointer; }
+#map-groups .group-name:hover { color: var(--primary); text-decoration: underline; }
+#map-groups .child-row td:first-child { padding-left: 44px; }
+#map-groups .child-row { cursor: pointer; }
+#map-groups .child-row:hover td { background: #f8fafc; }
+#map-groups tbody tr { cursor: default; }

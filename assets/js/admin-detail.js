@@ -172,6 +172,44 @@
 
   function renderChart(units) {
     const canvas = document.getElementById("detail-chart");
+    const wrap = canvas.parentElement;
+    wrap.style.height = "";
+    // Level toko: satu batang per toko = % capaian target, urut tertinggi ke terendah
+    if (units.level === "Toko" && units.rows.length && units.rows[0].v.pct !== null) {
+      const order = units.rows.map(function (r, i) { return i; }).sort(function (a, b) { return units.rows[b].v.pct - units.rows[a].v.pct; });
+      const rows = order.map(function (i) { return units.rows[i]; });
+      const COLOR = { good: "#10b981", warn: "#f59e0b", bad: "#ef4444" };
+      setText("chart-title", "Capaian Target per Toko");
+      setText("chart-sub", "% dari target, urut tertinggi · garis = 100%");
+      wrap.style.height = Math.max(300, rows.length * 24 + 50) + "px";
+      const max = Math.max(110, Math.ceil(Math.max.apply(null, rows.map(function (r) { return r.v.pct; })) / 10) * 10 + 10);
+      const target100 = {
+        id: "target100",
+        afterDatasetsDraw: function (chart) {
+          const x = chart.scales.x.getPixelForValue(100), a = chart.chartArea, ctx = chart.ctx;
+          ctx.save(); ctx.strokeStyle = "#0f172a"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.moveTo(x, a.top); ctx.lineTo(x, a.bottom); ctx.stroke();
+          ctx.setLineDash([]); ctx.fillStyle = "#0f172a"; ctx.font = "600 11px 'Segoe UI', Arial, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("Target 100%", x, a.top - 6); ctx.restore();
+        }
+      };
+      createChart(canvas, {
+        type: "bar",
+        data: { labels: rows.map(function (r) { return r.name.slice(0, 30); }),
+          datasets: [{ label: "Capaian", data: rows.map(function (r) { return Math.round(r.v.pct * 10) / 10; }), backgroundColor: rows.map(function (r) { return COLOR[r.v.tone] || "#2563eb"; }), borderRadius: 3, barThickness: 14 }] },
+        plugins: [target100],
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false, indexAxis: "y",
+          plugins: { legend: { display: false }, valueLabels: { format: function (v) { return v.toLocaleString("id-ID", { maximumFractionDigits: 1 }) + "%"; } },
+            tooltip: { callbacks: { label: function (it) { const r = rows[it.dataIndex]; return r.v.main + " · " + it.parsed.x.toLocaleString("id-ID") + "% dari target"; } } } },
+          scales: { x: { min: 0, max: max, grid: { color: "#eef2f7" }, ticks: { color: "#475569", font: { size: 11 }, callback: function (v) { return v + "%"; } } },
+            y: { grid: { display: false }, ticks: { color: "#1e293b", font: { size: 11 }, autoSkip: false } } },
+          layout: { padding: { right: 48, top: 18 } },
+          onClick: function (_e, els) { if (els.length) drill(units.groups[order[els[0].index]], units.level); }
+        }
+      });
+      return;
+    }
     const labels = units.rows.map(function (r) { return r.name.replace(/^Region \d · /, "").slice(0, 28); });
     let datasets, title, sub, horizontal = units.rows.length > 7;
     if (units.level === "Item") {
