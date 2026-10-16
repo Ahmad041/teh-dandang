@@ -55,41 +55,23 @@ Bootstrap CSS 5.3.8 tersedia lewat CDN jsDelivr pada semua halaman. CSS proyek d
 
 Halaman `dashboard OWNER/achievement.html` menggabungkan Target vs Realisasi dan drilldown dalam satu menu, dengan gaya batang aktual biru di atas target abu-abu. Halaman ini memakai satu grafik per level. Dropdown memilih Target vs Realisasi (Rp) atau Barang Terjual (Unit), serta semua barang atau produk tertentu. Pilihan tetap aktif saat menelusuri Nasional → Region → Area → Kabupaten → Kecamatan → Sales → Outlet → Produk. Breadcrumb dan tombol kembali membuka level sebelumnya; klik produk terakhir membuka popup detail. Data grafik ini adalah contoh statis, dengan total anak yang menjumlah ke total induk. Nama produk mengacu pada katalog resmi Teh Dandang.
 
-## Dashboard ADMIN PUSAT
+## Dashboard OWNER (gabungan dari Admin Pusat)
 
-Folder `dashboard ADMIN PUSAT/` meniru menu role Admin Pusat di prototipe PHP (Laravel), dengan gaya yang sama seperti dashboard OWNER (`styles.css` dan `app.js`). Tambahan khusus:
+Role Admin Pusat tidak dipakai, jadi seluruh halamannya dipindah ke `dashboard OWNER/`. Halaman dengan nama sama (`index`, `drilldown`, `noo`, `nop`, `master-sales`) memakai versi baru; halaman Owner lain (`achievement`, `visits`, `orders`, `ro`, `gps`, `audit`, dll) tetap ada dan masuk sidebar yang sama.
 
-- `assets/css/admin-pusat.css` untuk gaya tambahan halaman Admin Pusat.
-- `assets/js/admin-pusat.js` untuk filter tabel, grafik drilldown 7 level, dan filter Area Dashboard.
+File tambahan:
 
-Tahap 1 (Monitoring & Analytics):
+- `assets/css/admin-pusat.css`: gaya tambahan (layout dashboard, datepicker, kartu naik/turun).
+- `assets/js/admin-data.js`: data contoh (Region 1–5 → area → kecamatan → sales → toko → produk).
+- `assets/js/admin-filter.js`: filter periode (datepicker) + wilayah/area/toko, perbandingan periode sebelumnya.
+- `assets/js/admin-exec.js`, `admin-detail.js`, `admin-tracking.js`, `admin-pusat.js`: Executive, halaman detail KPI, live tracking, drilldown, master.
 
-| Halaman | Padanan di PHP |
+| Halaman | Isi |
 |---|---|
-| `index.html` | Executive Dashboard (`/dashboard/executive`) |
-| `sales-dashboard.html` | Sales Dashboard (`/dashboard/sales`) |
-| `area.html` | Area Dashboard (`/dashboard/area`) |
-| `drilldown.html` | Grafik Drilldown 7 Level (`/dashboard/drilldown`) |
-| `early-warning.html` | Risk & Fraud / Early Warning (`/dashboard/early-warning`) |
-
-Tahap 2 (Master Data):
-
-| Halaman | Padanan di PHP |
-|---|---|
-| `master-sales.html` | Sales Directory (`/master/sales`) |
-| `sales-detail.html?npk=S006` | Detail Sales (`/master/sales/{npk}`) |
-| `master-outlet.html` | Outlet SAP OCRD (`/master/outlet`) |
-| `outlet-detail.html?code=C10001` | Detail Outlet (`/master/outlet/{code}`) |
-| `master-product.html` | Product SAP OITM (`/master/product`) |
-| `master-area.html` | Area Hierarki (`/master/area`) |
-| `master-route.html` | Master Route (`/master/route`) |
-| `master-vehicle.html` | Fleet Concox GT06N (`/master/vehicle`) |
-
-Revisi 13 Oktober (papan tulis "Dashboard Admin Pusat"):
-
-- `index.html` (Executive): filter global periode (default 30 hari terakhir, bisa pilih tanggal) + wilayah → area → toko; 6 KPI berwarna sesuai target (Volume Penjualan, Effective Call, NOO, NOP, Outlet ROA, Item RO); peta outlet NOO/NOP lebar di atas; tren penjualan (klik bulan → drilldown 7 level bulan itu); produk paling laku; kesehatan outlet (gabungan outlet health + at risk).
-- Halaman detail KPI (klik kartu): `penjualan.html`, `effective-call.html`, `noo.html`, `nop.html`, `roa.html`, `ro-item.html`. Filter ikut terbawa lewat URL.
-- `live-tracking.html`: posisi kendaraan sales (simulasi, update tiap 5 detik).
-- Data contoh bersama ada di `assets/js/admin-data.js` (Region 1–5 → area → kecamatan → sales → toko), diolah oleh `assets/js/admin-filter.js`.
-
-Menu lain (Report, Transaksi, Administration) sudah tampil di sidebar dengan label "soon" dan dibuat di tahap berikutnya.
+| `index.html` | Executive Dashboard: 6 KPI (naik/turun vs periode lalu), peta outlet + tren penjualan, produk paling laku, kesehatan outlet, fleet |
+| `penjualan.html`, `effective-call.html`, `noo.html`, `nop.html`, `roa.html`, `ro-item.html` | Detail KPI, turun Wilayah → Area → Toko (level toko berupa tabel) |
+| `peta-outlet.html`, `tren-penjualan.html`, `kesehatan-outlet.html`, `fleet.html`, `notifikasi.html` | Halaman detail pengganti popup |
+| `drilldown.html` | Trend Penjualan 7 level (Wilayah → Area → Kecamatan → Sales → Segmen → Toko → Produk) |
+| `live-tracking.html` | Posisi kendaraan sales (simulasi) |
+| `sales-dashboard.html`, `area.html`, `early-warning.html` | Monitoring lain |
+| `master-*.html`, `sales-detail.html`, `outlet-detail.html` | Master data |

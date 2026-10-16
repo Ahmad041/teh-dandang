@@ -1562,3 +1562,10 @@ table tbody tr[data-href]:hover td { background: #f8fafc; }
 .dash-row.half .sales-map.tall { height: 340px; }
 .dash-row.half .admin-chart.wide { flex: 1; height: auto; min-height: 340px; }
 @media (max-width: 1100px) { .dash-row.half { grid-template-columns: 1fr; } }
+
+/* Per Toko sebagai tabel */
+.unit-cards.as-table { display: block; max-height: 560px; }
+.toko-table tbody tr { cursor: pointer; }
+.toko-table tbody tr:hover td { background: #f8fafc; }
+.toko-table tbody tr.selected td { background: var(--primary-soft); }
+.toko-table .delta { font-size: 11px; }

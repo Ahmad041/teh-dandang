@@ -609,7 +609,7 @@ function initSalesDetail() {
     document.getElementById("sales-detail").hidden = true;
     return;
   }
-  document.title = "Detail Sales - " + s.name + " | Teh Dandang ADMIN PUSAT";
+  document.title = "Detail Sales - " + s.name + " | Teh Dandang OWNER";
   document.getElementById("page-title").textContent = s.name + " (NPK: " + s.npk + ")";
   document.getElementById("breadcrumb").textContent = "Detail Sales";
   document.getElementById("page-description").textContent = "SAP SlpCode: " + s.slp_code + " · Area: " + s.area + " (" + s.region + ")";
@@ -642,7 +642,7 @@ function initOutletDetail() {
     document.getElementById("outlet-detail").hidden = true;
     return;
   }
-  document.title = "Detail Outlet - " + o.card_name + " | Teh Dandang ADMIN PUSAT";
+  document.title = "Detail Outlet - " + o.card_name + " | Teh Dandang OWNER";
   document.getElementById("page-title").textContent = o.card_name;
   document.getElementById("breadcrumb").textContent = "Detail Outlet";
   document.getElementById("page-description").textContent = "SAP CardCode: " + o.card_code + " · Market: " + o.market + " · Sales: " + o.sales_name;

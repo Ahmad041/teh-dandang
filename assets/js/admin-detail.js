@@ -121,7 +121,7 @@
     // Item RO: wilayah -> area -> item
     const itemMode = KPI === "ro-item" && state.area !== "all";
     const scopeM = AF.metrics(AF.scopeOutlets(state, true), factor);
-    let cards, rows;
+    let cards, rows, tokoTable = "";
     if (itemMode) {
       level = "Item";
       const items = itemGroups(scopeM);
@@ -150,11 +150,23 @@
           '<span class="unit-main">' + c.v.main + '</span><span class="unit-sub">' + c.v.sub + '</span><span class="unit-delta">' + AF.deltaPill(c.d, "Dibanding " + INFO.prevRange) + "</span></button>";
       });
       rows = computed.map(function (c) { return { name: c.g.name, m: c.m, v: c.v, id: c.g.id, outlet: c.g.outlet }; });
+      if (level === "Toko") {
+        const head = { penjualan: ["Aktual", "Target"], "effective-call": ["Effective Call", "Kunjungan"], noo: ["NOO / Target", "Keterangan"], nop: ["NOP / Target", "Keterangan"], roa: ["ROA", "Outlet aktif"], "ro-item": ["Unit", "Item"] }[KPI];
+        tokoTable = '<div class="table-scroll"><table class="toko-table" data-filterable=""><thead><tr><th scope="col">Toko</th><th scope="col">' + head[0] + '</th><th scope="col">' + head[1] +
+          '</th><th scope="col">Capaian</th><th scope="col">vs Periode Lalu</th></tr></thead><tbody>' +
+          computed.map(function (c, i) {
+            const sel = state.outlet === c.g.id ? ' class="selected"' : "";
+            return "<tr" + sel + ' data-i="' + i + '"><td><strong>' + AF.esc(c.g.name) + '</strong><span class="subtext mono">' + c.g.id + '</span></td><td class="numeric"><strong>' + c.v.main +
+              '</strong></td><td class="numeric">' + c.v.sub.replace(/^Target /, "") + '</td><td class="numeric">' + (c.v.pct === null ? "–" : badgeFor(c.v.tone, AF.pct(c.v.pct))) +
+              "</td><td>" + AF.deltaPill(c.d, "Dibanding " + INFO.prevRange) + "</td></tr>";
+          }).join("") + '<tr class="filter-empty" hidden><td class="table-empty" colspan="5">Tidak ada toko yang sesuai.</td></tr></tbody></table></div>';
+      }
     }
     setText("unit-title", "Per " + level + " (" + groups.length + ")");
     const box = document.getElementById("unit-cards");
-    box.innerHTML = cards.join("") || '<p class="muted">Tidak ada data.</p>';
-    for (const b of box.querySelectorAll(".unit-card")) b.onclick = function () { drill(groups[Number(b.dataset.i)], level); };
+    box.classList.toggle("as-table", !!tokoTable);
+    box.innerHTML = tokoTable || cards.join("") || '<p class="muted">Tidak ada data.</p>';
+    for (const b of box.querySelectorAll(".unit-card, tbody tr[data-i]")) b.onclick = function () { drill(groups[Number(b.dataset.i)], level); };
     return { level: level, rows: rows, groups: groups };
   }
 
@@ -291,6 +303,8 @@
 
   function renderTable(state, m, units, factor) {
     const lvl = units.level;
+    // di level toko tabel per toko sudah ada di atas, tabel bawah tidak perlu
+    document.getElementById("detail-table").closest(".card").hidden = lvl === "Toko" && KPI !== "noo" && KPI !== "nop";
     if (KPI === "noo" || KPI === "nop") {
       const list = KPI === "noo" ? m.nooList : m.nopList;
       setText("table-title", "Daftar " + KPI.toUpperCase() + " (" + list.length + " outlet)");
