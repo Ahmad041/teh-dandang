@@ -121,7 +121,7 @@
     // Item RO: wilayah -> area -> item
     const itemMode = KPI === "ro-item" && state.area !== "all";
     const scopeM = AF.metrics(AF.scopeOutlets(state, true), factor);
-    let cards, rows;
+    let cards, rows, tokoTable = "";
     if (itemMode) {
       level = "Item";
       const items = itemGroups(scopeM);
@@ -150,16 +150,66 @@
           '<span class="unit-main">' + c.v.main + '</span><span class="unit-sub">' + c.v.sub + '</span><span class="unit-delta">' + AF.deltaPill(c.d, "Dibanding " + INFO.prevRange) + "</span></button>";
       });
       rows = computed.map(function (c) { return { name: c.g.name, m: c.m, v: c.v, id: c.g.id, outlet: c.g.outlet }; });
+      if (level === "Toko") {
+        const head = { penjualan: ["Aktual", "Target"], "effective-call": ["Effective Call", "Kunjungan"], noo: ["NOO / Target", "Keterangan"], nop: ["NOP / Target", "Keterangan"], roa: ["ROA", "Outlet aktif"], "ro-item": ["Unit", "Item"] }[KPI];
+        tokoTable = '<div class="table-scroll"><table class="toko-table" data-filterable=""><thead><tr><th scope="col">Toko</th><th scope="col">' + head[0] + '</th><th scope="col">' + head[1] +
+          '</th><th scope="col">Capaian</th><th scope="col">vs Periode Lalu</th></tr></thead><tbody>' +
+          computed.map(function (c, i) {
+            const sel = state.outlet === c.g.id ? ' class="selected"' : "";
+            return "<tr" + sel + ' data-i="' + i + '"><td><strong>' + AF.esc(c.g.name) + '</strong><span class="subtext mono">' + c.g.id + '</span></td><td class="numeric"><strong>' + c.v.main +
+              '</strong></td><td class="numeric">' + c.v.sub.replace(/^Target /, "") + '</td><td class="numeric">' + (c.v.pct === null ? "–" : badgeFor(c.v.tone, AF.pct(c.v.pct))) +
+              "</td><td>" + AF.deltaPill(c.d, "Dibanding " + INFO.prevRange) + "</td></tr>";
+          }).join("") + '<tr class="filter-empty" hidden><td class="table-empty" colspan="5">Tidak ada toko yang sesuai.</td></tr></tbody></table></div>';
+      }
     }
     setText("unit-title", "Per " + level + " (" + groups.length + ")");
     const box = document.getElementById("unit-cards");
-    box.innerHTML = cards.join("") || '<p class="muted">Tidak ada data.</p>';
-    for (const b of box.querySelectorAll(".unit-card")) b.onclick = function () { drill(groups[Number(b.dataset.i)], level); };
+    box.classList.toggle("as-table", !!tokoTable);
+    box.innerHTML = tokoTable || cards.join("") || '<p class="muted">Tidak ada data.</p>';
+    for (const b of box.querySelectorAll(".unit-card, tbody tr[data-i]")) b.onclick = function () { drill(groups[Number(b.dataset.i)], level); };
     return { level: level, rows: rows, groups: groups };
   }
 
   function renderChart(units) {
     const canvas = document.getElementById("detail-chart");
+    const wrap = canvas.parentElement;
+    wrap.style.height = "";
+    // Level toko: satu batang per toko = % capaian target, urut tertinggi ke terendah
+    if (units.level === "Toko" && units.rows.length && units.rows[0].v.pct !== null) {
+      const order = units.rows.map(function (r, i) { return i; }).sort(function (a, b) { return units.rows[b].v.pct - units.rows[a].v.pct; });
+      const rows = order.map(function (i) { return units.rows[i]; });
+      const COLOR = { good: "#10b981", warn: "#f59e0b", bad: "#ef4444" };
+      setText("chart-title", "Capaian Target per Toko");
+      setText("chart-sub", "% dari target, urut tertinggi · garis = 100%");
+      wrap.style.height = Math.max(300, rows.length * 24 + 50) + "px";
+      const max = Math.max(110, Math.ceil(Math.max.apply(null, rows.map(function (r) { return r.v.pct; })) / 10) * 10 + 10);
+      const target100 = {
+        id: "target100",
+        afterDatasetsDraw: function (chart) {
+          const x = chart.scales.x.getPixelForValue(100), a = chart.chartArea, ctx = chart.ctx;
+          ctx.save(); ctx.strokeStyle = "#0f172a"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.moveTo(x, a.top); ctx.lineTo(x, a.bottom); ctx.stroke();
+          ctx.setLineDash([]); ctx.fillStyle = "#0f172a"; ctx.font = "600 11px 'Segoe UI', Arial, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("Target 100%", x, a.top - 6); ctx.restore();
+        }
+      };
+      createChart(canvas, {
+        type: "bar",
+        data: { labels: rows.map(function (r) { return r.name.slice(0, 30); }),
+          datasets: [{ label: "Capaian", data: rows.map(function (r) { return Math.round(r.v.pct * 10) / 10; }), backgroundColor: rows.map(function (r) { return COLOR[r.v.tone] || "#2563eb"; }), borderRadius: 3, barThickness: 14 }] },
+        plugins: [target100],
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false, indexAxis: "y",
+          plugins: { legend: { display: false }, valueLabels: { format: function (v) { return v.toLocaleString("id-ID", { maximumFractionDigits: 1 }) + "%"; } },
+            tooltip: { callbacks: { label: function (it) { const r = rows[it.dataIndex]; return r.v.main + " · " + it.parsed.x.toLocaleString("id-ID") + "% dari target"; } } } },
+          scales: { x: { min: 0, max: max, grid: { color: "#eef2f7" }, ticks: { color: "#475569", font: { size: 11 }, callback: function (v) { return v + "%"; } } },
+            y: { grid: { display: false }, ticks: { color: "#1e293b", font: { size: 11 }, autoSkip: false } } },
+          layout: { padding: { right: 48, top: 18 } },
+          onClick: function (_e, els) { if (els.length) drill(units.groups[order[els[0].index]], units.level); }
+        }
+      });
+      return;
+    }
     const labels = units.rows.map(function (r) { return r.name.replace(/^Region \d · /, "").slice(0, 28); });
     let datasets, title, sub, horizontal = units.rows.length > 7;
     if (units.level === "Item") {
@@ -291,6 +341,8 @@
 
   function renderTable(state, m, units, factor) {
     const lvl = units.level;
+    // di level toko tabel per toko sudah ada di atas, tabel bawah tidak perlu
+    document.getElementById("detail-table").closest(".card").hidden = lvl === "Toko" && KPI !== "noo" && KPI !== "nop";
     if (KPI === "noo" || KPI === "nop") {
       const list = KPI === "noo" ? m.nooList : m.nopList;
       setText("table-title", "Daftar " + KPI.toUpperCase() + " (" + list.length + " outlet)");

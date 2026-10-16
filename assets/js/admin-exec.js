@@ -166,31 +166,46 @@
     for (const c of tg.querySelectorAll("input")) c.onchange = function () { show[c.dataset.kind] = c.checked; drawMap(outlets, kindMap, show, null, 15); };
     drawMap(outlets, kindMap, show, null, 15);
 
-    // per wilayah / area / toko
+    // Satu tabel: per wilayah/area (klik nama = filter, klik panah = buka toko NOO/NOP), di level area langsung daftar toko
     const g = AF.childGroups(state);
-    document.getElementById("map-group-title").textContent = "Per " + g.level;
     const gt = document.getElementById("map-groups");
-    gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col">Outlet</th><th scope="col">NOO</th><th scope="col">NOP</th><th scope="col">Tidak aktif</th></tr>';
-    gt.querySelector("tbody").innerHTML = g.groups.map(function (x, i) {
-      const c = { "NOO": 0, "NOP": 0, "Tidak aktif": 0 };
-      for (const o of x.outlets) if (kindMap[o.id] && c[kindMap[o.id]] !== undefined) c[kindMap[o.id]]++;
-      return '<tr data-i="' + i + '" class="row-link"><td><strong>' + AF.esc(x.name) + '</strong></td><td class="numeric mono">' + x.outlets.length + '</td><td class="numeric mono">' + c.NOO +
-        '</td><td class="numeric mono">' + c.NOP + '</td><td class="numeric mono">' + c["Tidak aktif"] + "</td></tr>";
-    }).join("");
-    for (const tr of gt.querySelectorAll("tbody tr")) tr.onclick = function () {
-      const x = g.groups[Number(tr.dataset.i)];
-      if (g.key === "wilayah") filter.set({ region: x.id, area: "all", outlet: "all" });
-      else if (g.key === "area") filter.set({ area: x.id, outlet: "all" });
-      else location.href = outletHref(x.outlet);
-    };
-
-    const list = outlets.filter(function (o) { return kindMap[o.id] === "NOO" || kindMap[o.id] === "NOP"; });
-    document.getElementById("map-list-title").textContent = "NOO & NOP (" + list.length + ")";
-    document.querySelector("#map-list tbody").innerHTML = list.map(function (o) {
+    const isNew = function (o) { return kindMap[o.id] === "NOO" || kindMap[o.id] === "NOP"; };
+    const tokoRow = function (o, parent) {
       const k = kindMap[o.id];
-      return '<tr data-href="' + outletHref(o) + '"><td><strong>' + AF.esc(o.name) + '</strong></td><td><span class="badge ' + (k === "NOO" ? "" : "blue") + '">' + k + "</span></td><td>" +
-        AF.esc(AF.AREA[o.area].name) + '</td><td class="numeric">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
-    }).join("") + '<tr class="filter-empty" hidden><td class="table-empty" colspan="4">Tidak ada data yang sesuai.</td></tr>';
+      const badge = k === "NOO" ? '<span class="badge">NOO</span>' : k === "NOP" ? '<span class="badge blue">NOP</span>' : k === "Tidak aktif" ? '<span class="badge danger">Tidak aktif</span>' : '<span class="badge neutral">Aktif</span>';
+      return '<tr class="child-row" data-href="' + outletHref(o) + '"' + (parent !== undefined ? ' data-parent="' + parent + '" hidden' : "") + '><td><strong>' + AF.esc(o.name) +
+        '</strong><span class="subtext">' + AF.esc(AF.AREA[o.area].name) + '</span></td><td colspan="3">' + badge + '</td><td class="numeric">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
+    };
+    if (g.key === "toko") {
+      const list = outlets.slice().sort(function (a, b) { return isNew(b) - isNew(a); });
+      document.getElementById("map-group-title").textContent = "Toko (" + list.length + ")";
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">Toko</th><th scope="col" colspan="3">Status</th><th scope="col">Aktual</th></tr>';
+      gt.querySelector("tbody").innerHTML = list.map(function (o) { return tokoRow(o); }).join("");
+    } else {
+      document.getElementById("map-group-title").textContent = "Per " + g.level;
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col">Outlet</th><th scope="col">NOO</th><th scope="col">NOP</th><th scope="col">Tidak aktif</th></tr>';
+      gt.querySelector("tbody").innerHTML = g.groups.map(function (x, i) {
+        const c = { "NOO": 0, "NOP": 0, "Tidak aktif": 0 };
+        for (const o of x.outlets) if (c[kindMap[o.id]] !== undefined) c[kindMap[o.id]]++;
+        const items = x.outlets.filter(isNew);
+        return '<tr class="group-row" data-g="' + i + '" aria-expanded="false"><td><button type="button" class="chev" aria-label="Buka toko NOO dan NOP ' + AF.esc(x.name) + '">▸</button>' +
+          '<button type="button" class="group-name" title="Filter ke ' + AF.esc(x.name) + '">' + AF.esc(x.name) + '</button></td><td class="numeric mono">' + x.outlets.length +
+          '</td><td class="numeric mono">' + c.NOO + '</td><td class="numeric mono">' + c.NOP + '</td><td class="numeric mono">' + c["Tidak aktif"] + "</td></tr>" +
+          items.map(function (o) { return tokoRow(o, i); }).join("");
+      }).join("");
+      for (const tr of gt.querySelectorAll(".group-row")) {
+        const x = g.groups[Number(tr.dataset.g)];
+        tr.querySelector(".chev").onclick = function () {
+          const open = tr.getAttribute("aria-expanded") !== "true";
+          tr.setAttribute("aria-expanded", open);
+          for (const c of gt.querySelectorAll('[data-parent="' + tr.dataset.g + '"]')) c.hidden = !open;
+        };
+        tr.querySelector(".group-name").onclick = function () {
+          if (g.key === "wilayah") filter.set({ region: x.id, area: "all", outlet: "all" });
+          else filter.set({ area: x.id, outlet: "all" });
+        };
+      }
+    }
     if (document.getElementById("search").value) searchTables();
   }
 
