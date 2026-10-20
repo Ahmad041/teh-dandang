@@ -265,3 +265,190 @@ function drawOverviewCharts() {
   }
 }
 drawOverviewCharts();
+
+// Universal Top-Right Profile Widget & Role Switcher (Tetap di Header, Tidak Melayang)
+function setupTopRightProfile() {
+  // 1. Bersihkan floating widget lama jika pernah terbuat di document.body agar tidak melayang
+  const floatingWidget = document.getElementById('topRightProfileWidget');
+  if (floatingWidget && floatingWidget.parentElement === document.body) {
+    floatingWidget.remove();
+  }
+
+  // 2. Tentukan data path dan role aktif
+  const path = decodeURIComponent(window.location.pathname).toLowerCase();
+  const isSubFolder = path.includes('/dashboard');
+  const prefix = isSubFolder ? '../' : '';
+
+  const adminHref = prefix + 'dashboard ADMIN PUSAT/index.html';
+  const gmHref = prefix + 'dashboard GM/index.html';
+  const rsmHref = prefix + 'dashboard RSM/index.html';
+  const asmHref = prefix + 'dashboard ASM/index.html';
+
+  let roleKey = 'admin';
+  let roleName = 'Dewan Direksi & Owner';
+  let roleTitle = 'Owner / Admin Pusat';
+  let avatar = 'OW';
+
+  if (path.includes('dashboard gm')) {
+    roleKey = 'gm';
+    roleName = 'Ir. H. Gunawan W.';
+    roleTitle = 'General Manager (GM)';
+    avatar = 'GM';
+  } else if (path.includes('dashboard rsm')) {
+    roleKey = 'rsm';
+    roleName = 'Bambang Trihatmodjo';
+    roleTitle = 'RSM Jawa Tengah';
+    avatar = 'RS';
+  } else if (path.includes('dashboard asm')) {
+    roleKey = 'asm';
+    roleName = 'Hendra Kurniawan';
+    roleTitle = 'ASM Solo Raya';
+    avatar = 'AS';
+  } else if (path.includes('dashboard owner')) {
+    roleKey = 'owner';
+    roleName = 'Bpk. Hadi Santoso';
+    roleTitle = 'Owner / Komisaris';
+    avatar = 'HS';
+  }
+
+  // 3. Cari container di header halaman yang sudah ada
+  let container = document.getElementById('profileDropdownContainer');
+
+  // Jika belum ada di HTML (misal sub-halaman khusus), taruh di header dalam flow halaman (bukan melayang)
+  if (!container) {
+    const headerHost = document.querySelector('.page-heading') ||
+                       document.querySelector('.d-flex.justify-content-between') ||
+                       document.querySelector('main header') ||
+                       document.querySelector('main');
+    if (!headerHost) return;
+
+    container = document.createElement('div');
+    container.id = 'profileDropdownContainer';
+    container.className = 'position-relative';
+    container.style.position = 'relative';
+
+    container.innerHTML = `
+      <button type="button" id="profileDropdownBtn" class="sidebar-profile-pill" aria-expanded="false" aria-haspopup="true">
+        <span class="avatar-circle">${avatar}</span>
+        <div class="profile-info">
+          <strong>${roleName}</strong>
+          <small>${roleTitle}</small>
+        </div>
+        <svg class="chevron-icon ms-1" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+
+      <!-- Dropdown Menu Pilih Role -->
+      <div id="roleDropdownMenu" class="role-dropdown-card">
+        <div class="px-2 py-2 border-bottom mb-1" style="border-bottom:1px solid #e2e8f0; margin-bottom:4px; padding-bottom:6px;">
+          <div style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #94a3b8; letter-spacing: 0.5px;">Ganti Peran (Role)</div>
+          <div style="font-size: 11.5px; color: #475569;">Pilih level akses manajemen:</div>
+        </div>
+        
+        <a href="${adminHref}" class="role-menu-item ${roleKey === 'admin' || roleKey === 'owner' ? 'active' : ''}">
+          <span class="role-avatar-badge" style="background: ${roleKey === 'admin' || roleKey === 'owner' ? '#9B1C1C' : '#f1f5f9'}; color: ${roleKey === 'admin' || roleKey === 'owner' ? '#fff' : '#334155'};">OW</span>
+          <div class="flex-grow-1" style="flex-grow:1;">
+            <strong style="font-size: 12.5px; display: block; color: ${roleKey === 'admin' || roleKey === 'owner' ? '#9B1C1C' : '#1e293b'};">Owner / Admin Pusat</strong>
+            <small style="font-size: 11px; color: #64748b;">Direksi &amp; Konsolidasi Nasional</small>
+          </div>
+          ${roleKey === 'admin' || roleKey === 'owner' ? '<svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>' : ''}
+        </a>
+
+        <a href="${gmHref}" class="role-menu-item ${roleKey === 'gm' ? 'active' : ''}">
+          <span class="role-avatar-badge" style="background: ${roleKey === 'gm' ? '#9B1C1C' : '#f1f5f9'}; color: ${roleKey === 'gm' ? '#fff' : '#334155'};">GM</span>
+          <div class="flex-grow-1" style="flex-grow:1;">
+            <strong style="font-size: 12.5px; display: block; color: ${roleKey === 'gm' ? '#9B1C1C' : '#1e293b'};">General Manager (GM)</strong>
+            <small style="font-size: 11px; color: #64748b;">Agregat, ASM, Pareto &amp; Armada</small>
+          </div>
+          ${roleKey === 'gm' ? '<svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>' : ''}
+        </a>
+
+        <a href="${rsmHref}" class="role-menu-item ${roleKey === 'rsm' ? 'active' : ''}">
+          <span class="role-avatar-badge" style="background: ${roleKey === 'rsm' ? '#9B1C1C' : '#f1f5f9'}; color: ${roleKey === 'rsm' ? '#fff' : '#334155'};">RS</span>
+          <div class="flex-grow-1" style="flex-grow:1;">
+            <strong style="font-size: 12.5px; display: block; color: ${roleKey === 'rsm' ? '#9B1C1C' : '#1e293b'};">Regional Sales Manager (RSM)</strong>
+            <small style="font-size: 11px; color: #64748b;">Pengawasan 5 Region Operasional</small>
+          </div>
+          ${roleKey === 'rsm' ? '<svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>' : ''}
+        </a>
+
+        <a href="${asmHref}" class="role-menu-item ${roleKey === 'asm' ? 'active' : ''}">
+          <span class="role-avatar-badge" style="background: ${roleKey === 'asm' ? '#9B1C1C' : '#f1f5f9'}; color: ${roleKey === 'asm' ? '#fff' : '#334155'};">AS</span>
+          <div class="flex-grow-1" style="flex-grow:1;">
+            <strong style="font-size: 12.5px; display: block; color: ${roleKey === 'asm' ? '#9B1C1C' : '#1e293b'};">Area Sales Manager (ASM)</strong>
+            <small style="font-size: 11px; color: #64748b;">Operasional 90 Area, Toko &amp; Sales</small>
+          </div>
+          ${roleKey === 'asm' ? '<svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>' : ''}
+        </a>
+      </div>
+    `;
+    headerHost.appendChild(container);
+  }
+
+  // 4. Inisialisasi event listener interaktif pada button dan menu
+  const profileBtn = container.querySelector('#profileDropdownBtn') || document.getElementById('profileDropdownBtn');
+  const roleMenu = container.querySelector('#roleDropdownMenu') || document.getElementById('roleDropdownMenu');
+
+  if (profileBtn && roleMenu) {
+    if (profileBtn.dataset.listenerAttached === 'true') return;
+    profileBtn.dataset.listenerAttached = 'true';
+
+    profileBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = roleMenu.classList.contains('show') || roleMenu.style.display === 'block';
+      if (isOpen) {
+        roleMenu.classList.remove('show');
+        roleMenu.style.display = 'none';
+        profileBtn.setAttribute('aria-expanded', 'false');
+        const chevron = profileBtn.querySelector('.chevron-icon');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      } else {
+        roleMenu.classList.add('show');
+        roleMenu.style.display = 'block';
+        profileBtn.setAttribute('aria-expanded', 'true');
+        const chevron = profileBtn.querySelector('.chevron-icon');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      }
+    });
+
+    // Delegasi klik pada semua link role di dalam dropdown agar PASTI berpindah halaman
+    roleMenu.querySelectorAll('.role-menu-item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const targetHref = this.getAttribute('href');
+        if (targetHref && targetHref !== '#') {
+          window.location.href = targetHref;
+        }
+      });
+    });
+
+    // Klik di luar menutup dropdown
+    document.addEventListener('click', function (e) {
+      if (!profileBtn.contains(e.target) && !roleMenu.contains(e.target)) {
+        roleMenu.classList.remove('show');
+        roleMenu.style.display = 'none';
+        profileBtn.setAttribute('aria-expanded', 'false');
+        const chevron = profileBtn.querySelector('.chevron-icon');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    // Tombol ESC menutup dropdown
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        roleMenu.classList.remove('show');
+        roleMenu.style.display = 'none';
+        profileBtn.setAttribute('aria-expanded', 'false');
+        const chevron = profileBtn.querySelector('.chevron-icon');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupTopRightProfile);
+} else {
+  setupTopRightProfile();
+}
+

@@ -543,44 +543,172 @@ select:focus-visible {
   padding-top: 16px !important;
 }
 
-/* ── 25. Badge Contrast & Readability Fix (Anti-Nyaru) ──────── */
-.badge {
-  font-family: var(--dan-font) !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.2px;
-  padding: 4px 8px !important;
-  border-radius: 6px !important;
+/* Hilangkan info demo / connection & profile sidebar bawah */
+.connection,
+.demo-label,
+.sidebar-profile,
+.sidebar .sidebar-profile,
+aside .sidebar-profile {
+  display: none !important;
 }
 
-/* Pastikan warna teks putih solid pada latar belakang berwarna pekat */
-.badge.bg-primary,
-.badge.bg-success,
-.badge.bg-danger,
-.badge.bg-secondary,
-.badge.bg-dark,
-.badge.bg-info,
-.text-bg-primary,
-.text-bg-success,
-.text-bg-danger,
-.text-bg-secondary,
-.text-bg-dark,
-.text-bg-info {
+/* ── 26. Profile di Pojok Kanan Atas (Tetap di Atas, Tidak Melayang) ── */
+.top-right-profile-widget {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.sidebar-profile-pill,
+.profile-pill-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 7px 14px 7px 9px !important;
+  background: #9B1C1C !important;
   color: #ffffff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 14px rgba(155, 28, 28, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+  text-decoration: none !important;
 }
 
-/* Latar belakang terang dengan teks gelap kontras tinggi */
-.badge.bg-light,
-.text-bg-light {
+.sidebar-profile-pill:hover,
+.profile-pill-btn:hover {
+  background: #801818 !important;
+  box-shadow: 0 6px 18px rgba(155, 28, 28, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.sidebar-profile-pill:focus-visible,
+.profile-pill-btn:focus-visible {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 2px !important;
+}
+
+.sidebar-profile-pill .avatar-circle,
+.sidebar-profile-pill .role-avatar-badge,
+.profile-pill-btn .avatar-circle,
+.profile-pill-btn .role-avatar-badge {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #9B1C1C !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+.sidebar-profile-pill .profile-info,
+.profile-pill-btn .profile-info {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+  line-height: 1.2 !important;
+}
+
+.sidebar-profile-pill strong,
+.profile-pill-btn strong {
+  font-size: 13px !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  display: block !important;
+}
+
+.sidebar-profile-pill small,
+.profile-pill-btn small {
+  font-size: 10.5px !important;
+  color: #fca5a5 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+  display: block !important;
+}
+
+.sidebar-profile-pill .chevron-icon,
+.profile-pill-btn .chevron-icon {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: #ffffff !important;
+  transition: transform 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.sidebar-profile-pill[aria-expanded="true"] .chevron-icon,
+.profile-pill-btn[aria-expanded="true"] .chevron-icon {
+  transform: rotate(180deg) !important;
+}
+
+@media (max-width: 576px) {
+  .sidebar-profile-pill,
+  .profile-pill-btn {
+    padding: 6px 10px 6px 6px !important;
+    gap: 6px !important;
+  }
+  .sidebar-profile-pill small,
+  .profile-pill-btn small {
+    display: none !important;
+  }
+}
+
+.role-dropdown-card {
+  position: absolute !important;
+  right: 0 !important;
+  top: calc(100% + 8px) !important;
+  width: 295px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1) !important;
+  padding: 8px !important;
+  z-index: 1070 !important;
+  display: none;
+}
+
+.role-dropdown-card.show {
+  display: block !important;
+}
+
+.role-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  color: #1e293b !important;
+  transition: background 0.15s ease !important;
+  margin-bottom: 2px !important;
+}
+.role-menu-item:hover {
+  background: #f1f5f9 !important;
   color: #0f172a !important;
-  background-color: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
+}
+.role-menu-item.active {
+  background: #fef2f2 !important;
+  border: 1px solid #fecaca !important;
+}
+.role-menu-item.active:hover {
+  background: #fee2e2 !important;
+}
+.role-avatar-badge {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+  font-size: 11.5px !important;
+  flex-shrink: 0 !important;
 }
 
-.badge.bg-warning,
-.text-bg-warning {
-  color: #78350f !important;
-  background-color: #fef08a !important;
-  border: 1px solid #fde047 !important;
-}
 

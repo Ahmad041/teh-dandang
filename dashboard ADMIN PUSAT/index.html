@@ -29,19 +29,7 @@
     <a class="brand" href="index.html"><span class="brand-mark"><img alt="Logo Teh Dandang" class="brand-logo"
           src="../assets/img/Teh Dandang.jpeg" /></span><span><strong>TEH DANDANG</strong><small>OWNER &amp;
           DIREKSI PUSAT</small></span></a>
-    <div class="connection"><span class="dot"></span><span>Data Demo · Okt 2026</span><span
-        class="demo-label">DEMO</span></div>
 
-    <!-- Role Switcher -->
-    <div style="padding: 10px 14px; background: rgba(0,0,0,0.22); border-radius: 8px; margin: 10px 14px 14px;">
-      <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #fca5a5; display: block; margin-bottom: 4px; font-weight: 700;">Ganti Peran (Role):</label>
-      <select class="form-select form-select-sm" style="background:#1e293b; color:#fff; border-color:#475569; font-size:12px; font-weight:600; cursor:pointer;" onchange="if(this.value) window.location.href=this.value">
-        <option value="index.html" selected>Owner / Admin Pusat</option>
-        <option value="../dashboard GM/index.html">General Manager (GM)</option>
-        <option value="../dashboard RSM/index.html">Regional Sales Manager (RSM)</option>
-        <option value="../dashboard ASM/index.html">Area Sales Manager (ASM)</option>
-      </select>
-    </div>
 
     <nav id="navigation">
       <section class="nav-group">
@@ -87,38 +75,77 @@
         </a>
       </section>
     </nav>
-    <div class="sidebar-profile"><span class="avatar" style="background:#9B1C1C; color:#fff;">OW</span>
-      <div><strong>Dewan Direksi &amp; Owner</strong><small>DIREKSI PUSAT</small></div>
-    </div>
+
   </aside>
   <div class="workspace">
-    <!-- Header dihilangkan sesuai permintaan user: heder di hilangkan -->
-    <header class="topbar" style="display:none;">
-      <div class="topbar-left">
-        <label aria-label="Buka navigasi" class="icon-button menu-toggle" data-icon="menu" for="nav-toggle"><svg
-            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 6h18 M3 12h18 M3 18h18"></path>
-          </svg></label>
-        <span class="breadcrumb">Admin Pusat <span>/</span> <strong id="breadcrumb">Executive Dashboard</strong></span>
-      </div>
-      <div class="topbar-right">
-        <span class="badge">Role Aktif: Admin Pusat</span>
-        <a aria-label="Pemberitahuan" class="icon-button notif-button" data-icon="bell" href="notifikasi.html"><svg
-            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4"></path>
-          </svg><span class="notif-dot">3</span></a>
-        <span class="avatar small">RW</span>
-      </div>
-    </header>
     <main id="main" tabindex="-1">
-      <noscript>
-        <p class="note">Data tersedia sebagai HTML statis. JavaScript diperlukan untuk grafik dan pencarian.</p>
-      </noscript>
       <div id="views">
-
         <div class="view dash">
+          <!-- Topbar / Header Executive: Breadcrumb & Profile with Role Dropdown (Pojok Kanan Atas) -->
+          <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <label aria-label="Buka navigasi" class="icon-button menu-toggle d-lg-none" data-icon="menu" for="nav-toggle" style="cursor:pointer; display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:6px; border:1px solid #cbd5e1; background:#fff;">
+                <svg aria-hidden="true" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18 M3 12h18 M3 18h18"></path></svg>
+              </label>
+              <div>
+                <h1 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.2;">Dashboard Owner &amp; Executive</h1>
+                <span class="text-muted" style="font-size: 12px;">PT Kartini Teh Dandang &middot; Konsolidasi Eksekutif Nasional</span>
+              </div>
+            </div>
+
+            <!-- Profile & Role Switcher Dropdown (Pojok Kanan Atas - Tetap di Atas, Tidak Melayang) -->
+            <div class="position-relative" id="profileDropdownContainer" style="position:relative;">
+              <button type="button" id="profileDropdownBtn" class="sidebar-profile-pill" aria-expanded="false" aria-haspopup="true">
+                <span class="avatar-circle">OW</span>
+                <div class="profile-info">
+                  <strong>Dewan Direksi &amp; Owner</strong>
+                  <small>Direksi Pusat</small>
+                </div>
+                <svg class="chevron-icon ms-1" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
+
+              <!-- Dropdown Menu Pilih Role -->
+              <div id="roleDropdownMenu" class="role-dropdown-card">
+                <div class="px-2 py-2 border-bottom mb-1">
+                  <div style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #94a3b8; letter-spacing: 0.5px;">Ganti Peran (Role)</div>
+                  <div style="font-size: 11.5px; color: #475569;">Pilih level akses manajemen:</div>
+                </div>
+                
+                <a href="index.html" class="role-menu-item active">
+                  <span class="role-avatar-badge" style="background: #9B1C1C; color: #fff;">OW</span>
+                  <div class="flex-grow-1">
+                    <strong style="font-size: 12.5px; display: block; color: #9B1C1C;">Owner / Admin Pusat</strong>
+                    <small style="font-size: 11px; color: #7f1d1d;">Direksi &amp; Konsolidasi Nasional</small>
+                  </div>
+                  <svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+                </a>
+
+                <a href="../dashboard GM/index.html" class="role-menu-item">
+                  <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">GM</span>
+                  <div class="flex-grow-1">
+                    <strong style="font-size: 12.5px; display: block; color: #1e293b;">General Manager (GM)</strong>
+                    <small style="font-size: 11px; color: #64748b;">Agregat, ASM, Pareto &amp; Armada</small>
+                  </div>
+                </a>
+
+                <a href="../dashboard RSM/index.html" class="role-menu-item">
+                  <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">RS</span>
+                  <div class="flex-grow-1">
+                    <strong style="font-size: 12.5px; display: block; color: #1e293b;">Regional Sales Manager (RSM)</strong>
+                    <small style="font-size: 11px; color: #64748b;">Pengawasan 5 Region Operasional</small>
+                  </div>
+                </a>
+
+                <a href="../dashboard ASM/index.html" class="role-menu-item">
+                  <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">AS</span>
+                  <div class="flex-grow-1">
+                    <strong style="font-size: 12.5px; display: block; color: #1e293b;">Area Sales Manager (ASM)</strong>
+                    <small style="font-size: 11px; color: #64748b;">Operasional 90 Area, Toko &amp; Sales</small>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
           <!-- Filter Global -->
           <section class="card filter-card" aria-label="Filter dashboard">
             <div id="filter-bar"></div>

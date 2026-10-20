@@ -12,6 +12,7 @@
   <link href="../assets/css/admin-pusat.css" rel="stylesheet" />
   <link href="../assets/css/dandang-theme.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="../assets/js/app.js"></script>
   <style>
     .kpi-grid-asm {
       display: grid;
@@ -217,23 +218,7 @@
           src="../assets/img/Teh Dandang.jpeg" /></span>
       <span><strong>TEH DANDANG</strong><small>Area Sales Manager</small></span>
     </a>
-    <div class="connection"><span class="dot"></span><span>Area Solo Raya &amp; Boyolali</span><span
-        class="demo-label">ASM</span></div>
 
-    <!-- Role Switcher -->
-    <div style="padding: 10px 14px; background: rgba(0,0,0,0.22); border-radius: 8px; margin: 10px 14px 14px;">
-      <label
-        style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #fca5a5; display: block; margin-bottom: 4px; font-weight: 700;">Ganti
-        Peran (Role):</label>
-      <select class="form-select form-select-sm"
-        style="background:#1e293b; color:#fff; border-color:#475569; font-size:12px; font-weight:600; cursor:pointer;"
-        onchange="if(this.value) window.location.href=this.value">
-        <option value="../dashboard ADMIN PUSAT/index.html">Owner / Admin Pusat</option>
-        <option value="../dashboard GM/index.html">General Manager (GM)</option>
-        <option value="../dashboard RSM/index.html">Regional Sales Manager (RSM)</option>
-        <option value="index.html" selected>Area Sales Manager (ASM)</option>
-      </select>
-    </div>
 
     <nav id="navigation">
       <section class="nav-group">
@@ -280,10 +265,7 @@
         </a>
       </section>
     </nav>
-    <div class="sidebar-profile">
-      <span class="avatar">AS</span>
-      <div><strong>Hendra Kurniawan</strong><small>ASM Solo Raya (Boyolali)</small></div>
-    </div>
+
   </aside>
 
   <div class="workspace">
@@ -300,7 +282,7 @@
                 <span class="text-muted" style="font-size: 13px;">Area Operasional: <strong>Boyolali &amp; Solo
                     Raya</strong> &middot; Periode: <strong>Oktober 2026</strong></span>
               </div>
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
                 <select class="form-select form-select-sm" id="filter-sales" style="width: 200px; font-weight:600;"
                   onchange="applySalesFilter(this.value)">
                   <option value="all">Semua Salesman (5 Personil)</option>
@@ -310,8 +292,59 @@
                   <option value="S004">Deni Kurniadi</option>
                   <option value="S006">Eko Prasetyo (Top)</option>
                 </select>
-                <a href="../dashboard RSM/index.html" class="btn btn-sm btn-outline-danger font-weight-bold">&larr;
-                  Level RSM</a>
+
+                <!-- Profile & Role Switcher Dropdown (Pojok Kanan Atas) -->
+                <div class="position-relative" id="profileDropdownContainer">
+                  <button type="button" id="profileDropdownBtn" class="sidebar-profile-pill" aria-expanded="false" aria-haspopup="true">
+                    <span class="avatar-circle">AS</span>
+                    <div class="profile-info">
+                      <strong>Hendra Kurniawan</strong>
+                      <small>ASM Solo Raya</small>
+                    </div>
+                    <svg class="chevron-icon ms-1" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+                  </button>
+
+                  <!-- Dropdown Menu Pilih Role -->
+                  <div id="roleDropdownMenu" class="role-dropdown-card">
+                    <div class="px-2 py-2 border-bottom mb-1">
+                      <div style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #94a3b8; letter-spacing: 0.5px;">Ganti Peran (Role)</div>
+                      <div style="font-size: 11.5px; color: #475569;">Pilih level akses manajemen:</div>
+                    </div>
+                    
+                    <a href="../dashboard ADMIN PUSAT/index.html" class="role-menu-item">
+                      <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">OW</span>
+                      <div class="flex-grow-1">
+                        <strong style="font-size: 12.5px; display: block; color: #1e293b;">Owner / Admin Pusat</strong>
+                        <small style="font-size: 11px; color: #64748b;">Direksi &amp; Konsolidasi Nasional</small>
+                      </div>
+                    </a>
+
+                    <a href="../dashboard GM/index.html" class="role-menu-item">
+                      <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">GM</span>
+                      <div class="flex-grow-1">
+                        <strong style="font-size: 12.5px; display: block; color: #1e293b;">General Manager (GM)</strong>
+                        <small style="font-size: 11px; color: #64748b;">Agregat, ASM, Pareto &amp; Armada</small>
+                      </div>
+                    </a>
+
+                    <a href="../dashboard RSM/index.html" class="role-menu-item">
+                      <span class="role-avatar-badge" style="background: #f1f5f9; color: #334155;">RS</span>
+                      <div class="flex-grow-1">
+                        <strong style="font-size: 12.5px; display: block; color: #1e293b;">Regional Sales Manager (RSM)</strong>
+                        <small style="font-size: 11px; color: #64748b;">Pengawasan 5 Region Operasional</small>
+                      </div>
+                    </a>
+
+                    <a href="index.html" class="role-menu-item active">
+                      <span class="role-avatar-badge" style="background: #9B1C1C; color: #fff;">AS</span>
+                      <div class="flex-grow-1">
+                        <strong style="font-size: 12.5px; display: block; color: #9B1C1C;">Area Sales Manager (ASM)</strong>
+                        <small style="font-size: 11px; color: #7f1d1d;">Operasional 90 Area, Toko &amp; Sales</small>
+                      </div>
+                      <svg width="18" height="18" fill="none" stroke="#9B1C1C" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
