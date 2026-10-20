@@ -289,22 +289,22 @@ function setupTopRightProfile() {
   let roleTitle = 'Owner / Admin Pusat';
   let avatar = 'OW';
 
-  if (path.includes('dashboard gm')) {
+  if (path.includes('dashboard gm') || path.includes('/gm') || path.endsWith('gm')) {
     roleKey = 'gm';
     roleName = 'Ir. H. Gunawan W.';
     roleTitle = 'General Manager (GM)';
     avatar = 'GM';
-  } else if (path.includes('dashboard rsm')) {
+  } else if (path.includes('dashboard rsm') || path.includes('/rsm') || path.endsWith('rsm')) {
     roleKey = 'rsm';
     roleName = 'Bambang Trihatmodjo';
     roleTitle = 'RSM Jawa Tengah';
     avatar = 'RS';
-  } else if (path.includes('dashboard asm')) {
+  } else if (path.includes('dashboard asm') || path.includes('/asm') || path.endsWith('asm')) {
     roleKey = 'asm';
     roleName = 'Hendra Kurniawan';
     roleTitle = 'ASM Solo Raya';
     avatar = 'AS';
-  } else if (path.includes('dashboard owner')) {
+  } else if (path.includes('dashboard owner') || path.includes('/owner') || path.endsWith('owner')) {
     roleKey = 'owner';
     roleName = 'Bpk. Hadi Santoso';
     roleTitle = 'Owner / Komisaris';

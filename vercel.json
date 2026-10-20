@@ -1,11 +1,238 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": false,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/kesehatan-outlet",
-      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+      "source": "/assets/img/Teh%20Dandang.jpeg",
+      "destination": "/assets/img/Teh Dandang.jpeg"
+    },
+    {
+      "source": "/assets/img/Teh Dandang.jpeg",
+      "destination": "/assets/img/Teh%20Dandang.jpeg"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT",
+      "destination": "/dashboard ADMIN PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/",
+      "destination": "/dashboard ADMIN PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard%20GM",
+      "destination": "/dashboard GM/index.html"
+    },
+    {
+      "source": "/dashboard%20GM/",
+      "destination": "/dashboard GM/index.html"
+    },
+    {
+      "source": "/dashboard GM",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/dashboard GM/",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/dashboard%20RSM",
+      "destination": "/dashboard RSM/index.html"
+    },
+    {
+      "source": "/dashboard%20RSM/",
+      "destination": "/dashboard RSM/index.html"
+    },
+    {
+      "source": "/dashboard RSM",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/dashboard RSM/",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/dashboard%20ASM",
+      "destination": "/dashboard ASM/index.html"
+    },
+    {
+      "source": "/dashboard%20ASM/",
+      "destination": "/dashboard ASM/index.html"
+    },
+    {
+      "source": "/dashboard ASM",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/dashboard ASM/",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/dashboard%20OWNER",
+      "destination": "/dashboard OWNER/index.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/",
+      "destination": "/dashboard OWNER/index.html"
+    },
+    {
+      "source": "/dashboard OWNER",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/dashboard OWNER/",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/admin-pusat",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/admin-pusat/",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/admin-pusat/:path*",
+      "destination": "/dashboard%20ADMIN%20PUSAT/:path*"
+    },
+    {
+      "source": "/dashboard-admin-pusat",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard-admin-pusat/",
+      "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard-admin-pusat/:path*",
+      "destination": "/dashboard%20ADMIN%20PUSAT/:path*"
+    },
+    {
+      "source": "/gm",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/gm/",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/gm/:path*",
+      "destination": "/dashboard%20GM/:path*"
+    },
+    {
+      "source": "/dashboard-gm",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/dashboard-gm/",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/dashboard-gm/:path*",
+      "destination": "/dashboard%20GM/:path*"
+    },
+    {
+      "source": "/rsm",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/rsm/",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/rsm/:path*",
+      "destination": "/dashboard%20RSM/:path*"
+    },
+    {
+      "source": "/dashboard-rsm",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/dashboard-rsm/",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/dashboard-rsm/:path*",
+      "destination": "/dashboard%20RSM/:path*"
+    },
+    {
+      "source": "/asm",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/asm/",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/asm/:path*",
+      "destination": "/dashboard%20ASM/:path*"
+    },
+    {
+      "source": "/dashboard-asm",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/dashboard-asm/",
+      "destination": "/dashboard%20ASM/index.html"
+    },
+    {
+      "source": "/dashboard-asm/:path*",
+      "destination": "/dashboard%20ASM/:path*"
+    },
+    {
+      "source": "/owner",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/owner/",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/owner/:path*",
+      "destination": "/dashboard%20OWNER/:path*"
+    },
+    {
+      "source": "/dashboard-owner",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/dashboard-owner/",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/dashboard-owner/:path*",
+      "destination": "/dashboard%20OWNER/:path*"
     },
     {
       "source": "/area",
+      "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
+    },
+    {
+      "source": "/area.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
+    },
+    {
+      "source": "/admin-pusat/area",
+      "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
+    },
+    {
+      "source": "/admin-pusat/area.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/area.html",
+      "destination": "/dashboard ADMIN PUSAT/area.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/area.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/area.html"
     },
     {
@@ -13,7 +240,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
     },
     {
+      "source": "/asset.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
+    },
+    {
+      "source": "/admin-pusat/asset",
+      "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
+    },
+    {
+      "source": "/admin-pusat/asset.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/asset.html",
+      "destination": "/dashboard ADMIN PUSAT/asset.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/asset.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/asset.html"
+    },
+    {
       "source": "/drilldown",
+      "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
+    },
+    {
+      "source": "/drilldown.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
+    },
+    {
+      "source": "/admin-pusat/drilldown",
+      "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
+    },
+    {
+      "source": "/admin-pusat/drilldown.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/drilldown.html",
+      "destination": "/dashboard ADMIN PUSAT/drilldown.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/drilldown.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/drilldown.html"
     },
     {
@@ -21,7 +288,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
     },
     {
+      "source": "/early-warning.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
+    },
+    {
+      "source": "/admin-pusat/early-warning",
+      "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
+    },
+    {
+      "source": "/admin-pusat/early-warning.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/early-warning.html",
+      "destination": "/dashboard ADMIN PUSAT/early-warning.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/early-warning.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/early-warning.html"
+    },
+    {
       "source": "/effective-call",
+      "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
+    },
+    {
+      "source": "/effective-call.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
+    },
+    {
+      "source": "/admin-pusat/effective-call",
+      "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
+    },
+    {
+      "source": "/admin-pusat/effective-call.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/effective-call.html",
+      "destination": "/dashboard ADMIN PUSAT/effective-call.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/effective-call.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/effective-call.html"
     },
     {
@@ -29,15 +336,103 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
     },
     {
+      "source": "/expiry.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
+    },
+    {
+      "source": "/admin-pusat/expiry",
+      "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
+    },
+    {
+      "source": "/admin-pusat/expiry.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/expiry.html",
+      "destination": "/dashboard ADMIN PUSAT/expiry.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/expiry.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/expiry.html"
+    },
+    {
       "source": "/fleet",
       "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
     },
     {
-      "source": "/admin-pusat",
+      "source": "/fleet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
+    },
+    {
+      "source": "/admin-pusat/fleet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
+    },
+    {
+      "source": "/admin-pusat/fleet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/fleet.html",
+      "destination": "/dashboard ADMIN PUSAT/fleet.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/fleet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/fleet.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/index.html",
+      "destination": "/dashboard ADMIN PUSAT/index.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/index.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/index.html"
     },
     {
+      "source": "/kesehatan-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/kesehatan-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/kesehatan-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/kesehatan-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html",
+      "destination": "/dashboard ADMIN PUSAT/kesehatan-outlet.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/kesehatan-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/kesehatan-outlet.html"
+    },
+    {
       "source": "/live-tracking",
+      "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/live-tracking.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/admin-pusat/live-tracking",
+      "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/admin-pusat/live-tracking.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/live-tracking.html",
+      "destination": "/dashboard ADMIN PUSAT/live-tracking.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/live-tracking.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/live-tracking.html"
     },
     {
@@ -45,7 +440,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
     },
     {
+      "source": "/master-area.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
+    },
+    {
+      "source": "/admin-pusat/master-area",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
+    },
+    {
+      "source": "/admin-pusat/master-area.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-area.html",
+      "destination": "/dashboard ADMIN PUSAT/master-area.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-area.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-area.html"
+    },
+    {
       "source": "/master-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/master-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/master-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/master-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-outlet.html",
+      "destination": "/dashboard ADMIN PUSAT/master-outlet.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-outlet.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/master-outlet.html"
     },
     {
@@ -53,7 +488,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
     },
     {
+      "source": "/master-product.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
+    },
+    {
+      "source": "/admin-pusat/master-product",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
+    },
+    {
+      "source": "/admin-pusat/master-product.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-product.html",
+      "destination": "/dashboard ADMIN PUSAT/master-product.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-product.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-product.html"
+    },
+    {
       "source": "/master-route",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
+    },
+    {
+      "source": "/master-route.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
+    },
+    {
+      "source": "/admin-pusat/master-route",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
+    },
+    {
+      "source": "/admin-pusat/master-route.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-route.html",
+      "destination": "/dashboard ADMIN PUSAT/master-route.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-route.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/master-route.html"
     },
     {
@@ -61,7 +536,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
     },
     {
+      "source": "/master-sales.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
+    },
+    {
+      "source": "/admin-pusat/master-sales",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
+    },
+    {
+      "source": "/admin-pusat/master-sales.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-sales.html",
+      "destination": "/dashboard ADMIN PUSAT/master-sales.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-sales.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-sales.html"
+    },
+    {
       "source": "/master-vehicle",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/master-vehicle.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/admin-pusat/master-vehicle",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/admin-pusat/master-vehicle.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html",
+      "destination": "/dashboard ADMIN PUSAT/master-vehicle.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/master-vehicle.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/master-vehicle.html"
     },
     {
@@ -69,7 +584,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
     },
     {
+      "source": "/noo.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
+    },
+    {
+      "source": "/admin-pusat/noo",
+      "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
+    },
+    {
+      "source": "/admin-pusat/noo.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/noo.html",
+      "destination": "/dashboard ADMIN PUSAT/noo.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/noo.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/noo.html"
+    },
+    {
       "source": "/nop",
+      "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
+    },
+    {
+      "source": "/nop.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
+    },
+    {
+      "source": "/admin-pusat/nop",
+      "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
+    },
+    {
+      "source": "/admin-pusat/nop.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/nop.html",
+      "destination": "/dashboard ADMIN PUSAT/nop.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/nop.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/nop.html"
     },
     {
@@ -77,7 +632,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
     },
     {
+      "source": "/notifikasi.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
+    },
+    {
+      "source": "/admin-pusat/notifikasi",
+      "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
+    },
+    {
+      "source": "/admin-pusat/notifikasi.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/notifikasi.html",
+      "destination": "/dashboard ADMIN PUSAT/notifikasi.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/notifikasi.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/notifikasi.html"
+    },
+    {
       "source": "/outlet-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/outlet-detail.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/admin-pusat/outlet-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/admin-pusat/outlet-detail.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html",
+      "destination": "/dashboard ADMIN PUSAT/outlet-detail.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/outlet-detail.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/outlet-detail.html"
     },
     {
@@ -85,7 +680,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
     },
     {
+      "source": "/penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
+    },
+    {
+      "source": "/admin-pusat/penjualan",
+      "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
+    },
+    {
+      "source": "/admin-pusat/penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/penjualan.html",
+      "destination": "/dashboard ADMIN PUSAT/penjualan.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/penjualan.html"
+    },
+    {
       "source": "/peta-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/peta-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/peta-outlet",
+      "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/admin-pusat/peta-outlet.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html",
+      "destination": "/dashboard ADMIN PUSAT/peta-outlet.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/peta-outlet.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/peta-outlet.html"
     },
     {
@@ -93,7 +728,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
     },
     {
+      "source": "/ro-item.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
+    },
+    {
+      "source": "/admin-pusat/ro-item",
+      "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
+    },
+    {
+      "source": "/admin-pusat/ro-item.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/ro-item.html",
+      "destination": "/dashboard ADMIN PUSAT/ro-item.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/ro-item.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/ro-item.html"
+    },
+    {
       "source": "/roa",
+      "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
+    },
+    {
+      "source": "/roa.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
+    },
+    {
+      "source": "/admin-pusat/roa",
+      "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
+    },
+    {
+      "source": "/admin-pusat/roa.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/roa.html",
+      "destination": "/dashboard ADMIN PUSAT/roa.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/roa.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/roa.html"
     },
     {
@@ -101,7 +776,47 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
     },
     {
+      "source": "/sales-dashboard.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
+    },
+    {
+      "source": "/admin-pusat/sales-dashboard",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
+    },
+    {
+      "source": "/admin-pusat/sales-dashboard.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html",
+      "destination": "/dashboard ADMIN PUSAT/sales-dashboard.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/sales-dashboard.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-dashboard.html"
+    },
+    {
       "source": "/sales-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/sales-detail.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/admin-pusat/sales-detail",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/admin-pusat/sales-detail.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/sales-detail.html",
+      "destination": "/dashboard ADMIN PUSAT/sales-detail.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/sales-detail.html",
       "destination": "/dashboard%20ADMIN%20PUSAT/sales-detail.html"
     },
     {
@@ -109,11 +824,79 @@
       "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
     },
     {
-      "source": "/owner",
-      "destination": "/dashboard%20OWNER/index.html"
+      "source": "/tren-penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/admin-pusat/tren-penjualan",
+      "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/admin-pusat/tren-penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html",
+      "destination": "/dashboard ADMIN PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/tren-penjualan.html",
+      "destination": "/dashboard%20ADMIN%20PUSAT/tren-penjualan.html"
+    },
+    {
+      "source": "/dashboard%20GM/index.html",
+      "destination": "/dashboard GM/index.html"
+    },
+    {
+      "source": "/dashboard GM/index.html",
+      "destination": "/dashboard%20GM/index.html"
+    },
+    {
+      "source": "/dashboard%20RSM/index.html",
+      "destination": "/dashboard RSM/index.html"
+    },
+    {
+      "source": "/dashboard RSM/index.html",
+      "destination": "/dashboard%20RSM/index.html"
+    },
+    {
+      "source": "/dashboard%20ASM/index.html",
+      "destination": "/dashboard ASM/index.html"
+    },
+    {
+      "source": "/dashboard ASM/index.html",
+      "destination": "/dashboard%20ASM/index.html"
     },
     {
       "source": "/achievement",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/achievement.html",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/owner-achievement",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/owner-achievement.html",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/owner/achievement",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/owner/achievement.html",
+      "destination": "/dashboard%20OWNER/achievement.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/achievement.html",
+      "destination": "/dashboard OWNER/achievement.html"
+    },
+    {
+      "source": "/dashboard OWNER/achievement.html",
       "destination": "/dashboard%20OWNER/achievement.html"
     },
     {
@@ -121,11 +904,151 @@
       "destination": "/dashboard%20OWNER/audit.html"
     },
     {
+      "source": "/audit.html",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/owner-audit",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/owner-audit.html",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/owner/audit",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/owner/audit.html",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/audit.html",
+      "destination": "/dashboard OWNER/audit.html"
+    },
+    {
+      "source": "/dashboard OWNER/audit.html",
+      "destination": "/dashboard%20OWNER/audit.html"
+    },
+    {
+      "source": "/owner-drilldown",
+      "destination": "/dashboard%20OWNER/drilldown.html"
+    },
+    {
+      "source": "/owner-drilldown.html",
+      "destination": "/dashboard%20OWNER/drilldown.html"
+    },
+    {
+      "source": "/owner/drilldown",
+      "destination": "/dashboard%20OWNER/drilldown.html"
+    },
+    {
+      "source": "/owner/drilldown.html",
+      "destination": "/dashboard%20OWNER/drilldown.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/drilldown.html",
+      "destination": "/dashboard OWNER/drilldown.html"
+    },
+    {
+      "source": "/dashboard OWNER/drilldown.html",
+      "destination": "/dashboard%20OWNER/drilldown.html"
+    },
+    {
       "source": "/gps",
       "destination": "/dashboard%20OWNER/gps.html"
     },
     {
+      "source": "/gps.html",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/owner-gps",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/owner-gps.html",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/owner/gps",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/owner/gps.html",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/gps.html",
+      "destination": "/dashboard OWNER/gps.html"
+    },
+    {
+      "source": "/dashboard OWNER/gps.html",
+      "destination": "/dashboard%20OWNER/gps.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/index.html",
+      "destination": "/dashboard OWNER/index.html"
+    },
+    {
+      "source": "/dashboard OWNER/index.html",
+      "destination": "/dashboard%20OWNER/index.html"
+    },
+    {
+      "source": "/integration",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/integration.html",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/owner-integration",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/owner-integration.html",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/owner/integration",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/owner/integration.html",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/integration.html",
+      "destination": "/dashboard OWNER/integration.html"
+    },
+    {
+      "source": "/dashboard OWNER/integration.html",
+      "destination": "/dashboard%20OWNER/integration.html"
+    },
+    {
       "source": "/owner-master-sales",
+      "destination": "/dashboard%20OWNER/master-sales.html"
+    },
+    {
+      "source": "/owner-master-sales.html",
+      "destination": "/dashboard%20OWNER/master-sales.html"
+    },
+    {
+      "source": "/owner/master-sales",
+      "destination": "/dashboard%20OWNER/master-sales.html"
+    },
+    {
+      "source": "/owner/master-sales.html",
+      "destination": "/dashboard%20OWNER/master-sales.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/master-sales.html",
+      "destination": "/dashboard OWNER/master-sales.html"
+    },
+    {
+      "source": "/dashboard OWNER/master-sales.html",
       "destination": "/dashboard%20OWNER/master-sales.html"
     },
     {
@@ -133,7 +1056,47 @@
       "destination": "/dashboard%20OWNER/noo.html"
     },
     {
+      "source": "/owner-noo.html",
+      "destination": "/dashboard%20OWNER/noo.html"
+    },
+    {
+      "source": "/owner/noo",
+      "destination": "/dashboard%20OWNER/noo.html"
+    },
+    {
+      "source": "/owner/noo.html",
+      "destination": "/dashboard%20OWNER/noo.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/noo.html",
+      "destination": "/dashboard OWNER/noo.html"
+    },
+    {
+      "source": "/dashboard OWNER/noo.html",
+      "destination": "/dashboard%20OWNER/noo.html"
+    },
+    {
       "source": "/owner-nop",
+      "destination": "/dashboard%20OWNER/nop.html"
+    },
+    {
+      "source": "/owner-nop.html",
+      "destination": "/dashboard%20OWNER/nop.html"
+    },
+    {
+      "source": "/owner/nop",
+      "destination": "/dashboard%20OWNER/nop.html"
+    },
+    {
+      "source": "/owner/nop.html",
+      "destination": "/dashboard%20OWNER/nop.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/nop.html",
+      "destination": "/dashboard OWNER/nop.html"
+    },
+    {
+      "source": "/dashboard OWNER/nop.html",
       "destination": "/dashboard%20OWNER/nop.html"
     },
     {
@@ -141,7 +1104,63 @@
       "destination": "/dashboard%20OWNER/orders.html"
     },
     {
+      "source": "/orders.html",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/owner-orders",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/owner-orders.html",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/owner/orders",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/owner/orders.html",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/orders.html",
+      "destination": "/dashboard OWNER/orders.html"
+    },
+    {
+      "source": "/dashboard OWNER/orders.html",
+      "destination": "/dashboard%20OWNER/orders.html"
+    },
+    {
       "source": "/outlets",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/outlets.html",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/owner-outlets",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/owner-outlets.html",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/owner/outlets",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/owner/outlets.html",
+      "destination": "/dashboard%20OWNER/outlets.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/outlets.html",
+      "destination": "/dashboard OWNER/outlets.html"
+    },
+    {
+      "source": "/dashboard OWNER/outlets.html",
       "destination": "/dashboard%20OWNER/outlets.html"
     },
     {
@@ -149,7 +1168,63 @@
       "destination": "/dashboard%20OWNER/products.html"
     },
     {
+      "source": "/products.html",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/owner-products",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/owner-products.html",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/owner/products",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/owner/products.html",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/products.html",
+      "destination": "/dashboard OWNER/products.html"
+    },
+    {
+      "source": "/dashboard OWNER/products.html",
+      "destination": "/dashboard%20OWNER/products.html"
+    },
+    {
       "source": "/regions",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/regions.html",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/owner-regions",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/owner-regions.html",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/owner/regions",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/owner/regions.html",
+      "destination": "/dashboard%20OWNER/regions.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/regions.html",
+      "destination": "/dashboard OWNER/regions.html"
+    },
+    {
+      "source": "/dashboard OWNER/regions.html",
       "destination": "/dashboard%20OWNER/regions.html"
     },
     {
@@ -157,12 +1232,168 @@
       "destination": "/dashboard%20OWNER/ro.html"
     },
     {
+      "source": "/ro.html",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/owner-ro",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/owner-ro.html",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/owner/ro",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/owner/ro.html",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/ro.html",
+      "destination": "/dashboard OWNER/ro.html"
+    },
+    {
+      "source": "/dashboard OWNER/ro.html",
+      "destination": "/dashboard%20OWNER/ro.html"
+    },
+    {
+      "source": "/sales",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/sales.html",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/owner-sales",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/owner-sales.html",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/owner/sales",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/owner/sales.html",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/sales.html",
+      "destination": "/dashboard OWNER/sales.html"
+    },
+    {
+      "source": "/dashboard OWNER/sales.html",
+      "destination": "/dashboard%20OWNER/sales.html"
+    },
+    {
       "source": "/vehicles",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/vehicles.html",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/owner-vehicles",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/owner-vehicles.html",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/owner/vehicles",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/owner/vehicles.html",
+      "destination": "/dashboard%20OWNER/vehicles.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/vehicles.html",
+      "destination": "/dashboard OWNER/vehicles.html"
+    },
+    {
+      "source": "/dashboard OWNER/vehicles.html",
       "destination": "/dashboard%20OWNER/vehicles.html"
     },
     {
       "source": "/visits",
       "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/visits.html",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/owner-visits",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/owner-visits.html",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/owner/visits",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/owner/visits.html",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/dashboard%20OWNER/visits.html",
+      "destination": "/dashboard OWNER/visits.html"
+    },
+    {
+      "source": "/dashboard OWNER/visits.html",
+      "destination": "/dashboard%20OWNER/visits.html"
+    },
+    {
+      "source": "/dashboard%20ADMIN%20PUSAT/:path*",
+      "destination": "/dashboard ADMIN PUSAT/:path*"
+    },
+    {
+      "source": "/dashboard ADMIN PUSAT/:path*",
+      "destination": "/dashboard%20ADMIN%20PUSAT/:path*"
+    },
+    {
+      "source": "/dashboard%20GM/:path*",
+      "destination": "/dashboard GM/:path*"
+    },
+    {
+      "source": "/dashboard GM/:path*",
+      "destination": "/dashboard%20GM/:path*"
+    },
+    {
+      "source": "/dashboard%20RSM/:path*",
+      "destination": "/dashboard RSM/:path*"
+    },
+    {
+      "source": "/dashboard RSM/:path*",
+      "destination": "/dashboard%20RSM/:path*"
+    },
+    {
+      "source": "/dashboard%20ASM/:path*",
+      "destination": "/dashboard ASM/:path*"
+    },
+    {
+      "source": "/dashboard ASM/:path*",
+      "destination": "/dashboard%20ASM/:path*"
+    },
+    {
+      "source": "/dashboard%20OWNER/:path*",
+      "destination": "/dashboard OWNER/:path*"
+    },
+    {
+      "source": "/dashboard OWNER/:path*",
+      "destination": "/dashboard%20OWNER/:path*"
     }
   ]
 }
