@@ -1,25 +1,25 @@
 /*
  * ============================================================
- * DANDANG BRAND THEME — selaras dengan warna merah bold website
- * Terinspirasi dari header merah #E31E24 di tehdandang.com
+ * DANDANG BRAND THEME — palet merah baru (crimson palette)
+ * Palet: #FF1515 · #9B1C1C · #5C0000 · #E87878 · #8B0000
  * ============================================================
  */
 
 /* ── 1. Design Tokens ─────────────────────────────────────── */
 :root {
-  /* Merah Dandang utama (sesuai website) */
-  --dan-red:        #E31E24;
-  --dan-red-dark:   #C91820;
-  --dan-red-deep:   #A9141B;
-  --dan-red-rich:   #8B0E13;   /* merah tua pekat */
-  --dan-maroon:     #570B10;
-  --dan-maroon-deep:#3D070B;
-  --dan-maroon-dark:#260407;
+  /* Palet utama dari brand palette */
+  --dan-red:        #9B1C1C;   /* crimson — warna utama (dipilih) */
+  --dan-red-bright: #FF1515;   /* merah terang — aksen vivid */
+  --dan-red-dark:   #8B0000;   /* merah tua — hover / dark variant */
+  --dan-red-deep:   #5C0000;   /* burgundy pekat — deep accent */
+  --dan-maroon:     #4A0000;
+  --dan-maroon-deep:#330000;
+  --dan-maroon-dark:#1A0000;
 
-  /* Tints */
+  /* Tints (dari salmon #E87878) */
   --dan-red-10:     #FFF1F1;
-  --dan-red-20:     #FFDADA;
-  --dan-red-30:     #FCA5A5;
+  --dan-red-20:     #FDDADA;
+  --dan-red-30:     #E87878;   /* salmon — tint utama */
 
   /* Surface / neutral */
   --dan-white:      #FFFFFF;
@@ -38,11 +38,11 @@ body {
   background: var(--dan-bg) !important;
 }
 
-/* ── 3. SIDEBAR — merah solid seperti header website ──────── */
+/* ── 3. SIDEBAR — crimson solid ───────────────────────────── */
 .sidebar {
   width: 256px !important;
-  background: #E31E24 !important;
-  box-shadow: 4px 0 24px rgba(163, 20, 27, 0.35) !important;
+  background: #9B1C1C !important;
+  box-shadow: 4px 0 24px rgba(91, 0, 0, 0.4) !important;
   border-right: 0 !important;
 }
 
@@ -55,7 +55,7 @@ body {
 .brand {
   padding: 20px 18px 16px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-  background: rgba(0, 0, 0, 0.15) !important;
+  background: rgba(0, 0, 0, 0.2) !important;
   position: relative;
 }
 
@@ -172,16 +172,16 @@ nav {
   color: #ffffff !important;
 }
 
-/* Active nav link — putih bold kontras dengan merah gelap sidebar */
+/* Active nav link */
 .nav-link.active {
   background: rgba(255, 255, 255, 0.95) !important;
-  color: #C91820 !important;
+  color: #8B0000 !important;
   font-weight: 700 !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
 }
 
 .nav-link.active svg {
-  color: #C91820 !important;
+  color: #8B0000 !important;
 }
 
 /* Count badge di sidebar */
@@ -197,8 +197,8 @@ nav {
 }
 
 .nav-link.active .count {
-  background: rgba(201, 24, 32, 0.15) !important;
-  color: #C91820 !important;
+  background: rgba(139, 0, 0, 0.12) !important;
+  color: #8B0000 !important;
 }
 
 /* Pending nav link */
@@ -228,7 +228,7 @@ nav {
 
 .sidebar-profile .avatar {
   background: rgba(255, 255, 255, 0.9) !important;
-  color: #C91820 !important;
+  color: #8B0000 !important;
   font-weight: 800 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
   border: 2px solid rgba(255, 255, 255, 0.3) !important;
@@ -239,12 +239,12 @@ nav {
   margin-left: 256px !important;
 }
 
-/* ── 5. TOPBAR — lebih merah, lebih brand ──────────────── */
+/* ── 5. TOPBAR ──────────────────────────────────────────── */
 .topbar {
   height: 62px !important;
   background: #FFFFFF !important;
-  border-bottom: 2px solid #E31E24 !important;
-  box-shadow: 0 2px 12px rgba(227, 30, 36, 0.1) !important;
+  border-bottom: 2px solid #9B1C1C !important;
+  box-shadow: 0 2px 12px rgba(155, 28, 28, 0.12) !important;
   padding: 0 24px !important;
 }
 
@@ -254,7 +254,7 @@ nav {
 }
 
 .breadcrumb span {
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
   margin: 0 8px !important;
 }
 
@@ -264,7 +264,7 @@ nav {
 }
 
 .topbar .badge {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
   font-weight: 700 !important;
   box-shadow: none !important;
@@ -275,35 +275,35 @@ nav {
 /* Icon buttons di topbar */
 .icon-button {
   border-color: #e2e8f0 !important;
-  color: #C91820 !important;
+  color: #8B0000 !important;
 }
 
 .icon-button:hover {
   background: #FFF1F1 !important;
-  border-color: #fca5a5 !important;
-  color: #E31E24 !important;
+  border-color: #E87878 !important;
+  color: #9B1C1C !important;
 }
 
 /* Notif dot */
 .notif-dot {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   box-shadow: 0 0 0 2px #fff !important;
 }
 
 /* Avatar topbar */
 .topbar .avatar.small {
-  background: #C91820 !important;
+  background: #8B0000 !important;
   color: #fff !important;
   font-weight: 800 !important;
-  border: 2px solid rgba(227, 30, 36, 0.2) !important;
+  border: 2px solid rgba(155, 28, 28, 0.2) !important;
 }
 
 /* ── 6. PAGE HEADING ───────────────────────────────────── */
 .page-heading {
   background: #FFF5F5 !important;
-  border: 1px solid #FFDADA !important;
+  border: 1px solid #FDDADA !important;
   border-radius: 12px !important;
-  border-left: 4px solid #E31E24 !important;
+  border-left: 4px solid #9B1C1C !important;
   padding: 20px 22px !important;
 }
 
@@ -314,7 +314,7 @@ nav {
 }
 
 .eyebrow {
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
   font-weight: 700 !important;
   letter-spacing: 1.8px !important;
 }
@@ -334,12 +334,12 @@ nav {
 .card-click:hover,
 .card-click:focus-visible {
   transform: translateY(-3px) !important;
-  box-shadow: 0 12px 28px rgba(227, 30, 36, 0.15) !important;
-  border-color: #fca5a5 !important;
+  box-shadow: 0 12px 28px rgba(155, 28, 28, 0.15) !important;
+  border-color: #E87878 !important;
 }
 
 .card-heading .heading-title svg {
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
 }
 
 /* ── 8. KPI Cards ──────────────────────────────────────── */
@@ -349,75 +349,75 @@ nav {
 
 /* ── 9. BUTTONS ────────────────────────────────────────── */
 .button.primary {
-  background: #E31E24 !important;
-  border-color: #C91820 !important;
+  background: #9B1C1C !important;
+  border-color: #8B0000 !important;
   color: #fff !important;
   box-shadow: none !important;
   font-weight: 700 !important;
 }
 
 .button.primary:hover {
-  background: #C91820 !important;
+  background: #8B0000 !important;
   box-shadow: none !important;
 }
 
 .button:not(.primary):hover {
   background: #FFF1F1 !important;
-  border-color: #fca5a5 !important;
-  color: #C91820 !important;
+  border-color: #E87878 !important;
+  color: #8B0000 !important;
 }
 
 /* ── 10. TOGGLE BUTTONS ─────────────────────────────────── */
 .btn-toggle.active {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
   box-shadow: none !important;
 }
 
 .btn-toggle:hover:not(.active) {
   background: #FFF1F1 !important;
-  color: #991b1b !important;
+  color: #5C0000 !important;
 }
 
 /* ── 11. FILTER BAR ─────────────────────────────────────── */
 .filter-card {
   background: #FFF5F5 !important;
-  border-color: #FFDADA !important;
+  border-color: #FDDADA !important;
 }
 
 .filter-bar select,
 .filter-bar input[type="date"],
 .filter-bar .filter-field select {
-  border-color: #FFDADA !important;
+  border-color: #FDDADA !important;
   border-radius: 8px !important;
 }
 
 .dp-trigger {
-  border-color: #FFDADA !important;
+  border-color: #FDDADA !important;
 }
 
 .dp-trigger:hover,
 .dp-trigger[aria-expanded="true"] {
-  border-color: #E31E24 !important;
-  box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.12) !important;
+  border-color: #9B1C1C !important;
+  box-shadow: 0 0 0 3px rgba(155, 28, 28, 0.12) !important;
 }
 
 .dp-day.start,
 .dp-day.end {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
 }
 
 .dp-presets button.active {
-  background: #E31E24 !important;
-  border-color: #C91820 !important;
+  background: #9B1C1C !important;
+  border-color: #8B0000 !important;
   color: #fff !important;
 }
 
 /* ── 12. TABLES ─────────────────────────────────────────── */
 th {
   background: #FFF5F5 !important;
-  color: #7f1d1d !important;
+  color: #5C0000 !important;
 }
 
 tbody tr:hover td {
@@ -438,54 +438,54 @@ tbody tr:hover td {
 
 .rank-bottom .performer-rank {
   background: #FFF1F1 !important;
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
 }
 
 /* ── 14. MAP CARD ───────────────────────────────────────── */
 .sales-map {
   border-radius: 10px !important;
-  border-color: #FFDADA !important;
+  border-color: #FDDADA !important;
 }
 
 /* ── 15. TABS ───────────────────────────────────────────── */
 .tabs button[aria-selected="true"] {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
   box-shadow: none !important;
 }
 
 /* ── 16. CHART CONTROLS ─────────────────────────────────── */
 .chart-switcher button[aria-pressed="true"] {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
   box-shadow: none !important;
 }
 
 /* ── 17. DRILL BREADCRUMBS ──────────────────────────────── */
 .drill-breadcrumbs button:last-of-type {
-  background: #E31E24 !important;
+  background: #9B1C1C !important;
   color: #fff !important;
-  border-color: #C91820 !important;
+  border-color: #8B0000 !important;
 }
 
 /* ── 18. DRILLDOWN PROMPT ───────────────────────────────── */
 .exec-drill-prompt svg {
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
   opacity: 0.25 !important;
 }
 
 /* ── 19. TOAST ──────────────────────────────────────────── */
 .toast {
-  background: #C91820 !important;
+  background: #8B0000 !important;
 }
 
 /* ── 20. FOOTER ─────────────────────────────────────────── */
 footer {
-  border-top-color: #FFDADA !important;
+  border-top-color: #FDDADA !important;
 }
 
 footer a:hover {
-  color: #E31E24 !important;
+  color: #9B1C1C !important;
 }
 
 /* ── 21. Mobile responsive ──────────────────────────────── */
@@ -535,7 +535,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid rgba(227, 30, 36, 0.5) !important;
+  outline: 3px solid rgba(155, 28, 28, 0.5) !important;
   outline-offset: 3px !important;
 }
 
@@ -545,11 +545,11 @@ select:focus-visible {
   height: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #FFDADA;
+  background: #E87878;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #E31E24;
+  background: #9B1C1C;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

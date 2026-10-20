@@ -90,9 +90,36 @@
       style="width: 72px; height: 72px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);" />
     <h1 class="brand-title">TEH DANDANG</h1>
     <p class="brand-sub">Sistem Monitoring &amp; Executive Analytics</p>
-    <a class="btn-red-gradient" href="dashboard%20ADMIN%20PUSAT/index.html">
-      Dashboard OWNER
-    </a>
+    <!-- Role selection -->
+    <select id="role-select" class="form-select mb-3" style="max-width: 300px; margin: 0 auto;">
+      <option value="owner">Owner</option>
+      <option value="gm">General Manager (GM)</option>
+      <option value="rsm">Regional Sales Manager (RSM)</option>
+      <option value="asm">Area Sales Manager (ASM)</option>
+    </select>
+    <button class="btn btn-primary btn-red-gradient w-100" id="go-role-btn">Go to Dashboard</button>
+
+    <script>
+      document.getElementById('go-role-btn').addEventListener('click', function() {
+        const role = document.getElementById('role-select').value;
+        let url = '';
+        switch(role) {
+          case 'owner':
+            url = 'dashboard%20OWNER/index.html';
+            break;
+          case 'gm':
+            url = 'dashboard%20GM/index.html';
+            break;
+          case 'rsm':
+            url = 'dashboard%20RSM/index.html';
+            break;
+          case 'asm':
+            url = 'dashboard%20ASM/index.html';
+            break;
+        }
+        if (url) window.location.href = url;
+      });
+    </script>
     <!-- <a class="btn-red-outline" href="dashboard%20OWNER/index.html">
     Buka Dashboard OWNER
    </a> -->

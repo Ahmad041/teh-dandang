@@ -1,321 +1,548 @@
 <!DOCTYPE html>
 <html lang="id">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="#b91c1c" name="theme-color"/>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#b91c1c" name="theme-color" />
   <title>Executive Dashboard | Teh Dandang ADMIN PUSAT</title>
-  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet"/>
-  <link href="../assets/css/styles.css?v=bold_red" rel="stylesheet"/>
-  <link href="../assets/css/admin-pusat.css?v=bold_red" rel="stylesheet"/>
-  <link href="../assets/css/dandang-theme.css" rel="stylesheet"/>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
+  <link href="../assets/css/styles.css?v=bold_red" rel="stylesheet" />
+  <link href="../assets/css/admin-pusat.css?v=bold_red" rel="stylesheet" />
+  <link href="../assets/css/dandang-theme.css" rel="stylesheet" />
   <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
   <script defer="" src="../assets/js/app.js"></script>
   <script defer="" src="../assets/js/admin-pusat.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" rel="stylesheet" />
   <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script defer="" src="../assets/js/admin-data.js"></script>
   <script defer="" src="../assets/js/admin-filter.js"></script>
   <script defer="" src="../assets/js/admin-exec.js"></script>
- </head>
- <body data-page="index">
-  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox"/>
+</head>
+
+<body data-page="index">
+  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox" />
   <a class="skip-link" href="#main">Lewati navigasi</a>
   <label aria-label="Tutup navigasi" class="sidebar-backdrop" for="nav-toggle"></label>
   <aside aria-label="Navigasi utama" class="sidebar" id="sidebar">
-   <a class="brand" href="index.html"><span class="brand-mark"><img alt="Logo Teh Dandang" class="brand-logo" src="../assets/img/Teh Dandang.jpeg"/></span><span><strong>TEH DANDANG</strong><small>ADMIN PUSAT</small></span></a>
-   <div class="connection"><span class="dot"></span><span>Data Demo · Okt 2026</span><span class="demo-label">DEMO</span></div>
-   <nav id="navigation"><section class="nav-group"><h2>Monitoring &amp; Analytics</h2><a aria-current="page" class="nav-link active" href="index.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"></path></svg><span>Executive Dashboard</span></a><a class="nav-link" href="sales-dashboard.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8"></path></svg><span>Sales Dashboard</span></a><a class="nav-link" href="area.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg><span>Area Dashboard</span></a><a class="nav-link" href="drilldown.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg><span>Grafik Drilldown 7 Level</span></a><a class="nav-link" href="early-warning.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg><span>Risk &amp; Fraud (Early Warning)</span><span class="count">12</span></a></section><section class="nav-group"><h2>Tracking &amp; Report</h2><a class="nav-link" href="live-tracking.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4"></path></svg><span>Live Tracking GPS</span></a><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path></svg><span>Reporting Center</span><span class="count">soon</span></span></section><section class="nav-group"><h2>Master Data</h2><a class="nav-link" href="master-sales.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8"></path></svg><span>Sales Directory</span></a><a class="nav-link" href="master-outlet.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path></svg><span>Outlet (SAP OCRD)</span></a><a class="nav-link" href="master-product.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg><span>Product (SAP OITM)</span></a><a class="nav-link" href="master-area.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg><span>Area Hierarki</span></a><a class="nav-link" href="master-route.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg><span>Master Route</span></a><a class="nav-link" href="master-vehicle.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4"></path></svg><span>Fleet (Concox GT06N)</span></a></section><section class="nav-group"><h2>Transaksi</h2><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg><span>Sales Visit GPS</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path></svg><span>Sales Order (SAP)</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path></svg><span>NOO (New Outlet)</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg><span>NOP (New Product)</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg><span>RO / ROA</span><span class="count">soon</span></span></section><section class="nav-group"><h2>Administration</h2><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8"></path></svg><span>User Management</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg><span>Role &amp; Permission</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12a9 9 0 0 1-15.5 6.2 M3 12A9 9 0 0 1 18.5 5.8 M18 2v4h-4 M6 22v-4h4"></path></svg><span>SAP Integration</span><span class="count">soon</span></span><span aria-disabled="true" class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path></svg><span>Audit Log</span><span class="count">soon</span></span></section></nav>
-   <div class="sidebar-profile"><span class="avatar">RW</span><div><strong>Roni Wijaya</strong><small>ADMIN PUSAT</small></div></div>
+    <a class="brand" href="index.html"><span class="brand-mark"><img alt="Logo Teh Dandang" class="brand-logo"
+          src="../assets/img/Teh Dandang.jpeg" /></span><span><strong>TEH DANDANG</strong><small>ADMIN
+          PUSAT</small></span></a>
+    <div class="connection"><span class="dot"></span><span>Data Demo · Okt 2026</span><span
+        class="demo-label">DEMO</span></div>
+    <nav id="navigation">
+      <section class="nav-group">
+        <h2>Monitoring &amp; Analytics</h2><a aria-current="page" class="nav-link active" href="index.html"><svg
+            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"></path>
+          </svg><span>Executive Dashboard</span></a><a class="nav-link" href="sales-dashboard.html"><svg
+            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8">
+            </path>
+          </svg><span>Sales Dashboard</span></a><a class="nav-link" href="area.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path>
+          </svg><span>Area Dashboard</span></a><a class="nav-link" href="drilldown.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path>
+          </svg><span>Grafik Drilldown 7 Level</span></a><a class="nav-link" href="early-warning.html"><svg
+            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path>
+          </svg><span>Risk &amp; Fraud (Early Warning)</span><span class="count">12</span></a>
+      </section>
+      <section class="nav-group">
+        <h2>Tracking &amp; Report</h2><a class="nav-link" href="live-tracking.html"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
+            </path>
+          </svg><span>Live Tracking GPS</span></a><span aria-disabled="true" class="nav-link is-pending"
+          title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path>
+          </svg><span>Reporting Center</span><span class="count">soon</span></span>
+      </section>
+      <section class="nav-group">
+        <h2>Master Data</h2><a class="nav-link" href="master-sales.html"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8">
+            </path>
+          </svg><span>Sales Directory</span></a><a class="nav-link" href="master-outlet.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path>
+          </svg><span>Outlet (SAP OCRD)</span></a><a class="nav-link" href="master-product.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path>
+          </svg><span>Product (SAP OITM)</span></a><a class="nav-link" href="master-area.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path>
+          </svg><span>Area Hierarki</span></a><a class="nav-link" href="master-route.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path>
+          </svg><span>Master Route</span></a><a class="nav-link" href="master-vehicle.html"><svg aria-hidden="true"
+            class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4">
+            </path>
+          </svg><span>Fleet (Concox GT06N)</span></a>
+      </section>
+      <section class="nav-group">
+        <h2>Transaksi</h2><span aria-disabled="true" class="nav-link is-pending"
+          title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path>
+          </svg><span>Sales Visit GPS</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path>
+          </svg><span>Sales Order (SAP)</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path>
+          </svg><span>NOO (New Outlet)</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path>
+          </svg><span>NOP (New Product)</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path>
+          </svg><span>RO / ROA</span><span class="count">soon</span></span>
+      </section>
+      <section class="nav-group">
+        <h2>Administration</h2><span aria-disabled="true" class="nav-link is-pending"
+          title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon" fill="none" focusable="false"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8">
+            </path>
+          </svg><span>User Management</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path>
+          </svg><span>Role &amp; Permission</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12a9 9 0 0 1-15.5 6.2 M3 12A9 9 0 0 1 18.5 5.8 M18 2v4h-4 M6 22v-4h4"></path>
+          </svg><span>SAP Integration</span><span class="count">soon</span></span><span aria-disabled="true"
+          class="nav-link is-pending" title="Belum dibuat (tahap berikutnya)"><svg aria-hidden="true" class="icon"
+            fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path>
+          </svg><span>Audit Log</span><span class="count">soon</span></span>
+      </section>
+    </nav>
+    <div class="sidebar-profile"><span class="avatar">RW</span>
+      <div><strong>Roni Wijaya</strong><small>ADMIN PUSAT</small></div>
+    </div>
   </aside>
   <div class="workspace">
-   <header class="topbar">
-    <div class="topbar-left">
-     <label aria-label="Buka navigasi" class="icon-button menu-toggle" data-icon="menu" for="nav-toggle"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18 M3 12h18 M3 18h18"></path></svg></label>
-     <span class="breadcrumb">Admin Pusat <span>/</span> <strong id="breadcrumb">Executive Dashboard</strong></span>
-    </div>
-    <div class="topbar-right">
-     <span class="badge">Role Aktif: Admin Pusat</span>
-     <a aria-label="Pemberitahuan" class="icon-button notif-button" data-icon="bell" href="notifikasi.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4"></path></svg><span class="notif-dot">3</span></a>
-     <span class="avatar small">RW</span>
-    </div>
-   </header>
-   <main id="main" tabindex="-1">
-    <div class="page-heading">
-     <div>
-      <p class="eyebrow">TEH DANDANG / ADMIN PUSAT</p>
-      <h1 id="page-title">Executive Dashboard</h1>
-      <p class="muted" id="page-description" hidden=""></p>
-     </div>
-     <div class="heading-actions"><a class="button primary" href="drilldown.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg>Drilldown 7 Level</a></div>
-    </div>
-    <noscript><p class="note">Data tersedia sebagai HTML statis. JavaScript diperlukan untuk grafik dan pencarian.</p></noscript>
-    <div id="views">
-
-     <div class="view dash">
-      <!-- Filter Global -->
-      <section class="card filter-card" aria-label="Filter dashboard"><div id="filter-bar"></div></section>
-
-      <!-- Peta Outlet — dinaikan ke atas, lebar penuh -->
-      <section class="card map-card card-click" data-keep-filter="" data-base="peta-outlet.html" data-href="peta-outlet.html" tabindex="0" role="link" aria-label="Buka peta outlet">
-       <div class="card-heading"><div><h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg>Peta Outlet</h2></div><span class="badge neutral" id="scope-label"></span></div>
-       <div class="sales-map extra-tall" id="sales-map" role="img" aria-label="Peta sebaran outlet dengan penanda NOO dan NOP."><p class="map-fallback">Memuat peta…</p></div>
-       <div class="map-legend" id="map-legend"></div>
-      </section>
-
-      <!-- KPI Grid (8 card setelah revisi) -->
-      <section aria-label="Ringkasan KPI" class="kpi-grid exec-kpi-grid" id="exec-kpis"></section>
-
-      <!-- Tren Penjualan (Harian/Mingguan/Bulanan + Line/Bar + Drill Down switch) -->
-      <section class="card" id="trend-section" aria-label="Tren Penjualan">
-       <div class="card-heading">
-        <div>
-         <h2 class="heading-title" id="trend-title">Tren Penjualan</h2>
-         <p id="trend-subtitle">Aktual vs target, miliar Rp — klik periode untuk drilldown</p>
-        </div>
-        <div class="chart-controls">
-         <div class="btn-group-sm" id="trend-grain-toggles" role="group" aria-label="Pilih rentang tren">
-          <button type="button" class="btn-toggle" data-grain="daily">Harian</button>
-          <button type="button" class="btn-toggle" data-grain="weekly">Mingguan</button>
-          <button type="button" class="btn-toggle active" data-grain="monthly">Bulanan</button>
-         </div>
-         <div class="btn-group-sm" id="trend-type-toggles" role="group" aria-label="Pilih tipe grafik tren">
-          <button type="button" class="btn-toggle active" data-type="bar">Bar</button>
-          <button type="button" class="btn-toggle" data-type="line">Line</button>
-         </div>
-         <button type="button" class="drill-switch-btn" id="trend-drill-btn" aria-pressed="false" title="Aktifkan/Buka panel Drilldown">
-          <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg>
-          <span>Drill Down</span>
-         </button>
-        </div>
-       </div>
-
-       <!-- Breadcrumbs & Navigasi Drill Down dalam Grafik Tren -->
-       <div class="trend-drill-nav" id="trend-drill-nav" hidden>
-        <button type="button" class="trend-drill-back-btn" id="trend-drill-back-btn" onclick="trendDrillBack()" title="Kembali 1 level">
-          <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5 M12 19l-7-7 7-7"></path></svg>
-          <span>Kembali</span>
-        </button>
-        <nav class="trend-drill-crumbs" id="trend-drill-crumbs" aria-label="Hierarki Drilldown"></nav>
-        <button type="button" class="trend-drill-reset-btn" id="trend-drill-reset-btn" onclick="trendDrillReset()" title="Reset ke Tren Bulanan">Reset Bulanan</button>
-       </div>
-
-       <div class="admin-chart wide"><canvas id="trend-chart" role="img" aria-label="Tren aktual penjualan, target, dan tahun lalu."></canvas><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div>
-      </section>
-
-      <!-- Row: Kontribusi Penjualan per Wilayah (Pie, Donut, Bar + Interaktif + Tertinggi/Terendah/Rata-rata) -->
-      <section class="card" id="region-contrib-section" aria-label="Kontribusi Penjualan per Wilayah">
-       <div class="card-heading">
-        <div>
-         <h2 class="heading-title">Kontribusi Penjualan per Wilayah</h2>
-         <p>Pangsa omzet wilayah — klik segmen grafik untuk filter / drill down</p>
-        </div>
-        <div class="chart-controls">
-         <div class="btn-group-sm" id="region-type-toggles" role="group" aria-label="Tipe grafik wilayah">
-          <button type="button" class="btn-toggle active" data-type="doughnut">Donut</button>
-          <button type="button" class="btn-toggle" data-type="pie">Pie</button>
-          <button type="button" class="btn-toggle" data-type="bar">Bar</button>
-         </div>
-        </div>
-       </div>
-       <div class="admin-chart" style="height:270px; position:relative;"><canvas id="region-contrib-chart" role="img" aria-label="Kontribusi penjualan per wilayah"></canvas><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div>
-       <!-- Detail Informasi: Wilayah Tertinggi, Terendah, Rata-rata -->
-       <div class="region-stat-grid" id="region-stat-grid">
-        <div class="region-stat-card highest">
-         <span class="label">Wilayah Tertinggi</span>
-         <span class="val" id="region-highest-val">–</span>
-         <span class="sub" id="region-highest-name">–</span>
-        </div>
-        <div class="region-stat-card lowest">
-         <span class="label">Wilayah Terendah</span>
-         <span class="val" id="region-lowest-val">–</span>
-         <span class="sub" id="region-lowest-name">–</span>
-        </div>
-        <div class="region-stat-card avg">
-         <span class="label">Rata-rata per Wilayah</span>
-         <span class="val" id="region-avg-val">–</span>
-         <span class="sub" id="region-avg-sub">5 Wilayah (Region)</span>
-        </div>
-       </div>
-      </section>
-
-      <!-- Row: Top & Bottom Performer (Tabs Toko, Produk, Salesman) -->
-      <section class="card" id="performer-section" aria-label="Top dan Bottom Performer">
-       <div class="card-heading">
-        <div>
-         <h2 class="heading-title">Top &amp; Bottom Performer</h2>
-         <p>Peringkat kinerja tertinggi dan terendah untuk evaluasi strategis</p>
-        </div>
-        <div class="chart-controls">
-         <div class="btn-group-sm" id="performer-tab-toggles" role="group" aria-label="Pilih kategori performer">
-          <button type="button" class="btn-toggle active" data-tab="toko">Toko</button>
-          <button type="button" class="btn-toggle" data-tab="produk">Produk</button>
-          <button type="button" class="btn-toggle" data-tab="salesman">Salesman</button>
-         </div>
-        </div>
-       </div>
-       <div class="performer-grid">
-        <!-- Top 5 -->
-        <div class="performer-col rank-top">
-         <div class="performer-col-head">
-          <h3><span class="performer-rank rank-1">★</span> <span id="top-title">Top 5 Toko</span></h3>
-          <span class="badge">Performa Terbaik</span>
-         </div>
-         <ul class="performer-list" id="top-performer-list"></ul>
-        </div>
-        <!-- Bottom 5 -->
-        <div class="performer-col rank-bottom">
-         <div class="performer-col-head">
-          <h3><span class="performer-rank">!</span> <span id="bottom-title">Bottom 5 Toko</span></h3>
-          <span class="badge warning">Perlu Perhatian</span>
-         </div>
-         <ul class="performer-list" id="bottom-performer-list"></ul>
-        </div>
-       </div>
-      </section>
-
-      <!-- Row: Produk Paling Laku + Kesehatan Outlet -->
-      <div class="dash-row r2">
-       <section class="card card-click" data-keep-filter="" data-base="ro-item.html" data-href="ro-item.html" tabindex="0" role="link" aria-label="Buka detail item RO">
-        <div class="card-heading"><div><h2 class="heading-title">Produk Paling Laku</h2><p>Unit terjual</p></div></div>
-        <div class="admin-chart tall"><canvas id="product-chart" role="img" aria-label="Unit terjual per produk." data-admin-chart='{"type": "bar", "labels": [], "datasets": [{"label": "", "data": [], "backgroundColor": []}]}'></canvas><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div>
-       </section>
-       <section class="card card-click" data-keep-filter="" data-base="kesehatan-outlet.html" data-href="kesehatan-outlet.html" tabindex="0" role="link" aria-label="Buka kesehatan outlet">
-        <div class="card-heading"><div><h2 class="heading-title">Kesehatan Outlet</h2></div></div>
-        <div class="admin-chart donut"><canvas id="health-chart" role="img" aria-label="Komposisi outlet sehat, berisiko, dan tidak aktif." data-admin-chart='{"type": "doughnut", "labels": [], "datasets": [{"label": "", "data": [], "backgroundColor": []}]}'></canvas><div class="chart-center" id="health-center"></div><p class="note" data-chart-error hidden>Grafik belum tersedia.</p></div>
-        <ul class="stat-list" id="health-list"></ul>
-       </section>
+    <header class="topbar">
+      <div class="topbar-left">
+        <label aria-label="Buka navigasi" class="icon-button menu-toggle" data-icon="menu" for="nav-toggle"><svg
+            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6h18 M3 12h18 M3 18h18"></path>
+          </svg></label>
+        <span class="breadcrumb">Admin Pusat <span>/</span> <strong id="breadcrumb">Executive Dashboard</strong></span>
       </div>
+      <div class="topbar-right">
+        <span class="badge">Role Aktif: Admin Pusat</span>
+        <a aria-label="Pemberitahuan" class="icon-button notif-button" data-icon="bell" href="notifikasi.html"><svg
+            aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4"></path>
+          </svg><span class="notif-dot">3</span></a>
+        <span class="avatar small">RW</span>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <noscript>
+        <p class="note">Data tersedia sebagai HTML statis. JavaScript diperlukan untuk grafik dan pencarian.</p>
+      </noscript>
+      <div id="views">
 
-      <!-- Row: What Needs Attention (Drilldown inline) -->
-      <section class="card" id="exec-drilldown-section">
-       <div class="card-heading">
-        <div><h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg>Drilldown Penjualan</h2><p>Klik bulan di grafik tren atau buka halaman detail — hierarki 7 level</p></div>
-        <div class="heading-actions"><a class="button" href="drilldown.html">Buka Halaman Penuh</a></div>
-       </div>
-       <div id="exec-drilldown-placeholder" class="exec-drill-prompt">
-        <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="40" height="40"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg>
-        <p>Klik salah satu <strong>batang pada grafik Tren Penjualan</strong> di atas untuk melihat drilldown 7 level secara inline, atau buka halaman penuh di atas.</p>
-       </div>
-       <div id="exec-drilldown-content" hidden>
-        <div class="drill-summary" id="exec-drill-summary"></div>
-        <div class="drill-chart-wrap" style="height:260px"><canvas id="exec-drill-chart" role="img" aria-label="Grafik drilldown inline."></canvas></div>
-        <div class="table-scroll" style="margin-top:12px"><table><thead><tr><th scope="col">Nama</th><th scope="col">Target</th><th scope="col">Aktual Penjualan</th><th scope="col">Selisih</th><th scope="col">Capaian</th><th scope="col">Status</th><th scope="col">Aksi</th></tr></thead><tbody id="exec-drill-rows"></tbody></table></div>
-        <div class="exec-drill-nav">
-         <button class="button" id="exec-drill-back" onclick="execDrillBack()">← Kembali</button>
-         <span class="badge" id="exec-drill-depth"></span>
-         <button class="button ghost" id="exec-drill-reset" onclick="execDrillReset()">Reset</button>
-        </div>
-       </div>
-      </section>
+        <div class="view dash">
+          <!-- Filter Global -->
+          <section class="card filter-card" aria-label="Filter dashboard">
+            <div id="filter-bar"></div>
+          </section>
 
-       <!-- ================= SEKSI PERINGATAN OPERASIONAL & RISIKO ================= -->
-       <section class="card" id="exec-risk-section">
-        <div class="card-heading">
-         <div>
-          <h2 class="heading-title">
-           <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg>
-           Peringatan Operasional &amp; Manajemen Risiko
-          </h2>
-          <p>Pemantauan sales bermasalah, outlet tidak aktif, deviasi GPS armada, alert prioritas tinggi, dan SLA breach.</p>
-         </div>
-         <a class="button ghost" href="early-warning.html">Lihat Semua Alert &rarr;</a>
-        </div>
-        <div class="risk-summary-grid">
-         <a class="risk-summary-card danger" href="sales-dashboard.html">
-          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Sales Bermasalah</span></div>
-          <strong class="risk-count">18</strong>
-          <span class="risk-meta">EC &lt; 80% / Target Rendah</span>
-         </a>
-         <a class="risk-summary-card danger" href="kesehatan-outlet.html?status=Inactive">
-          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Outlet Tidak Aktif</span></div>
-          <strong class="risk-count">256</strong>
-          <span class="risk-meta">&gt; 60 hari tidak repeat order</span>
-         </a>
-         <a class="risk-summary-card warning" href="live-tracking.html">
-          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Penyimpangan Kendaraan</span></div>
-          <strong class="risk-count">7</strong>
-          <span class="risk-meta">Deviasi rute GPS &gt; 3 km</span>
-         </a>
-         <a class="risk-summary-card danger" href="early-warning.html">
-          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Alert Prioritas Tinggi</span></div>
-          <strong class="risk-count">47</strong>
-          <span class="risk-meta">12 Critical + 35 High alert</span>
-         </a>
-         <a class="risk-summary-card warning" href="early-warning.html">
-          <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Kasus Melewati SLA</span></div>
-          <strong class="risk-count">9</strong>
-          <span class="risk-meta">Eskalasi terbuka &gt; 24 jam</span>
-         </a>
-        </div>
-       </section>
+          <!-- Peta Outlet — dinaikan ke atas, lebar penuh -->
+          <section class="card map-card card-click" data-keep-filter="" data-base="peta-outlet.html"
+            data-href="peta-outlet.html" tabindex="0" role="link" aria-label="Buka peta outlet">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path>
+                  </svg>Peta Outlet</h2>
+              </div><span class="badge neutral" id="scope-label"></span>
+            </div>
+            <div class="sales-map extra-tall" id="sales-map" role="img"
+              aria-label="Peta sebaran outlet dengan penanda NOO dan NOP.">
+              <p class="map-fallback">Memuat peta…</p>
+            </div>
+            <div class="map-legend" id="map-legend"></div>
+          </section>
 
-       <!-- ================= SEKSI KLASIFIKASI AREA: MERAH & KUNING ================= -->
-       <section class="card" id="exec-area-health-section">
-        <div class="card-heading">
-         <div>
-          <h2 class="heading-title">
-           <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg>
-           Kinerja &amp; Klasifikasi Wilayah Pasar
-          </h2>
-          <p>Deteksi dini area merah (kritis belum capai target) dan area kuning (potensi pasar yang perlu dikembangkan).</p>
-         </div>
-         <a class="button ghost" href="area.html">Buka Area Dashboard &rarr;</a>
-        </div>
-        <div class="area-category-grid">
-         <div class="area-cat-col red-col">
-          <div class="area-cat-head">
-           <span class="cat-pill pill-red">AREA MERAH (KRITIS)</span>
-           <span class="cat-desc">Penjualan rendah &amp; target belum tercapai</span>
+          <!-- KPI Grid (8 card setelah revisi) -->
+          <section aria-label="Ringkasan KPI" class="kpi-grid exec-kpi-grid" id="exec-kpis"></section>
+
+          <!-- Tren Penjualan (Harian/Mingguan/Bulanan + Line/Bar + Drill Down switch) -->
+          <section class="card" id="trend-section" aria-label="Tren Penjualan">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title" id="trend-title">Tren Penjualan</h2>
+                <p id="trend-subtitle">Aktual vs target, miliar Rp — klik periode untuk drilldown</p>
+              </div>
+              <div class="chart-controls">
+                <div class="btn-group-sm" id="trend-grain-toggles" role="group" aria-label="Pilih rentang tren">
+                  <button type="button" class="btn-toggle" data-grain="daily">Harian</button>
+                  <button type="button" class="btn-toggle" data-grain="weekly">Mingguan</button>
+                  <button type="button" class="btn-toggle active" data-grain="monthly">Bulanan</button>
+                </div>
+                <div class="btn-group-sm" id="trend-type-toggles" role="group" aria-label="Pilih tipe grafik tren">
+                  <button type="button" class="btn-toggle active" data-type="bar">Bar</button>
+                  <button type="button" class="btn-toggle" data-type="line">Line</button>
+                </div>
+                <button type="button" class="drill-switch-btn" id="trend-drill-btn" aria-pressed="false"
+                  title="Aktifkan/Buka panel Drilldown">
+                  <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path>
+                  </svg>
+                  <span>Drill Down</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Breadcrumbs & Navigasi Drill Down dalam Grafik Tren -->
+            <div class="trend-drill-nav" id="trend-drill-nav" hidden>
+              <button type="button" class="trend-drill-back-btn" id="trend-drill-back-btn" onclick="trendDrillBack()"
+                title="Kembali 1 level">
+                <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                  viewBox="0 0 24 24">
+                  <path d="M19 12H5 M12 19l-7-7 7-7"></path>
+                </svg>
+                <span>Kembali</span>
+              </button>
+              <nav class="trend-drill-crumbs" id="trend-drill-crumbs" aria-label="Hierarki Drilldown"></nav>
+              <button type="button" class="trend-drill-reset-btn" id="trend-drill-reset-btn" onclick="trendDrillReset()"
+                title="Reset ke Tren Bulanan">Reset Bulanan</button>
+            </div>
+
+            <div class="admin-chart wide"><canvas id="trend-chart" role="img"
+                aria-label="Tren aktual penjualan, target, dan tahun lalu."></canvas>
+              <p class="note" data-chart-error hidden>Grafik belum tersedia.</p>
+            </div>
+          </section>
+
+          <!-- Row: Kontribusi Penjualan per Wilayah (Pie, Donut, Bar + Interaktif + Tertinggi/Terendah/Rata-rata) -->
+          <section class="card" id="region-contrib-section" aria-label="Kontribusi Penjualan per Wilayah">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title">Kontribusi Penjualan per Wilayah</h2>
+                <p>Pangsa omzet wilayah — klik segmen grafik untuk filter / drill down</p>
+              </div>
+              <div class="chart-controls">
+                <div class="btn-group-sm" id="region-type-toggles" role="group" aria-label="Tipe grafik wilayah">
+                  <button type="button" class="btn-toggle active" data-type="doughnut">Donut</button>
+                  <button type="button" class="btn-toggle" data-type="pie">Pie</button>
+                  <button type="button" class="btn-toggle" data-type="bar">Bar</button>
+                </div>
+              </div>
+            </div>
+            <div class="admin-chart" style="height:270px; position:relative;"><canvas id="region-contrib-chart"
+                role="img" aria-label="Kontribusi penjualan per wilayah"></canvas>
+              <p class="note" data-chart-error hidden>Grafik belum tersedia.</p>
+            </div>
+            <!-- Detail Informasi: Wilayah Tertinggi, Terendah, Rata-rata -->
+            <div class="region-stat-grid" id="region-stat-grid">
+              <div class="region-stat-card highest">
+                <span class="label">Wilayah Tertinggi</span>
+                <span class="val" id="region-highest-val">–</span>
+                <span class="sub" id="region-highest-name">–</span>
+              </div>
+              <div class="region-stat-card lowest">
+                <span class="label">Wilayah Terendah</span>
+                <span class="val" id="region-lowest-val">–</span>
+                <span class="sub" id="region-lowest-name">–</span>
+              </div>
+              <div class="region-stat-card avg">
+                <span class="label">Rata-rata per Wilayah</span>
+                <span class="val" id="region-avg-val">–</span>
+                <span class="sub" id="region-avg-sub">5 Wilayah (Region)</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Row: Top & Bottom Performer (Tabs Toko, Produk, Salesman) -->
+          <section class="card" id="performer-section" aria-label="Top dan Bottom Performer">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title">Top &amp; Bottom Performer</h2>
+                <p>Peringkat kinerja tertinggi dan terendah untuk evaluasi strategis</p>
+              </div>
+              <div class="chart-controls">
+                <div class="btn-group-sm" id="performer-tab-toggles" role="group" aria-label="Pilih kategori performer">
+                  <button type="button" class="btn-toggle active" data-tab="toko">Toko</button>
+                  <button type="button" class="btn-toggle" data-tab="produk">Produk</button>
+                  <button type="button" class="btn-toggle" data-tab="salesman">Salesman</button>
+                </div>
+              </div>
+            </div>
+            <div class="performer-grid">
+              <!-- Top 5 -->
+              <div class="performer-col rank-top">
+                <div class="performer-col-head">
+                  <h3><span class="performer-rank rank-1">★</span> <span id="top-title">Top 5 Toko</span></h3>
+                  <span class="badge">Performa Terbaik</span>
+                </div>
+                <ul class="performer-list" id="top-performer-list"></ul>
+              </div>
+              <!-- Bottom 5 -->
+              <div class="performer-col rank-bottom">
+                <div class="performer-col-head">
+                  <h3><span class="performer-rank">!</span> <span id="bottom-title">Bottom 5 Toko</span></h3>
+                  <span class="badge warning">Perlu Perhatian</span>
+                </div>
+                <ul class="performer-list" id="bottom-performer-list"></ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Row: Produk Paling Laku + Kesehatan Outlet -->
+          <div class="dash-row r2">
+            <section class="card card-click" data-keep-filter="" data-base="ro-item.html" data-href="ro-item.html"
+              tabindex="0" role="link" aria-label="Buka detail item RO">
+              <div class="card-heading">
+                <div>
+                  <h2 class="heading-title">Produk Paling Laku</h2>
+                  <p>Unit terjual</p>
+                </div>
+              </div>
+              <div class="admin-chart tall"><canvas id="product-chart" role="img" aria-label="Unit terjual per produk."
+                  data-admin-chart='{"type": "bar", "labels": [], "datasets": [{"label": "", "data": [], "backgroundColor": []}]}'></canvas>
+                <p class="note" data-chart-error hidden>Grafik belum tersedia.</p>
+              </div>
+            </section>
+            <section class="card card-click" data-keep-filter="" data-base="kesehatan-outlet.html"
+              data-href="kesehatan-outlet.html" tabindex="0" role="link" aria-label="Buka kesehatan outlet">
+              <div class="card-heading">
+                <div>
+                  <h2 class="heading-title">Kesehatan Outlet</h2>
+                </div>
+              </div>
+              <div class="admin-chart donut"><canvas id="health-chart" role="img"
+                  aria-label="Komposisi outlet sehat, berisiko, dan tidak aktif."
+                  data-admin-chart='{"type": "doughnut", "labels": [], "datasets": [{"label": "", "data": [], "backgroundColor": []}]}'></canvas>
+                <div class="chart-center" id="health-center"></div>
+                <p class="note" data-chart-error hidden>Grafik belum tersedia.</p>
+              </div>
+              <ul class="stat-list" id="health-list"></ul>
+            </section>
           </div>
-          <div class="area-status-card card-red">
-           <div class="area-status-top">
-            <strong>Kota &amp; Kab. Cirebon</strong>
-            <span class="badge danger">Capaian: 67%</span>
-           </div>
-           <p class="area-status-body">Aktual: Rp 1,00 M / Target: Rp 1,50 M (Minus Rp 500 Jt). Growth: -5.0%, RO: 68%, EC: 75%.</p>
-           <div class="area-status-action">
-            <span class="area-tag">Rekomendasi: Evaluasi rute sales, restrukturisasi jadwal kunjungan &amp; program diskon aktivasi toko.</span>
-           </div>
-          </div>
-         </div>
-         <div class="area-cat-col yellow-col">
-          <div class="area-cat-head">
-           <span class="cat-pill pill-yellow">AREA KUNING (POTENSIAL)</span>
-           <span class="cat-desc">Potensi pasar besar yang perlu dikembangkan</span>
-          </div>
-          <div class="area-status-card card-yellow">
-           <div class="area-status-top">
-            <strong>Bandung Raya</strong>
-            <span class="badge warning">Capaian: 80%</span>
-           </div>
-           <p class="area-status-body">Aktual: Rp 1,60 M / Target: Rp 2,00 M. Growth: +2.0%, RO: 77%, EC: 89%. Penetrasi outlet baru (NOO) tinggi namun varian belum merata.</p>
-           <div class="area-status-action">
-            <span class="area-tag">Peluang: Ekspansi varian SKU Teh Dandang Celup &amp; penguatan distribusi grosir.</span>
-           </div>
-          </div>
-          <div class="area-status-card card-yellow" style="margin-top:8px">
-           <div class="area-status-top">
-            <strong>Banyuwangi &amp; Jember</strong>
-            <span class="badge warning">Capaian: 82%</span>
-           </div>
-           <p class="area-status-body">Aktual: Rp 2,05 M / Target: Rp 2,50 M. Growth: +3.2%, RO: 78%, EC: 86%. Basis mitra bertumbuh tapi frekuensi order lambat.</p>
-           <div class="area-status-action">
-            <span class="area-tag">Peluang: Percepat siklus repeat order mingguan &amp; insentif bundling produk.</span>
-           </div>
-          </div>
-         </div>
-        </div>
-       </section>
+
+          <!-- Row: What Needs Attention (Drilldown inline) -->
+          <section class="card" id="exec-drilldown-section">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path>
+                  </svg>Drilldown Penjualan</h2>
+                <p>Klik bulan di grafik tren atau buka halaman detail — hierarki 7 level</p>
+              </div>
+              <div class="heading-actions"><a class="button" href="drilldown.html">Buka Halaman Penuh</a></div>
+            </div>
+            <div id="exec-drilldown-placeholder" class="exec-drill-prompt">
+              <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.5" viewbox="0 0 24 24" width="40" height="40">
+                <path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path>
+              </svg>
+              <p>Klik salah satu <strong>batang pada grafik Tren Penjualan</strong> di atas untuk melihat drilldown 7
+                level secara inline, atau buka halaman penuh di atas.</p>
+            </div>
+            <div id="exec-drilldown-content" hidden>
+              <div class="drill-summary" id="exec-drill-summary"></div>
+              <div class="drill-chart-wrap" style="height:260px"><canvas id="exec-drill-chart" role="img"
+                  aria-label="Grafik drilldown inline."></canvas></div>
+              <div class="table-scroll" style="margin-top:12px">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Nama</th>
+                      <th scope="col">Target</th>
+                      <th scope="col">Aktual Penjualan</th>
+                      <th scope="col">Selisih</th>
+                      <th scope="col">Capaian</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="exec-drill-rows"></tbody>
+                </table>
+              </div>
+              <div class="exec-drill-nav">
+                <button class="button" id="exec-drill-back" onclick="execDrillBack()">← Kembali</button>
+                <span class="badge" id="exec-drill-depth"></span>
+                <button class="button ghost" id="exec-drill-reset" onclick="execDrillReset()">Reset</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= SEKSI PERINGATAN OPERASIONAL & RISIKO ================= -->
+          <section class="card" id="exec-risk-section">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title">
+                  <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path>
+                  </svg>
+                  Peringatan Operasional &amp; Manajemen Risiko
+                </h2>
+                <p>Pemantauan sales bermasalah, outlet tidak aktif, deviasi GPS armada, alert prioritas tinggi, dan SLA
+                  breach.</p>
+              </div>
+              <a class="button ghost" href="early-warning.html">Lihat Semua Alert &rarr;</a>
+            </div>
+            <div class="risk-summary-grid">
+              <a class="risk-summary-card danger" href="sales-dashboard.html">
+                <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Sales
+                    Bermasalah</span></div>
+                <strong class="risk-count">18</strong>
+                <span class="risk-meta">EC &lt; 80% / Target Rendah</span>
+              </a>
+              <a class="risk-summary-card danger" href="kesehatan-outlet.html?status=Inactive">
+                <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Outlet Tidak
+                    Aktif</span></div>
+                <strong class="risk-count">256</strong>
+                <span class="risk-meta">&gt; 60 hari tidak repeat order</span>
+              </a>
+              <a class="risk-summary-card warning" href="live-tracking.html">
+                <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Penyimpangan
+                    Kendaraan</span></div>
+                <strong class="risk-count">7</strong>
+                <span class="risk-meta">Deviasi rute GPS &gt; 3 km</span>
+              </a>
+              <a class="risk-summary-card danger" href="early-warning.html">
+                <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Alert
+                    Prioritas Tinggi</span></div>
+                <strong class="risk-count">47</strong>
+                <span class="risk-meta">12 Critical + 35 High alert</span>
+              </a>
+              <a class="risk-summary-card warning" href="early-warning.html">
+                <div class="risk-card-head"><span class="risk-icon">&bull;</span><span class="risk-title">Kasus Melewati
+                    SLA</span></div>
+                <strong class="risk-count">9</strong>
+                <span class="risk-meta">Eskalasi terbuka &gt; 24 jam</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- ================= SEKSI KLASIFIKASI AREA: MERAH & KUNING ================= -->
+          <section class="card" id="exec-area-health-section">
+            <div class="card-heading">
+              <div>
+                <h2 class="heading-title">
+                  <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path>
+                  </svg>
+                  Kinerja &amp; Klasifikasi Wilayah Pasar
+                </h2>
+                <p>Deteksi dini area merah (kritis belum capai target) dan area kuning (potensi pasar yang perlu
+                  dikembangkan).</p>
+              </div>
+              <a class="button ghost" href="area.html">Buka Area Dashboard &rarr;</a>
+            </div>
+            <div class="area-category-grid">
+              <div class="area-cat-col red-col">
+                <div class="area-cat-head">
+                  <span class="cat-pill pill-red">AREA MERAH (KRITIS)</span>
+                  <span class="cat-desc">Penjualan rendah &amp; target belum tercapai</span>
+                </div>
+                <div class="area-status-card card-red">
+                  <div class="area-status-top">
+                    <strong>Kota &amp; Kab. Cirebon</strong>
+                    <span class="badge danger">Capaian: 67%</span>
+                  </div>
+                  <p class="area-status-body">Aktual: Rp 1,00 M / Target: Rp 1,50 M (Minus Rp 500 Jt). Growth: -5.0%,
+                    RO: 68%, EC: 75%.</p>
+                  <div class="area-status-action">
+                    <span class="area-tag">Rekomendasi: Evaluasi rute sales, restrukturisasi jadwal kunjungan &amp;
+                      program diskon aktivasi toko.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="area-cat-col yellow-col">
+                <div class="area-cat-head">
+                  <span class="cat-pill pill-yellow">AREA KUNING (POTENSIAL)</span>
+                  <span class="cat-desc">Potensi pasar besar yang perlu dikembangkan</span>
+                </div>
+                <div class="area-status-card card-yellow">
+                  <div class="area-status-top">
+                    <strong>Bandung Raya</strong>
+                    <span class="badge warning">Capaian: 80%</span>
+                  </div>
+                  <p class="area-status-body">Aktual: Rp 1,60 M / Target: Rp 2,00 M. Growth: +2.0%, RO: 77%, EC: 89%.
+                    Penetrasi outlet baru (NOO) tinggi namun varian belum merata.</p>
+                  <div class="area-status-action">
+                    <span class="area-tag">Peluang: Ekspansi varian SKU Teh Dandang Celup &amp; penguatan distribusi
+                      grosir.</span>
+                  </div>
+                </div>
+                <div class="area-status-card card-yellow" style="margin-top:8px">
+                  <div class="area-status-top">
+                    <strong>Banyuwangi &amp; Jember</strong>
+                    <span class="badge warning">Capaian: 82%</span>
+                  </div>
+                  <p class="area-status-body">Aktual: Rp 2,05 M / Target: Rp 2,50 M. Growth: +3.2%, RO: 78%, EC: 86%.
+                    Basis mitra bertumbuh tapi frekuensi order lambat.</p>
+                  <div class="area-status-action">
+                    <span class="area-tag">Peluang: Percepat siklus repeat order mingguan &amp; insentif bundling
+                      produk.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
 
-     </div>
-    </div>
-    <footer><span>© 2026 PT Kartini Teh Dandang</span></footer>
-   </main>
+        </div>
+      </div>
+      <footer><span>© 2026 PT Kartini Teh Dandang</span></footer>
+    </main>
   </div>
 
- </body>
+</body>
+
 </html>
-
-
