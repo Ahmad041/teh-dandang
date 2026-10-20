@@ -242,11 +242,11 @@
         dl: { dir: "flat", text: "90 Area" }, prevRange: pr,
         bar: 100, statusPct: 100,
         sub: "Admin, Sales Lapangan &amp; Admin Gudang" }),
-      // 8. Total Registered Outlet (RO) & Promosi MMT Geber
-      kpiCard({ href: "kesehatan-outlet.html", label: "Total RO & MMT Geber", value: AF.num(totalRO) + "<small> RO</small>",
-        dl: AF.delta(m.active, p.active), prevRange: pr,
-        bar: 84, statusPct: 90,
-        sub: "MMT Geber terpasang: <b>" + Math.round(totalRO * 0.68) + "</b> warung" })
+      // 8. Effective Call (EC) Nasional
+      kpiCard({ href: "effective-call.html", label: "Effective Call (EC)", value: "87.8%",
+        dl: { dir: "up", text: "+2.4%" }, prevRange: pr,
+        bar: 87.8, statusPct: 88,
+        sub: "<b>87.8%</b> panggilan menghasilkan order (Target: 85%)" })
     ].join("");
 
     // Peta
