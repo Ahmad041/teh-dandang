@@ -16,8 +16,11 @@
   let seed = 7;
   function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
   const vehicles = [];
+  const LK = AF.LOCK;
+  const inScope = function (s) { return (!LK.pulau || s.pulau === LK.pulau) && (!LK.region || s.region === LK.region) && (!LK.area || s.area === LK.area); };
+  const every = LK.area ? 1 : LK.region ? 2 : 4; // area kecil: semua sales tampil
   D.sales.forEach(function (s, i) {
-    if (i % 4) return;
+    if (!inScope(s) || i % every) return;
     const stops = D.outlets.filter(function (o) { return o.sales === s.id; });
     if (!stops.length) return;
     const r = rnd();
@@ -58,7 +61,8 @@
   let map, markers = {}, routeLayer, selected = null;
   const regionSel = document.getElementById("lt-region");
   const statusSel = document.getElementById("lt-status");
-  for (const pl of D.pulau) regionSel.insertAdjacentHTML("beforeend", '<optgroup label="' + AF.esc(pl.name) + '">' + D.regions.filter(function (r) { return r.pulau === pl.code; }).map(function (r) {
+  if (LK.region) regionSel.closest(".filter-field").hidden = true;
+  for (const pl of D.pulau.filter(function (p) { return !LK.pulau || p.code === LK.pulau; })) regionSel.insertAdjacentHTML("beforeend", '<optgroup label="' + AF.esc(pl.name) + '">' + D.regions.filter(function (r) { return r.pulau === pl.code; }).map(function (r) {
     return '<option value="' + r.code + '">' + AF.esc(r.name) + "</option>"; }).join("") + "</optgroup>");
 
   function visible() {

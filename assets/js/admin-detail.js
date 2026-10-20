@@ -32,12 +32,16 @@
   }
 
   function crumbs(state) {
-    const parts = ['<button type="button" data-go="all">Semua Wilayah</button>'];
-    if (state.pulau !== "all") parts.push('<button type="button" data-go="pulau">' + AF.esc(AF.PULAU[state.pulau].name) + "</button>");
-    if (state.region !== "all") parts.push('<button type="button" data-go="region">' + AF.esc(AF.REGION[state.region].name) + "</button>");
-    if (state.area !== "all") parts.push('<button type="button" data-go="area">' + AF.esc(AF.AREA[state.area].name) + "</button>");
-    if (state.sales !== "all" && KPI !== "ro-item") parts.push('<button type="button" data-go="sales">' + AF.esc(AF.SALES[state.sales].name) + "</button>");
+    // level yang dikunci role: tampilkan hanya yang paling dalam sebagai titik awal
+    const L = AF.LOCK, deepest = L.sales ? "sales" : L.area ? "area" : L.region ? "region" : L.pulau ? "pulau" : "all";
+    const show = function (k) { return !L[k] || k === deepest; };
+    const parts = deepest === "all" ? ['<button type="button" data-go="all">Semua Wilayah</button>'] : [];
+    if (state.pulau !== "all" && show("pulau")) parts.push('<button type="button" data-go="pulau">' + AF.esc(AF.PULAU[state.pulau].name) + "</button>");
+    if (state.region !== "all" && show("region")) parts.push('<button type="button" data-go="region">' + AF.esc(AF.REGION[state.region].name) + "</button>");
+    if (state.area !== "all" && show("area")) parts.push('<button type="button" data-go="area">' + AF.esc(AF.AREA[state.area].name) + "</button>");
+    if (state.sales !== "all" && KPI !== "ro-item" && show("sales")) parts.push('<button type="button" data-go="sales">' + AF.esc(AF.SALES[state.sales].name) + "</button>");
     if (state.outlet !== "all" && KPI !== "ro-item") parts.push('<button type="button" data-go="outlet">' + AF.esc(AF.OUTLET[state.outlet].name) + "</button>");
+    if (!parts.length) parts.push('<button type="button" data-go="none">' + AF.esc(AF.scopeName(state)) + "</button>");
     const el = document.getElementById("scope-crumbs");
     el.innerHTML = parts.join('<span aria-hidden="true">›</span>');
     const last = el.querySelectorAll("button");

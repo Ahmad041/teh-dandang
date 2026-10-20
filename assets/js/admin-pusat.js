@@ -103,12 +103,14 @@ function initDrill() {
     const sel = document.getElementById("drill-month");
     sel.innerHTML = window.AF.D.trend.labels.map(function (l, i) { return '<option value="' + i + '"' + (i === month ? " selected" : "") + ">" + l + " 2026</option>"; }).join("");
     document.getElementById("drill-month-field").hidden = false;
-    window.drillState = [buildAFTree(month)];
-    const reg = q.get("wilayah"), pul = q.get("pulau");
-    const R = window.AF.REGION[reg], P = window.AF.PULAU[pul || (R && R.pulau)];
-    if (P) {
-      window.drillState.push(window.drillState[0].children[P.name]);
-      if (R) window.drillState.push(drillCurrent().children[R.name]);
+    const st = window.AF.readState();
+    window.drillState = [buildDrillRoot(month)];
+    // turun sesuai filter yang dibawa dari halaman lain (di bawah cakupan role)
+    for (const step of drillSteps(st)) {
+      if (window.AF.LOCK[step[0]]) continue;
+      const child = drillChild(drillCurrent(), step[1]);
+      if (!child) break;
+      window.drillState.push(child);
     }
     renderDrill();
     return;
@@ -121,7 +123,7 @@ function initDrill() {
 
 function setDrillMonth(value) {
   const path = window.drillState.map(function (n) { return n.title; });
-  window.drillState = [buildAFTree(Number(value))];
+  window.drillState = [buildDrillRoot(Number(value))];
   // pertahankan posisi drill sejauh label masih ada
   const labels = window.drillPath || [];
   for (const label of labels) {
@@ -134,6 +136,32 @@ function setDrillMonth(value) {
   history.replaceState(null, "", location.pathname + "?" + q.toString());
   renderDrill();
   return path;
+}
+
+function drillSteps(st) {
+  const AF = window.AF;
+  return [["pulau", st.pulau !== "all" && AF.PULAU[st.pulau].name], ["region", st.region !== "all" && AF.REGION[st.region].name],
+    ["area", st.area !== "all" && AF.AREA[st.area].name], ["sales", st.sales !== "all" && "Sales: " + AF.SALES[st.sales].name]].filter(function (x) { return x[1]; });
+}
+
+function drillChild(node, label) {
+  if (!node || !node.children) return null;
+  if (node.children[label]) return node.children[label];
+  for (const k in node.children) if (k.indexOf(label) === 0) return node.children[k];
+  return null;
+}
+
+// Pohon rincian dimulai dari cakupan role (GM: pulau, RSM: wilayah, ASM: area, Sales: sales)
+function buildDrillRoot(month) {
+  let node = buildAFTree(month);
+  const L = window.AF.LOCK, st = window.AF.readState();
+  for (const step of drillSteps(st)) {
+    if (!L[step[0]]) break;
+    const child = drillChild(node, step[1]);
+    if (!child) break;
+    node = child;
+  }
+  return node;
 }
 
 function buildAFTree(month) {

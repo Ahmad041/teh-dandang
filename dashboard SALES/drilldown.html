@@ -1,834 +1,98 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-50 text-slate-800">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafik Drilldown 7 Level - Teh Dandang</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Alpine.js & Chart.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        [x-cloak] { display: none !important; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    </style>
-</head>
-<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 flex flex-col lg:flex-row overflow-hidden" x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
-
-    <!-- Mobile Backdrop Overlay -->
-    <div 
-        x-show="sidebarOpen" 
-        @click="sidebarOpen = false" 
-        x-cloak
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 lg:hidden transition-opacity"
-    ></div>
-
-    <!-- Sidebar Khusus SALES (Persis seperti di screenshot acuan) -->
-    <aside 
-        class="bg-white border-r border-slate-200/80 w-64 flex-shrink-0 flex flex-col transition-all duration-300 z-40 fixed lg:static inset-y-0 left-0 shadow-xl lg:shadow-xs"
-        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20'"
-    >
-        <!-- Brand Header -->
-        <div class="h-16 px-5 border-b border-slate-100 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3 overflow-hidden">
-                <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0 text-white shadow-sm">
-                    <i data-lucide="cup-soda" class="w-5 h-5"></i>
-                </div>
-                <div class="leading-tight transition-opacity duration-200" x-show="sidebarOpen">
-                    <span class="font-display font-bold text-base text-slate-900 tracking-tight block">TEH DANDANG</span>
-                    <span class="text-[9px] tracking-wider text-slate-400 font-bold uppercase block">Sales Force Management</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Role Badge Banner (Personal Profile Sales) -->
-        <div class="mx-3 my-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between" x-show="sidebarOpen">
-            <div class="flex items-center space-x-3 overflow-hidden">
-                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center flex-shrink-0 shadow-xs text-xs">
-                    EP
-                </div>
-                <div class="overflow-hidden">
-                    <p class="text-xs font-bold text-slate-900 truncate">Eko Prasetyo</p>
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                        Sales Field
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation Menu 100% Sesuai Screenshot User -->
-        <nav class="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-            
-            <!-- DASHBOARD SECTION -->
-            <div class="pt-2 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                DASHBOARD
-            </div>
-            
-            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="user" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Sales Dashboard</span>
-            </a>
-
-            <a href="drilldown.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all bg-blue-600 text-white shadow-md shadow-blue-200 font-bold">
-                <i data-lucide="bar-chart-2" class="w-4 h-4 mr-3 flex-shrink-0 text-emerald-300"></i>
-                <span x-show="sidebarOpen">Grafik Drilldown 7 Level</span>
-            </a>
-
-            <!-- TRACKING SECTION -->
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                TRACKING
-            </div>
-
-            <a href="live-tracking.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="radio" class="w-4 h-4 mr-3 flex-shrink-0 text-cyan-600"></i>
-                <span x-show="sidebarOpen">Live Tracking GPS</span>
-            </a>
-
-            <!-- REPORT SECTION -->
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                REPORT
-            </div>
-
-            <a href="report.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="bar-chart-3" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Reporting Center</span>
-            </a>
-
-            <!-- MASTER DATA SECTION -->
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                MASTER DATA
-            </div>
-
-            <a href="outlets.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="store" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Outlet (SAP OCRD)</span>
-            </a>
-
-            <a href="routes.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="route" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Master Route</span>
-            </a>
-
-            <!-- TRANSAKSI SECTION -->
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                TRANSAKSI
-            </div>
-
-            <a href="visits.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="clipboard-check" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Sales Visit GPS</span>
-            </a>
-
-            <a href="orders.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="shopping-cart" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">Sales Order (SAP)</span>
-            </a>
-
-            <a href="noo.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="user-plus" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">NOO (New Outlet)</span>
-            </a>
-
-            <a href="nop.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="box" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">NOP (New Product)</span>
-            </a>
-
-            <a href="ro.html" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                <i data-lucide="repeat" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-500"></i>
-                <span x-show="sidebarOpen">RO / ROA</span>
-            </a>
-
-            <!-- PORTAL LINK -->
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider" x-show="sidebarOpen">
-                PORTAL ACCESS
-            </div>
-
-            <a href="../dashboard OWNER/index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
-                <i data-lucide="shield" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
-                <span x-show="sidebarOpen">Portal Owner</span>
-            </a>
-
-            <a href="../index.html" class="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800">
-                <i data-lucide="arrow-left-circle" class="w-4 h-4 mr-3 flex-shrink-0 text-slate-400"></i>
-                <span x-show="sidebarOpen">Pilih Portal Awal</span>
-            </a>
-        </nav>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
-        
-        <!-- Header Topbar -->
-        <header class="h-16 bg-white border-b border-slate-200/80 px-4 md:px-6 flex items-center justify-between z-20 shadow-xs">
-            <div class="flex items-center space-x-3 md:space-x-4">
-                <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none">
-                    <i data-lucide="menu" class="w-5 h-5"></i>
-                </button>
-                <div class="hidden sm:flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-900">BeverageCo / Teh Dandang</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">
-                        Multi-Level Hierarchy Analytics (7 Level)
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex items-center space-x-3">
-                <div class="text-right hidden sm:block">
-                    <span class="text-xs font-bold text-slate-900 block leading-tight">Eko Prasetyo</span>
-                    <span class="text-[10px] text-blue-600 font-bold block">Sales Field</span>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-blue-500/20">
-                    EP
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Body -->
-        <main class="flex-1 overflow-y-auto p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 min-w-0 w-full max-w-full">
-            <div class="space-y-6" x-data="drilldownDashboard()">
-
-                <!-- Top Headline & Action Header -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
-                                Interactive Drill-Down Chart
-                            </span>
-                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[11px] border border-indigo-200" x-text="'Depth: Level ' + currentDepth + ' dari 7'">
-                            </span>
-                        </div>
-                        <h1 class="text-xl font-bold font-display text-slate-900 mt-1 flex items-center gap-2">
-                            <i data-lucide="bar-chart-2" class="w-6 h-6 text-emerald-600"></i> Grafik Sales Multi-Level Drilldown (7 Level)
-                        </h1>
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            Klik pada batang grafik (bar chart) atau baris tabel untuk masuk ke grafik detail level di bawahnya (Nasional &rarr; Region &rarr; Area &rarr; Kabupaten &rarr; Kecamatan &rarr; Sales &rarr; Outlet &rarr; Produk SKU).
-                        </p>
-                    </div>
-                    
-                    <div class="flex items-center gap-2">
-                        <button @click="goBack()" :disabled="stack.length <= 1" class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border" :class="stack.length > 1 ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100 shadow-xs cursor-pointer' : 'bg-slate-100 text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'">
-                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                            <span>Kembali 1 Level</span>
-                        </button>
-
-                        <button @click="resetToTop()" :disabled="stack.length <= 1" class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border" :class="stack.length > 1 ? 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200 cursor-pointer' : 'bg-slate-50 text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'">
-                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                            <span>Reset Level 1</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dynamic Breadcrumb Navigation Bar -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs flex items-center flex-wrap gap-2 text-xs">
-                    <span class="font-bold text-slate-400 uppercase text-[10px] tracking-wider mr-1">Hierarki Wilayah:</span>
-                    <template x-for="(item, index) in stack" :key="index">
-                        <div class="flex items-center gap-2">
-                            <template x-if="index > 0">
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                            </template>
-                            <button 
-                                @click="jumpToStack(index)" 
-                                class="px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 border text-xs cursor-pointer"
-                                :class="index === stack.length - 1 ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs ring-2 ring-emerald-600/20' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'"
-                            >
-                                <i data-lucide="map-pin" class="w-3 h-3" :class="index === stack.length - 1 ? 'text-white' : 'text-slate-400'"></i>
-                                <span x-text="item.title"></span>
-                                <span class="text-[10px] px-1.5 py-0.5 rounded-full" :class="index === stack.length - 1 ? 'bg-emerald-700 text-white' : 'bg-slate-200 text-slate-600'" x-text="item.levelName"></span>
-                            </button>
-                        </div>
-                    </template>
-                </div>
-
-                <!-- Active Level KPI Summary Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">LEVEL SAAT INI</span>
-                            <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                                <i data-lucide="layers" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-                        <div class="text-xl font-bold text-slate-900 mt-2 truncate" x-text="currentLevelTitle"></div>
-                        <div class="text-[11px] text-indigo-600 font-semibold mt-1" x-text="currentLevelSubtitle"></div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">TOTAL TARGET PENJUALAN</span>
-                            <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">
-                                <i data-lucide="target" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-                        <div class="text-xl font-bold text-slate-900 mt-2" x-text="formatCurrency(totalTarget)"></div>
-                        <div class="text-[11px] text-slate-500 mt-1" x-text="itemCount + ' item data'"></div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">REALISASI PENJUALAN</span>
-                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-                        <div class="text-xl font-bold text-emerald-700 mt-2" x-text="formatCurrency(totalActual)"></div>
-                        <div class="text-[11px] font-bold mt-1" :class="avgAchievement >= 100 ? 'text-emerald-600' : 'text-amber-600'" x-text="'Capaian: ' + avgAchievement.toFixed(1) + '%'"></div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">STATUS HIERARKI</span>
-                            <div class="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center">
-                                <i data-lucide="info" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-                        <div class="text-lg font-bold mt-2 flex items-center gap-2">
-                            <span x-text="isLowestLevel ? '🏆 Level Terbawah' : '📊 Level ' + currentDepth + ' (Bisa Click Bar)'" :class="isLowestLevel ? 'text-amber-600' : 'text-indigo-600'"></span>
-                        </div>
-                        <div class="text-[11px] text-slate-500 mt-1" x-text="isLowestLevel ? 'Detail SKU Produk Selesai' : 'Klik batang bar untuk drill down'"></div>
-                    </div>
-
-                </div>
-
-                <!-- Main Chart Box -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
-                    
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-base font-bold text-slate-900" x-text="'Grafik Penjualan: ' + currentLevelTitle"></h3>
-                                <span x-show="!isLowestLevel" class="animate-pulse bg-emerald-100 text-emerald-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-emerald-200">
-                                    👉 Clickable Bar Active
-                                </span>
-                                <span x-show="isLowestLevel" class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-bold border border-amber-200">
-                                    🔒 Level Terbawah (SKU Breakdown)
-                                </span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-0.5" x-text="chartSubtitleInstruction"></p>
-                        </div>
-
-                        <!-- Controls: Chart Switcher -->
-                        <div class="flex items-center gap-2">
-                            <div class="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs">
-                                <button @click="setChartType('bar')" class="px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer" :class="chartType === 'bar' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'">
-                                    Bar Vertikal
-                                </button>
-                                <button @click="setChartType('horizontalBar')" class="px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer" :class="chartType === 'horizontalBar' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'">
-                                    Bar Horizontal
-                                </button>
-                                <button @click="setChartType('doughnut')" class="px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer" :class="chartType === 'doughnut' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'">
-                                    Donut
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Canvas Area -->
-                    <div class="relative h-96 w-full">
-                        <canvas id="multiLevelDrilldownChart"></canvas>
-                    </div>
-
-                    <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-800 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="pointer" class="w-4 h-4 text-indigo-600 animate-bounce"></i>
-                            <span class="font-medium">Petunjuk: Klik pada salah satu batang grafik (Bar) untuk menggali grafik detail ke tingkat lebih dalam!</span>
-                        </div>
-                        <span class="text-[11px] font-bold bg-white px-2.5 py-1 rounded-lg text-indigo-600 border border-indigo-200" x-text="'Tingkat: ' + stack[stack.length - 1].levelName"></span>
-                    </div>
-                </div>
-
-                <!-- Synchronized Detailed Data Table -->
-                <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <i data-lucide="table" class="w-4 h-4 text-indigo-600"></i> Data Sinkronisasi Tabel Level: <span class="text-indigo-600" x-text="currentLevelTitle"></span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Anda juga dapat mengklik tombol "Drill Down" atau baris tabel untuk menelusuri data.</p>
-                        </div>
-                        
-                        <div class="w-full sm:w-64">
-                            <input type="text" x-model="searchQuery" placeholder="Cari nama area/sales/outlet..." class="w-full bg-slate-50 border border-slate-200 text-xs text-slate-800 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500 font-medium">
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-700">
-                            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="py-3 px-4">Nama (Wilayah / Outlet / SKU)</th>
-                                    <th class="py-3 px-4">Target Penjualan</th>
-                                    <th class="py-3 px-4">Realisasi (Actual)</th>
-                                    <th class="py-3 px-4">Capaian (%)</th>
-                                    <th class="py-3 px-4">Growth (MoM)</th>
-                                    <th class="py-3 px-4 text-center">Status</th>
-                                    <th class="py-3 px-4 text-right">Aksi Drilldown</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <template x-for="(row, idx) in filteredRows" :key="idx">
-                                    <tr 
-                                        @click="!isLowestLevel ? drillDownTo(row.label) : null" 
-                                        class="transition-colors group"
-                                        :class="!isLowestLevel ? 'hover:bg-emerald-50/60 cursor-pointer' : 'hover:bg-slate-50'"
-                                    >
-                                        <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
-                                            <span class="w-2.5 h-2.5 rounded-full" :style="'background-color: ' + row.color"></span>
-                                            <span x-text="row.label"></span>
-                                            <template x-if="row.achievement >= 110">
-                                                <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-600 text-white font-bold">Top</span>
-                                            </template>
-                                        </td>
-                                        <td class="py-3 px-4 text-slate-600" x-text="formatCurrency(row.target)"></td>
-                                        <td class="py-3 px-4 font-bold text-slate-900" x-text="formatCurrency(row.actual)"></td>
-                                        <td class="py-3 px-4 font-bold" :class="row.achievement >= 100 ? 'text-emerald-600' : (row.achievement >= 85 ? 'text-indigo-600' : 'text-rose-600')">
-                                            <span x-text="row.achievement.toFixed(1) + '%'"></span>
-                                        </td>
-                                        <td class="py-3 px-4 font-semibold" :class="row.growth >= 0 ? 'text-emerald-600' : 'text-rose-600'">
-                                            <span x-text="(row.growth >= 0 ? '+' : '') + row.growth + '%'"></span>
-                                        </td>
-                                        <td class="py-3 px-4 text-center text-sm" x-text="row.statusEmoji"></td>
-                                        <td class="py-3 px-4 text-right">
-                                            <template x-if="!isLowestLevel">
-                                                <button @click.stop="drillDownTo(row.label)" class="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-bold shadow-xs transition-all group-hover:scale-105 cursor-pointer">
-                                                    <span>Drill Down</span>
-                                                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-                                                </button>
-                                            </template>
-                                            <template x-if="isLowestLevel">
-                                                <span class="text-[11px] text-slate-400 font-semibold px-2 py-1 rounded bg-slate-100">Lowest Reached</span>
-                                            </template>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template x-if="filteredRows.length === 0">
-                                    <tr>
-                                        <td colspan="7" class="py-8 text-center text-slate-400">
-                                            Tidak ada data yang sesuai dengan pencarian "<span x-text="searchQuery"></span>".
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </main>
+<html lang="id">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="#2563eb" name="theme-color"/>
+  <title>Rincian Penjualan | Teh Dandang Sales</title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet"/>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+  <link href="../assets/css/admin-pusat.css" rel="stylesheet"/>
+  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+  <script>window.ROLE = {"sales": "SLP-0001"};</script>
+  <script defer="" src="../assets/js/app.js"></script>
+  <script defer="" src="../assets/js/admin-pusat.js"></script>
+  <script defer="" src="../assets/js/admin-data.js"></script>
+  <script defer="" src="../assets/js/admin-filter.js"></script>
+ </head>
+ <body data-page="drilldown">
+  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox"/>
+  <a class="skip-link" href="#main">Lewati navigasi</a>
+  <label aria-label="Tutup navigasi" class="sidebar-backdrop" for="nav-toggle"></label>
+  <aside aria-label="Navigasi utama" class="sidebar" id="sidebar">
+   <a class="brand" href="index.html"><span class="brand-mark"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg></span><span><strong>TEH DANDANG</strong><small>SALES</small></span></a>
+   <nav id="navigation"><section class="nav-group"><h2>Monitoring</h2><a class="nav-link" href="index.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"></path></svg><span>Dashboard Utama</span></a><a class="nav-link" href="peta-outlet.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg><span>Peta Outlet</span></a><a class="nav-link" href="tren-penjualan.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg><span>Tren Penjualan</span></a><a class="nav-link" href="kesehatan-outlet.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg><span>Status Outlet</span></a><a aria-current="page" class="nav-link active" href="drilldown.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path></svg><span>Rincian Penjualan</span></a><a class="nav-link" href="early-warning.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg><span>Peringatan Dini</span></a></section><section class="nav-group"><h2>Kinerja</h2><a class="nav-link" href="penjualan.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg><span>Volume Penjualan</span></a><a class="nav-link" href="effective-call.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg><span>Effective Call</span></a><a class="nav-link" href="noo.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path></svg><span>NOO</span></a><a class="nav-link" href="nop.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg><span>NOP</span></a><a class="nav-link" href="roa.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path></svg><span>ROA</span></a><a class="nav-link" href="ro-item.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg><span>Produk Paling Laku</span></a></section></nav>
+   <div class="sidebar-profile"><span class="avatar">OP</span><div><strong>Oki Pratama</strong><small>SALES · Kota Surakarta</small></div></div>
+  </aside>
+  <div class="workspace">
+   <header class="topbar">
+    <div class="topbar-left">
+     <label aria-label="Buka navigasi" class="icon-button menu-toggle" data-icon="menu" for="nav-toggle"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18 M3 12h18 M3 18h18"></path></svg></label>
+     <span class="breadcrumb">Sales <span>/</span> <strong id="breadcrumb">Rincian Penjualan</strong></span>
     </div>
+    <div class="topbar-right">
+     <span class="badge blue">Sales · Kota Surakarta</span>
+     <a aria-label="Pemberitahuan" class="icon-button notif-button" data-icon="bell" href="notifikasi.html"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4"></path></svg><span class="notif-dot">3</span></a>
+     <span class="avatar small">OP</span>
+    </div>
+   </header>
+   <main id="main" tabindex="-1">
+    <div class="page-heading" hidden="">
+     <div>
+      <p class="eyebrow">TEH DANDANG / OWNER</p>
+      <h1 id="page-title">Rincian Penjualan</h1>
+      <p class="muted" id="page-description" hidden=""></p>
+     </div>
+    </div>
+    <div class="toolbar" hidden="">
+     <div class="search-field">
+      <span data-icon="search"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14 M15 15l6 6"></path></svg></span>
+      <label class="sr-only" for="search">Cari data tabel</label>
+      <input id="search" oninput="searchTables()" placeholder="Cari nama di level ini…" type="search"/>
+     </div>
+     
+    </div>
+    <noscript><p class="note">Data tersedia sebagai HTML statis. JavaScript diperlukan untuk grafik dan pencarian.</p></noscript>
+    <div id="views">
 
-    <script>
-        lucide.createIcons();
-    </script>
-    <script>
-    function drilldownDashboard() {
-        return {
-            searchQuery: '',
-            chartType: 'bar',
-            chartInstance: null,
+     <div class="view">
+      <section class="card">
+       <div class="card-heading">
+        <div><h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10 M10 20V4 M16 20v-8 M22 20H2"></path></svg>Trend Penjualan</h2></div>
+        <div class="heading-actions"><div class="filter-field" id="drill-month-field" hidden><label for="drill-month">Bulan</label><select id="drill-month" onchange="setDrillMonth(this.value)"></select></div><span class="badge blue" id="drill-depth"></span>
+         <button class="button" id="drill-back" onclick="drillBack()">Kembali 1 Level</button>
+         <button class="button" id="drill-reset" onclick="drillReset()">Reset Level 1</button></div>
+       </div>
+       <nav aria-label="Hierarki wilayah" class="drill-breadcrumbs" id="drill-breadcrumbs"></nav>
+      </section>
+      <section aria-label="Ringkasan level" class="drill-summary">
+       <article class="card kpi"><h2 class="kpi-label">Level saat ini</h2><div class="kpi-value location" id="drill-level-title">-</div><span class="subtext" id="drill-level-name"></span></article>
+       <article class="card kpi"><h2 class="kpi-label">Total Target Penjualan</h2><div class="kpi-value location" id="drill-total-target">-</div><span class="subtext" id="drill-count"></span></article>
+       <article class="card kpi"><h2 class="kpi-label">Aktual Penjualan</h2><div class="kpi-value location" id="drill-total-actual">-</div><span class="subtext" id="drill-achievement"></span></article>
+      </section>
+      <section class="card">
+       <div class="card-heading">
+        <div><h2 class="heading-title" id="drill-chart-title"></h2><p id="drill-instruction"></p></div>
+        <div class="chart-switcher" role="group" aria-label="Jenis grafik">
+         <button type="button" data-drill-type="bar" onclick="setDrillChartType('bar')">Bar Vertikal</button>
+         <button type="button" data-drill-type="horizontal" onclick="setDrillChartType('horizontal')">Bar Horizontal</button>
+         <button type="button" data-drill-type="donut" onclick="setDrillChartType('donut')">Donut</button>
+        </div>
+       </div>
+       <div class="drill-chart-wrap"><canvas id="drill-chart" role="img" aria-label="Grafik target dan realisasi level saat ini. Nilai lengkap ada di tabel."></canvas><p class="note" data-chart-error hidden>Chart.js tidak dapat dimuat. Data tetap tersedia di tabel.</p></div>
+      </section>
+      <section class="card">
+       <div class="card-heading"><div><h2 class="heading-title"><svg aria-hidden="true" class="icon" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"></path></svg>Data Level Ini</h2></div></div>
+       <div class="table-scroll"><table>
+        <thead><tr><th scope="col">Nama</th><th scope="col">Target Penjualan</th><th scope="col">Aktual Penjualan</th><th scope="col">Selisih</th><th scope="col">Porsi</th><th scope="col">Capaian</th><th scope="col">vs Bulan Lalu</th><th scope="col">Status</th><th scope="col">Aksi</th></tr></thead>
+        <tbody id="drill-rows"></tbody></table></div>
+      </section>
+      <script id="drill-data" type="application/json">{"tree": {"title": "Nasional (PT. Kartini Teh Nasional)", "levelName": "Nasional", "depth": 1, "items": [{"label": "Jawa Tengah", "target": 22500000000, "actual": 24200000000, "achievement": 107.5, "growth": 14.2, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Jawa Timur", "target": 18000000000, "actual": 17100000000, "achievement": 95, "growth": 8.5, "statusEmoji": "🟢", "color": "#4f46e5"}, {"label": "Jawa Barat", "target": 16500000000, "actual": 14800000000, "achievement": 89.7, "growth": 4.1, "statusEmoji": "🟡", "color": "#f59e0b"}, {"label": "Banten & DKI Jakarta", "target": 14000000000, "actual": 13500000000, "achievement": 96.4, "growth": 7.8, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "DIY Yogyakarta", "target": 10000000000, "actual": 8400000000, "achievement": 84, "growth": -2.3, "statusEmoji": "🔴", "color": "#ef4444"}], "children": {"Jawa Tengah": {"title": "Region Jawa Tengah", "levelName": "Region", "depth": 2, "items": [{"label": "Solo Raya", "target": 7500000000, "actual": 8250000000, "achievement": 110, "growth": 16.5, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Semarang Raya", "target": 6000000000, "actual": 6180000000, "achievement": 103, "growth": 11.2, "statusEmoji": "🟢", "color": "#6366f1"}, {"label": "Kedu Raya", "target": 4500000000, "actual": 4590000000, "achievement": 102, "growth": 9.8, "statusEmoji": "🟢", "color": "#0284c7"}, {"label": "Pati Raya", "target": 2500000000, "actual": 2900000000, "achievement": 116, "growth": 18.1, "statusEmoji": "🟢", "color": "#8b5cf6"}, {"label": "Banyumas Raya", "target": 2000000000, "actual": 2280000000, "achievement": 114, "growth": 15, "statusEmoji": "🟢", "color": "#14b8a6"}], "children": {"Solo Raya": {"title": "Area Solo Raya", "levelName": "Area", "depth": 3, "items": [{"label": "Kab. Boyolali", "target": 2200000000, "actual": 2530000000, "achievement": 115, "growth": 18.5, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Kota Surakarta (Solo)", "target": 1800000000, "actual": 1944000000, "achievement": 108, "growth": 12, "statusEmoji": "🟢", "color": "#4f46e5"}, {"label": "Kab. Karanganyar", "target": 1100000000, "actual": 1177000000, "achievement": 107, "growth": 10.5, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "Kab. Sragen", "target": 900000000, "actual": 918000000, "achievement": 102, "growth": 8.2, "statusEmoji": "🟢", "color": "#8b5cf6"}, {"label": "Kab. Sukoharjo", "target": 800000000, "actual": 848000000, "achievement": 106, "growth": 9.5, "statusEmoji": "🟢", "color": "#f59e0b"}, {"label": "Kab. Klaten", "target": 500000000, "actual": 530000000, "achievement": 106, "growth": 7, "statusEmoji": "🟢", "color": "#ec4899"}, {"label": "Kab. Wonogiri", "target": 200000000, "actual": 300000000, "achievement": 150, "growth": 35, "statusEmoji": "🟢", "color": "#84cc16"}], "children": {"Kab. Boyolali": {"title": "Kabupaten Boyolali", "levelName": "Kabupaten", "depth": 4, "items": [{"label": "Kec. Cepogo", "target": 650000000, "actual": 780000000, "achievement": 120, "growth": 22, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Kec. Selo", "target": 450000000, "actual": 495000000, "achievement": 110, "growth": 14.5, "statusEmoji": "🟢", "color": "#3b82f6"}, {"label": "Kec. Ampel", "target": 400000000, "actual": 440000000, "achievement": 110, "growth": 13, "statusEmoji": "🟢", "color": "#8b5cf6"}, {"label": "Kec. Boyolali Kota", "target": 350000000, "actual": 385000000, "achievement": 110, "growth": 11.2, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "Kec. Musuk", "target": 200000000, "actual": 240000000, "achievement": 120, "growth": 19, "statusEmoji": "🟢", "color": "#f59e0b"}, {"label": "Kec. Mojosongo", "target": 150000000, "actual": 190000000, "achievement": 126.7, "growth": 25, "statusEmoji": "🟢", "color": "#ec4899"}], "children": {"Kec. Cepogo": {"title": "Kecamatan Cepogo", "levelName": "Kecamatan", "depth": 5, "items": [{"label": "Sales: Eko Prasetyo (Top)", "target": 350000000, "actual": 420000000, "achievement": 120, "growth": 24, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Sales: Agus Setiawan", "target": 180000000, "actual": 216000000, "achievement": 120, "growth": 18, "statusEmoji": "🟢", "color": "#6366f1"}, {"label": "Sales: Tri Widodo", "target": 120000000, "actual": 144000000, "achievement": 120, "growth": 15, "statusEmoji": "🟢", "color": "#f59e0b"}], "children": {"Sales: Eko Prasetyo (Top)": {"title": "Salesperson: Eko Prasetyo", "levelName": "Salesperson", "depth": 6, "items": [{"label": "Toko Berkah Cepogo", "target": 120000000, "actual": 150000000, "achievement": 125, "growth": 28, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "UD Rezeki Subur", "target": 90000000, "actual": 105000000, "achievement": 116.7, "growth": 20, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "Warung Makan Resto Bundo", "target": 80000000, "actual": 92000000, "achievement": 115, "growth": 16, "statusEmoji": "🟢", "color": "#8b5cf6"}, {"label": "Toko Sembako Barokah", "target": 60000000, "actual": 73000000, "achievement": 121.7, "growth": 22, "statusEmoji": "🟢", "color": "#f59e0b"}], "children": {"Toko Berkah Cepogo": {"title": "Outlet: Toko Berkah Cepogo", "levelName": "Outlet (SKU)", "depth": 7, "isLowest": true, "items": [{"label": "Teh Dandang 2in1 25g", "target": 45000000, "actual": 55000000, "achievement": 122.2, "growth": 30, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Teh Dandang Celup Black Tea", "target": 35000000, "actual": 40000000, "achievement": 114.3, "growth": 20, "statusEmoji": "🟢", "color": "#6366f1"}, {"label": "Teh Dandang Hijau Jasmine", "target": 25000000, "actual": 30000000, "achievement": 120, "growth": 25, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "Teh Dandang Loose Leaf 500g", "target": 10000000, "actual": 15000000, "achievement": 150, "growth": 40, "statusEmoji": "🟢", "color": "#f59e0b"}, {"label": "Teh Dandang Botol RTD 350ml", "target": 5000000, "actual": 10000000, "achievement": 200, "growth": 50, "statusEmoji": "🟢", "color": "#ec4899"}]}}}}}}}}}}}}}, "defaultSku": [{"label": "Teh Dandang 2in1 25g", "target": 45000000, "actual": 55000000, "achievement": 122.2, "growth": 30, "statusEmoji": "🟢", "color": "#10b981"}, {"label": "Teh Dandang Celup Black Tea", "target": 35000000, "actual": 40000000, "achievement": 114.3, "growth": 20, "statusEmoji": "🟢", "color": "#6366f1"}, {"label": "Teh Dandang Hijau Jasmine", "target": 25000000, "actual": 30000000, "achievement": 120, "growth": 25, "statusEmoji": "🟢", "color": "#06b6d4"}, {"label": "Teh Dandang Loose Leaf 500g", "target": 10000000, "actual": 15000000, "achievement": 150, "growth": 40, "statusEmoji": "🟢", "color": "#f59e0b"}, {"label": "Teh Dandang Botol RTD 350ml", "target": 5000000, "actual": 10000000, "achievement": 200, "growth": 50, "statusEmoji": "🟢", "color": "#ec4899"}]}</script>
+     </div>
+    </div>
+    <footer><span>© 2026 PT Kartini Teh Dandang</span></footer>
+   </main>
+  </div>
 
-            // Multi-level Data Hierarchy Trees (Level 1 to Level 7 Lengkap)
-            rawHierarchy: {
-                title: 'Nasional (PT. Kartini Teh Nasional)',
-                levelName: 'Nasional',
-                depth: 1,
-                items: [
-                    { label: 'Jawa Tengah', target: 22500000000, actual: 24200000000, achievement: 107.5, growth: 14.2, statusEmoji: '🟢', color: '#10b981' },
-                    { label: 'Jawa Timur', target: 18000000000, actual: 17100000000, achievement: 95.0, growth: 8.5, statusEmoji: '🟢', color: '#4f46e5' },
-                    { label: 'Jawa Barat', target: 16500000000, actual: 14800000000, achievement: 89.7, growth: 4.1, statusEmoji: '🟡', color: '#f59e0b' },
-                    { label: 'Banten & DKI Jakarta', target: 14000000000, actual: 13500000000, achievement: 96.4, growth: 7.8, statusEmoji: '🟢', color: '#06b6d4' },
-                    { label: 'DIY Yogyakarta', target: 10000000000, actual: 8400000000, achievement: 84.0, growth: -2.3, statusEmoji: '🔴', color: '#ef4444' }
-                ],
-                children: {
-                    'Jawa Tengah': {
-                        title: 'Region Jawa Tengah',
-                        levelName: 'Region',
-                        depth: 2,
-                        items: [
-                            { label: 'Solo Raya', target: 7500000000, actual: 8250000000, achievement: 110.0, growth: 16.5, statusEmoji: '🟢', color: '#10b981' },
-                            { label: 'Semarang Raya', target: 6000000000, actual: 6180000000, achievement: 103.0, growth: 11.2, statusEmoji: '🟢', color: '#6366f1' },
-                            { label: 'Kedu Raya', target: 4500000000, actual: 4590000000, achievement: 102.0, growth: 9.8, statusEmoji: '🟢', color: '#0284c7' },
-                            { label: 'Pati Raya', target: 2500000000, actual: 2900000000, achievement: 116.0, growth: 18.1, statusEmoji: '🟢', color: '#8b5cf6' },
-                            { label: 'Banyumas Raya', target: 2000000000, actual: 2280000000, achievement: 114.0, growth: 15.0, statusEmoji: '🟢', color: '#14b8a6' }
-                        ],
-                        children: {
-                            'Solo Raya': {
-                                title: 'Area Solo Raya',
-                                levelName: 'Area',
-                                depth: 3,
-                                items: [
-                                    { label: 'Kab. Boyolali', target: 2200000000, actual: 2530000000, achievement: 115.0, growth: 18.5, statusEmoji: '🟢', color: '#10b981' },
-                                    { label: 'Kota Surakarta (Solo)', target: 1800000000, actual: 1944000000, achievement: 108.0, growth: 12.0, statusEmoji: '🟢', color: '#4f46e5' },
-                                    { label: 'Kab. Karanganyar', target: 1100000000, actual: 1177000000, achievement: 107.0, growth: 10.5, statusEmoji: '🟢', color: '#06b6d4' },
-                                    { label: 'Kab. Sragen', target: 900000000, actual: 918000000, achievement: 102.0, growth: 8.2, statusEmoji: '🟢', color: '#8b5cf6' },
-                                    { label: 'Kab. Sukoharjo', target: 800000000, actual: 848000000, achievement: 106.0, growth: 9.5, statusEmoji: '🟢', color: '#f59e0b' },
-                                    { label: 'Kab. Klaten', target: 500000000, actual: 530000000, achievement: 106.0, growth: 7.0, statusEmoji: '🟢', color: '#ec4899' },
-                                    { label: 'Kab. Wonogiri', target: 200000000, actual: 300000000, achievement: 150.0, growth: 35.0, statusEmoji: '🟢', color: '#84cc16' }
-                                ],
-                                children: {
-                                    'Kab. Boyolali': {
-                                        title: 'Kabupaten Boyolali',
-                                        levelName: 'Kabupaten',
-                                        depth: 4,
-                                        items: [
-                                            { label: 'Kec. Cepogo', target: 650000000, actual: 780000000, achievement: 120.0, growth: 22.0, statusEmoji: '🟢', color: '#10b981' },
-                                            { label: 'Kec. Selo', target: 450000000, actual: 495000000, achievement: 110.0, growth: 14.5, statusEmoji: '🟢', color: '#3b82f6' },
-                                            { label: 'Kec. Ampel', target: 400000000, actual: 440000000, achievement: 110.0, growth: 13.0, statusEmoji: '🟢', color: '#8b5cf6' },
-                                            { label: 'Kec. Boyolali Kota', target: 350000000, actual: 385000000, achievement: 110.0, growth: 11.2, statusEmoji: '🟢', color: '#06b6d4' },
-                                            { label: 'Kec. Musuk', target: 200000000, actual: 240000000, achievement: 120.0, growth: 19.0, statusEmoji: '🟢', color: '#f59e0b' },
-                                            { label: 'Kec. Mojosongo', target: 150000000, actual: 190000000, achievement: 126.7, growth: 25.0, statusEmoji: '🟢', color: '#ec4899' }
-                                        ],
-                                        children: {
-                                            'Kec. Cepogo': {
-                                                title: 'Kecamatan Cepogo',
-                                                levelName: 'Kecamatan',
-                                                depth: 5,
-                                                items: [
-                                                    { label: 'Sales: Eko Prasetyo (Top)', target: 350000000, actual: 420000000, achievement: 120.0, growth: 24.0, statusEmoji: '🟢', color: '#10b981' },
-                                                    { label: 'Sales: Agus Setiawan', target: 180000000, actual: 216000000, achievement: 120.0, growth: 18.0, statusEmoji: '🟢', color: '#6366f1' },
-                                                    { label: 'Sales: Tri Widodo', target: 120000000, actual: 144000000, achievement: 120.0, growth: 15.0, statusEmoji: '🟢', color: '#f59e0b' }
-                                                ],
-                                                children: {
-                                                    'Sales: Eko Prasetyo (Top)': {
-                                                        title: 'Salesperson: Eko Prasetyo',
-                                                        levelName: 'Salesperson',
-                                                        depth: 6,
-                                                        items: [
-                                                            { label: 'Toko Berkah Cepogo', target: 120000000, actual: 150000000, achievement: 125.0, growth: 28.0, statusEmoji: '🟢', color: '#10b981' },
-                                                            { label: 'UD Rezeki Subur', target: 90000000, actual: 105000000, achievement: 116.7, growth: 20.0, statusEmoji: '🟢', color: '#06b6d4' },
-                                                            { label: 'Warung Makan Resto Bundo', target: 80000000, actual: 92000000, achievement: 115.0, growth: 16.0, statusEmoji: '🟢', color: '#8b5cf6' },
-                                                            { label: 'Toko Sembako Barokah', target: 60000000, actual: 73000000, achievement: 121.7, growth: 22.0, statusEmoji: '🟢', color: '#f59e0b' }
-                                                        ],
-                                                        children: {
-                                                            'Toko Berkah Cepogo': {
-                                                                title: 'Outlet: Toko Berkah Cepogo',
-                                                                levelName: 'Outlet (SKU)',
-                                                                depth: 7,
-                                                                isLowest: true,
-                                                                items: [
-                                                                    { label: 'Teh Dandang 2in1 25g (Sachet)', target: 45000000, actual: 55000000, achievement: 122.2, growth: 30.0, statusEmoji: '🟢', color: '#10b981' },
-                                                                    { label: 'Teh Dandang Celup Black Tea', target: 35000000, actual: 40000000, achievement: 114.3, growth: 20.0, statusEmoji: '🟢', color: '#6366f1' },
-                                                                    { label: 'Teh Dandang Hijau Jasmine 40g', target: 25000000, actual: 30000000, achievement: 120.0, growth: 25.0, statusEmoji: '🟢', color: '#06b6d4' },
-                                                                    { label: 'Teh Dandang Loose Leaf 500g', target: 10000000, actual: 15000000, achievement: 150.0, growth: 40.0, statusEmoji: '🟢', color: '#f59e0b' },
-                                                                    { label: 'Teh Dandang Botol RTD 350ml', target: 5000000, actual: 10000000, achievement: 200.0, growth: 50.0, statusEmoji: '🟢', color: '#ec4899' }
-                                                                ]
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-
-            stack: [],
-
-            init() {
-                this.stack = [this.rawHierarchy];
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        this.renderChart();
-                    }, 50);
-                });
-            },
-
-            get currentLevel() {
-                return this.stack[this.stack.length - 1];
-            },
-
-            get currentDepth() {
-                return this.currentLevel.depth || this.stack.length;
-            },
-
-            get currentLevelTitle() {
-                return this.currentLevel.title;
-            },
-
-            get currentLevelSubtitle() {
-                return 'Tingkat Hierarki: ' + this.currentLevel.levelName;
-            },
-
-            get chartSubtitleInstruction() {
-                if (this.isLowestLevel) {
-                    return 'Ini adalah level terbawah (Rincian Produk SKU). Anda sudah melihat detail paling spesifik.';
-                }
-                return 'Klik pada batang grafik (bar) untuk drilldown masuk ke level ' + (this.currentDepth + 1) + '.';
-            },
-
-            get isLowestLevel() {
-                return !!this.currentLevel.isLowest || this.currentDepth >= 7;
-            },
-
-            get totalTarget() {
-                return (this.currentLevel.items || []).reduce((acc, i) => acc + (i.target || 0), 0);
-            },
-
-            get totalActual() {
-                return (this.currentLevel.items || []).reduce((acc, i) => acc + (i.actual || 0), 0);
-            },
-
-            get avgAchievement() {
-                if (this.totalTarget === 0) return 0;
-                return (this.totalActual / this.totalTarget) * 100;
-            },
-
-            get itemCount() {
-                return (this.currentLevel.items || []).length;
-            },
-
-            get filteredRows() {
-                const items = this.currentLevel.items || [];
-                if (!this.searchQuery.trim()) {
-                    return items;
-                }
-                const q = this.searchQuery.toLowerCase();
-                return items.filter(i => i.label.toLowerCase().includes(q));
-            },
-
-            formatCurrency(val) {
-                if (!val) return 'Rp 0';
-                if (val >= 1000000000) {
-                    return 'Rp ' + (val / 1000000000).toFixed(2) + ' M';
-                } else if (val >= 1000000) {
-                    return 'Rp ' + (val / 1000000).toFixed(1) + ' Jt';
-                }
-                return 'Rp ' + val.toLocaleString('id-ID');
-            },
-
-            getNextLevelName(currentName) {
-                const levels = ['Nasional', 'Region', 'Area', 'Kabupaten', 'Kecamatan', 'Salesperson', 'Outlet (SKU)', 'Produk SKU'];
-                const idx = levels.indexOf(currentName);
-                if (idx !== -1 && idx < levels.length - 1) {
-                    return levels[idx + 1];
-                }
-                return 'Detail SKU';
-            },
-
-            generateSubItems(parentLabel, nextLevelName, isLowest) {
-                if (isLowest) {
-                    return [
-                        { label: 'Teh Dandang 2in1 25g (Sachet)', target: 45000000, actual: 55000000, achievement: 122.2, growth: 30.0, statusEmoji: '🟢', color: '#10b981' },
-                        { label: 'Teh Dandang Celup Black Tea', target: 35000000, actual: 40000000, achievement: 114.3, growth: 20.0, statusEmoji: '🟢', color: '#6366f1' },
-                        { label: 'Teh Dandang Hijau Jasmine', target: 25000000, actual: 30000000, achievement: 120.0, growth: 25.0, statusEmoji: '🟢', color: '#06b6d4' },
-                        { label: 'Teh Dandang Loose Leaf 500g', target: 10000000, actual: 15000000, achievement: 150.0, growth: 40.0, statusEmoji: '🟢', color: '#f59e0b' },
-                        { label: 'Teh Dandang Botol RTD 350ml', target: 5000000, actual: 10000000, achievement: 200.0, growth: 50.0, statusEmoji: '🟢', color: '#ec4899' }
-                    ];
-                }
-
-                return [
-                    { label: parentLabel + ' - Sektor Utara', target: 1200000000, actual: 1380000000, achievement: 115.0, growth: 14.0, statusEmoji: '🟢', color: '#10b981' },
-                    { label: parentLabel + ' - Sektor Selatan', target: 950000000, actual: 1045000000, achievement: 110.0, growth: 12.0, statusEmoji: '🟢', color: '#6366f1' },
-                    { label: parentLabel + ' - Sektor Timur', target: 800000000, actual: 840000000, achievement: 105.0, growth: 8.0, statusEmoji: '🟢', color: '#06b6d4' },
-                    { label: parentLabel + ' - Sektor Barat', target: 600000000, actual: 630000000, achievement: 105.0, growth: 7.0, statusEmoji: '🟢', color: '#f59e0b' }
-                ];
-            },
-
-            drillDownTo(label) {
-                if (this.isLowestLevel) return;
-
-                const node = this.currentLevel;
-                let child = null;
-
-                if (node && node.children && node.children[label]) {
-                    child = node.children[label];
-                } else {
-                    const nextLevel = this.getNextLevelName(node.levelName);
-                    const nextDepth = (node.depth || 1) + 1;
-                    const isLowest = nextDepth >= 7;
-
-                    child = {
-                        title: node.levelName + ': ' + label,
-                        levelName: nextLevel,
-                        depth: nextDepth,
-                        isLowest: isLowest,
-                        items: this.generateSubItems(label, nextLevel, isLowest)
-                    };
-                }
-
-                this.stack.push(child);
-                this.searchQuery = '';
-
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        this.renderChart();
-                        lucide.createIcons();
-                    }, 50);
-                });
-            },
-
-            goBack() {
-                if (this.stack.length > 1) {
-                    this.stack.pop();
-                    this.searchQuery = '';
-                    this.$nextTick(() => {
-                        setTimeout(() => {
-                            this.renderChart();
-                            lucide.createIcons();
-                        }, 50);
-                    });
-                }
-            },
-
-            jumpToStack(index) {
-                if (index >= 0 && index < this.stack.length) {
-                    this.stack = this.stack.slice(0, index + 1);
-                    this.searchQuery = '';
-                    this.$nextTick(() => {
-                        setTimeout(() => {
-                            this.renderChart();
-                            lucide.createIcons();
-                        }, 50);
-                    });
-                }
-            },
-
-            resetToTop() {
-                this.stack = [this.rawHierarchy];
-                this.searchQuery = '';
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        this.renderChart();
-                        lucide.createIcons();
-                    }, 50);
-                });
-            },
-
-            setChartType(type) {
-                this.chartType = type;
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        this.renderChart();
-                        lucide.createIcons();
-                    }, 50);
-                });
-            },
-
-            renderChart() {
-                const canvas = document.getElementById('multiLevelDrilldownChart');
-                if (!canvas) return;
-
-                if (this.chartInstance) {
-                    this.chartInstance.destroy();
-                    this.chartInstance = null;
-                }
-
-                const items = this.currentLevel.items || [];
-                if (items.length === 0) return;
-
-                const labels = items.map(i => i.label);
-                const actualData = items.map(i => i.actual / 1000000);
-                const targetData = items.map(i => i.target / 1000000);
-                const bgColors = items.map(i => i.color || '#4f46e5');
-
-                const isHorizontal = this.chartType === 'horizontalBar';
-                const effectiveType = isHorizontal ? 'bar' : this.chartType;
-                const self = this;
-
-                const ctx = canvas.getContext('2d');
-
-                this.chartInstance = new Chart(ctx, {
-                    type: effectiveType,
-                    data: {
-                        labels: labels,
-                        datasets: effectiveType === 'doughnut' ? [
-                            {
-                                label: 'Realisasi Penjualan (Juta Rp)',
-                                data: actualData,
-                                backgroundColor: bgColors,
-                                hoverOffset: 8
-                            }
-                        ] : [
-                            {
-                                label: 'Realisasi (Actual) Juta Rp',
-                                data: actualData,
-                                backgroundColor: bgColors,
-                                borderRadius: 8,
-                                borderWidth: 0
-                            },
-                            {
-                                label: 'Target Penjualan (Juta Rp)',
-                                data: targetData,
-                                backgroundColor: 'rgba(148, 163, 184, 0.25)',
-                                borderColor: '#94a3b8',
-                                borderWidth: 1,
-                                borderRadius: 8
-                            }
-                        ]
-                    },
-                    options: {
-                        indexAxis: isHorizontal ? 'y' : 'x',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        onClick: (evt, elements) => {
-                            if (elements && elements.length > 0 && !self.isLowestLevel) {
-                                const index = elements[0].index;
-                                const clickedLabel = labels[index];
-                                if (clickedLabel) {
-                                    setTimeout(() => {
-                                        self.drillDownTo(clickedLabel);
-                                    }, 50);
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                labels: { color: '#475569', font: { size: 11, family: 'Plus Jakarta Sans' } }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) label += ': ';
-                                        if (context.parsed.y !== null || context.parsed.x !== null) {
-                                            const val = isHorizontal ? context.parsed.x : (context.parsed.y ?? context.parsed);
-                                            label += 'Rp ' + val.toLocaleString('id-ID') + ' Juta';
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        scales: effectiveType === 'doughnut' ? {} : {
-                            x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } },
-                            y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#f1f5f9' } }
-                        }
-                    }
-                });
-            }
-        }
-    }
-</script>
-</body>
+ </body>
 </html>

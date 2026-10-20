@@ -83,6 +83,7 @@
     const m = AF.metrics(outlets, info.factor);
     const p = AF.prevMetrics(outlets, info, scopeKey(state));
     document.getElementById("scope-label").textContent = info.range;
+    renderTeam(state, outlets, info);
 
     const items = D.products.map(function (x) { return { p: x, u: m.units[x.code], pu: p.units[x.code] }; }).sort(function (a, b) { return b.u - a.u; });
     const totalUnits = items.reduce(function (s, x) { return s + x.u; }, 0);
@@ -114,10 +115,10 @@
     drawMap(outlets, kindMap, { "NOO": 1, "NOP": 1, "Aktif": 1, "Tidak aktif": 1 }, function () { location.href = card.dataset.href; });
 
     // tren
-    const t = D.trend;
+    const t = AF.scopedTrend(outlets);
     const q = AF.stateQuery(state, { bulan: "{i}" }).replace("%7Bi%7D", "{i}");
     refreshAdminChart(document.getElementById("trend-chart"), {
-      type: "bar", legend: "top", clickHref: "drilldown.html" + q, labels: t.labels, tickPrefix: "Rp ", tickSuffix: " M",
+      type: "bar", legend: "top", clickHref: "drilldown.html" + q, labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
         { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 44, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },
@@ -148,6 +149,39 @@
     };
     document.getElementById("health-list").innerHTML =
       row("#10b981", "ROA, kunjungan rutin", healthy, pHealthy) + row("#f59e0b", "Belum dikunjungi > 14 hari", m.atRisk, p.atRisk, true) + row("#ef4444", "RO tidak ROA", m.inactive, p.inactive, true);
+  }
+
+  // ---------- Kartu tim (GM/RSM/ASM) & jadwal kunjungan (Sales) ----------
+  function renderTeam(state, outlets, info) {
+    const box = document.getElementById("team-list");
+    if (box) {
+      const L = AF.LOCK;
+      const areas = D.areas.filter(function (a) { return (state.pulau === "all" || a.pulau === state.pulau) && (state.region === "all" || a.region === state.region) && (state.area === "all" || a.id === state.area); });
+      const regions = D.regions.filter(function (r) { return areas.some(function (a) { return a.region === r.code; }); });
+      const sales = D.sales.filter(function (x) { return areas.some(function (a) { return a.id === x.area; }); });
+      const admins = areas.reduce(function (n, a) { return n + a.admins; }, 0);
+      const rows = [];
+      if (!L.region) rows.push(["RSM", regions.length]);
+      if (!L.area) rows.push(["ASM", areas.length]);
+      rows.push(["Sales", sales.length], ["Admin &amp; admin gudang", admins]);
+      // sales dengan EC terendah di cakupan ini
+      const per = {};
+      for (const o of outlets) { const x = per[o.sales] || (per[o.sales] = { p: 0, d: 0 }); x.p += o.visits_plan; x.d += o.visits_done; }
+      const low = Object.keys(per).map(function (id) { return { s: AF.SALES[id], ec: per[id].p ? per[id].d / per[id].p * 100 : 0 }; }).sort(function (a, b) { return a.ec - b.ec; }).slice(0, 3);
+      box.innerHTML = rows.map(function (r) { return "<li><span>" + r[0] + "</span><strong>" + AF.num(r[1]) + "</strong></li>"; }).join("") +
+        '<li class="list-head"><span>EC terendah</span><span></span></li>' +
+        low.map(function (x) { return "<li><span>" + AF.esc(x.s.name) + '<span class="subtext">' + AF.esc(AF.AREA[x.s.area].name) + '</span></span><span class="badge ' + (x.ec >= 90 ? "" : x.ec >= 80 ? "warning" : "danger") + '">' + AF.pct(x.ec) + "</span></li>"; }).join("");
+    }
+    const vbox = document.getElementById("visit-list");
+    if (vbox) {
+      const due = outlets.filter(function (o) { return o.visits_done < o.visits_plan; })
+        .sort(function (a, b) { return (b.status === "Inactive") - (a.status === "Inactive") || a.visits_done - b.visits_done; });
+      document.getElementById("visit-count").textContent = due.length + " toko";
+      vbox.innerHTML = due.slice(0, 8).map(function (o) {
+        const st = o.status === "Inactive" ? '<span class="badge danger">RO tidak ROA</span>' : o.status === "At Risk" ? '<span class="badge warning">&gt; 14 hari</span>' : '<span class="badge neutral">' + o.visits_done + "/" + o.visits_plan + "</span>";
+        return '<li><a href="' + outletHref(o) + '"><span>' + AF.esc(o.name) + '</span></a><span>' + st + "</span></li>";
+      }).join("") || "<li><span>Semua toko sudah dikunjungi bulan ini.</span></li>";
+    }
   }
 
   // ================================================================ PETA OUTLET
@@ -210,12 +244,12 @@
 
   // ================================================================ TREN PENJUALAN
   function trendPage() {
-    const t = D.trend, n = t.actual.length;
+    const t = AF.scopedTrend(AF.scopeOutlets(AF.readState())), n = t.actual.length;
     const sum = function (a) { return a.reduce(function (s, v) { return s + v; }, 0); };
     const ytd = sum(t.actual), ytdT = sum(t.target), ytdLY = sum(t.lastYear);
     let best = 0;
     t.actual.forEach(function (v, i) { if (v > t.actual[best]) best = i; });
-    const mrd = function (v) { return "Rp " + v.toLocaleString("id-ID", { maximumFractionDigits: 2 }) + " M"; };
+    const mrd = function (v) { return "Rp " + v.toLocaleString("id-ID", { maximumFractionDigits: 2 }) + t.unit; };
     document.getElementById("trend-kpis").innerHTML = [
       '<article class="card kpi trend-' + AF.deltaTone(AF.delta(ytd, ytdLY)) + '"><h2 class="kpi-label">Aktual Jan–' + t.labels[n - 1] + '</h2><div class="kpi-value">' + mrd(ytd) + '</div><div class="kpi-top">' + AF.deltaPill(AF.delta(ytd, ytdLY)) + '<span class="kpi-prev">vs tahun lalu</span></div></article>',
       '<article class="card kpi trend-' + (ytd >= ytdT ? "up" : "down") + '"><h2 class="kpi-label">Capaian Target</h2><div class="kpi-value">' + AF.pct(ytd / ytdT * 100) + '</div><span class="kpi-sub">Target ' + mrd(ytdT) + "</span></article>",
@@ -223,7 +257,7 @@
       '<article class="card kpi trend-flat"><h2 class="kpi-label">Bulan Terbaik</h2><div class="kpi-value">' + t.labels[best] + '</div><span class="kpi-sub">' + mrd(t.actual[best]) + "</span></article>"
     ].join("");
     refreshAdminChart(document.getElementById("trend-big"), {
-      type: "bar", legend: "top", clickHref: "drilldown.html?bulan={i}", labels: t.labels, tickPrefix: "Rp ", tickSuffix: " M",
+      type: "bar", legend: "top", clickHref: "drilldown.html?bulan={i}", labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
         { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 56, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },

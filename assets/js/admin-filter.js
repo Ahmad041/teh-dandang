@@ -28,6 +28,15 @@
   }
   const SALES = {};
   for (const s of D.sales) SALES[s.id] = s;
+
+  // Cakupan terkunci sesuai role (dashboard GM / RSM / ASM / Sales). Owner: tanpa kunci.
+  const ROLE = window.ROLE || { key: "owner" };
+  const LOCK = {};
+  if (ROLE.sales) { const x = SALES[ROLE.sales]; LOCK.sales = x.id; LOCK.area = x.area; LOCK.region = x.region; LOCK.pulau = x.pulau; }
+  else if (ROLE.area) { const a = AREA[ROLE.area]; LOCK.area = a.id; LOCK.region = a.region; LOCK.pulau = a.pulau; }
+  else if (ROLE.region) { LOCK.region = ROLE.region; LOCK.pulau = REGION[ROLE.region].pulau; }
+  else if (ROLE.pulau) LOCK.pulau = ROLE.pulau;
+  function applyLock(st) { for (const k in LOCK) st[k] = LOCK[k]; return st; }
   const OUTLET = {};
   D.outlets.forEach(function (o, i) {
     OUTLET[o.id] = o;
@@ -97,7 +106,7 @@
     if (st.region !== "all" && REGION[st.region]) st.pulau = REGION[st.region].pulau;
     if (st.period !== "custom" && !PRESET[st.period]) st.period = DEFAULT_PRESET;
     if (st.period === "custom" && (!st.from || !st.to)) st.period = DEFAULT_PRESET;
-    return st;
+    return applyLock(st);
   }
 
   function stateQuery(state, extra) {
@@ -107,10 +116,10 @@
       q.set("dari", state.from);
       q.set("sampai", state.to);
     }
-    if (state.pulau !== "all") q.set("pulau", state.pulau);
-    if (state.region !== "all") q.set("wilayah", state.region);
-    if (state.area !== "all") q.set("area", state.area);
-    if (state.sales !== "all") q.set("sales", state.sales);
+    if (state.pulau !== "all" && !LOCK.pulau) q.set("pulau", state.pulau);
+    if (state.region !== "all" && !LOCK.region) q.set("wilayah", state.region);
+    if (state.area !== "all" && !LOCK.area) q.set("area", state.area);
+    if (state.sales !== "all" && !LOCK.sales) q.set("sales", state.sales);
     if (state.outlet !== "all") q.set("toko", state.outlet);
     if (state.item !== "all") q.set("item", state.item);
     if (extra) for (const k in extra) q.set(k, extra[k]);
@@ -320,6 +329,23 @@
     return "Semua Wilayah";
   }
 
+  // Tren bulanan sesuai cakupan (porsi cakupan terhadap total), satuan miliar atau juta
+  let TOTAL_A = 0, TOTAL_T = 0;
+  function scopedTrend(outlets) {
+    if (!TOTAL_A) for (const o of D.outlets) { TOTAL_A += outletActual(o); TOTAL_T += o.target; }
+    let a = 0, t = 0;
+    for (const o of outlets) { a += outletActual(o); t += o.target; }
+    const sa = a / TOTAL_A, st = t / TOTAL_T;
+    const juta = D.trend.actual[D.trend.actual.length - 1] * sa < 1;
+    const k = juta ? 1000 : 1, r = function (v) { return Math.round(v * k * 100) / 100; };
+    return {
+      labels: D.trend.labels, unit: juta ? " jt" : " M",
+      actual: D.trend.actual.map(function (v) { return r(v * sa); }),
+      target: D.trend.target.map(function (v) { return r(v * st); }),
+      lastYear: D.trend.lastYear.map(function (v) { return r(v * sa); })
+    };
+  }
+
   function rupiah(v, short) {
     if (short !== false) {
       if (Math.abs(v) >= 1e9) return "Rp " + (v / 1e9).toLocaleString("id-ID", { maximumFractionDigits: 2 }) + " M";
@@ -456,10 +482,11 @@
     function draw() {
       // kolom cari disimpan dulu supaya tidak ikut terhapus saat filter digambar ulang
       searchField = searchField || document.querySelector(".toolbar .search-field");
+      if (searchField && searchField.hidden) searchField = null;
       if (searchField && searchField.parentNode) searchField.parentNode.removeChild(searchField);
       // Wilayah: Jawa / Luar Jawa (semua region di dalamnya) atau satu region
       const wil = state.region !== "all" ? state.region : state.pulau !== "all" ? "P:" + state.pulau : "all";
-      const wilOpts = '<option value="all">Semua Wilayah</option>' + D.pulau.map(function (p) {
+      const wilOpts = (LOCK.pulau ? "" : '<option value="all">Semua Wilayah</option>') + D.pulau.filter(function (p) { return !LOCK.pulau || p.code === LOCK.pulau; }).map(function (p) {
         return '<optgroup label="' + esc(p.name) + '"><option value="P:' + p.code + '"' + (wil === "P:" + p.code ? " selected" : "") + ">Semua " + esc(p.name) + "</option>" +
           D.regions.filter(function (r) { return r.pulau === p.code; }).map(function (r) {
             return '<option value="' + r.code + '"' + (wil === r.code ? " selected" : "") + ">" + esc(r.name) + "</option>";
@@ -469,16 +496,18 @@
       const sales = state.area === "all" ? [] : D.sales.filter(function (x) { return x.area === state.area; });
       const outlets = state.sales === "all" ? [] : D.outlets.filter(function (o) { return o.sales === state.sales; }).map(function (o) { return { id: o.id, name: o.name }; });
       const items = D.products.map(function (p) { return { id: p.code, name: p.name }; });
-      const dirty = state.period !== DEFAULT_PRESET || wil !== "all" || state.item !== "all";
+      const dirty = state.period !== DEFAULT_PRESET || (state.region !== (LOCK.region || "all")) || (state.pulau !== (LOCK.pulau || "all")) || state.area !== (LOCK.area || "all") ||
+        state.sales !== (LOCK.sales || "all") || state.outlet !== "all" || state.item !== "all";
+      const hide = function (k) { return LOCK[k] ? " hidden" : ""; };
       container.innerHTML =
         '<div class="filter-bar">' +
         '<div class="dp" id="f-date"></div>' +
-        '<div class="filter-field"><label class="sr-only" for="f-region">Wilayah</label><select id="f-region">' + wilOpts + "</select></div>" +
-        '<div class="filter-field"><label class="sr-only" for="f-area">Area</label><select id="f-area"' + (state.region === "all" ? " disabled" : "") + ">" + opts(areas, state.area, "Semua Area") + "</select></div>" +
+        '<div class="filter-field"' + hide("region") + '><label class="sr-only" for="f-region">Wilayah</label><select id="f-region">' + wilOpts + "</select></div>" +
+        '<div class="filter-field"' + hide("area") + '><label class="sr-only" for="f-area">Area</label><select id="f-area"' + (state.region === "all" ? " disabled" : "") + ">" + opts(areas, state.area, "Semua Area") + "</select></div>" +
         (third === "item"
           ? '<div class="filter-field"><label class="sr-only" for="f-item">Produk</label><select id="f-item">' + opts(items, state.item, "Semua Produk") + "</select></div>"
           : third === "none" ? ""
-          : '<div class="filter-field"><label class="sr-only" for="f-sales">Sales</label><select id="f-sales"' + (state.area === "all" ? " disabled" : "") + ">" + opts(sales, state.sales, "Semua Sales") + "</select></div>" +
+          : '<div class="filter-field"' + hide("sales") + '><label class="sr-only" for="f-sales">Sales</label><select id="f-sales"' + (state.area === "all" ? " disabled" : "") + ">" + opts(sales, state.sales, "Semua Sales") + "</select></div>" +
             '<div class="filter-field"><label class="sr-only" for="f-outlet">Toko</label><select id="f-outlet"' + (state.sales === "all" ? " disabled" : "") + ">" + opts(outlets, state.outlet, "Semua Toko") + "</select></div>") +
         (dirty ? '<button type="button" class="button ghost" id="f-reset">Reset</button>' : "") +
         "</div>";
@@ -506,7 +535,7 @@
       if (it) it.onchange = function () { state.item = this.value; commit(); };
       const rs = container.querySelector("#f-reset");
       if (rs) rs.onclick = function () {
-        state.period = DEFAULT_PRESET; state.from = ""; state.to = ""; state.pulau = "all"; state.region = "all"; state.area = "all"; state.sales = "all"; state.outlet = "all"; state.item = "all"; commit();
+        state.period = DEFAULT_PRESET; state.from = ""; state.to = ""; state.pulau = "all"; state.region = "all"; state.area = "all"; state.sales = "all"; state.outlet = "all"; state.item = "all"; applyLock(state); commit();
       };
     }
     function syncLinks() {
@@ -516,6 +545,7 @@
       }
     }
     function commit() {
+      applyLock(state);
       history.replaceState(null, "", location.pathname + stateQuery(state) + location.hash);
       draw();
       onChange(state);
@@ -534,7 +564,7 @@
   window.AF = {
     D: D, PRICE: PRICE, PULAU: PULAU, REGION: REGION, AREA: AREA, SALES: SALES, OUTLET: OUTLET, MONTHS: MONTHS,
     readState: readState, stateQuery: stateQuery, periodInfo: periodInfo, scopeOutlets: scopeOutlets, outletActual: outletActual,
-    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, childGroups: childGroups, drillPatch: drillPatch, scopeName: scopeName, renderFilterBar: renderFilterBar,
+    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, LOCK: LOCK, ROLE: ROLE, scopedTrend: scopedTrend, childGroups: childGroups, drillPatch: drillPatch, scopeName: scopeName, renderFilterBar: renderFilterBar,
     rupiah: rupiah, num: num, pct: pct, tone: tone, esc: esc
   };
 })();
