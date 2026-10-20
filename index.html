@@ -4,82 +4,109 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta content="#b91c1c" name="theme-color" />
-  <title>Teh Dandang - Portal Dashboard</title>
+  <meta content="#9B1C1C" name="theme-color" />
+  <title>Portal Masuk Role | Teh Dandang Monitoring System</title>
   <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
   <style>
     body {
-      background: #f8fafc;
+      background: linear-gradient(135deg, #f8fafc 0%, #fee2e2 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px 16px;
     }
 
     .portal-card {
       background: white;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-      padding: 40px;
-      max-width: 520px;
+      border-radius: 20px;
+      box-shadow: 0 16px 40px rgba(155, 28, 28, 0.12);
+      padding: 40px 36px;
+      max-width: 540px;
       width: 100%;
     }
 
     .brand-title {
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: -0.5px;
-      color: #E31E24;
-      margin-bottom: 8px;
+      color: #9B1C1C;
+      margin-bottom: 4px;
+      font-size: 26px;
     }
 
     .brand-sub {
       color: #64748b;
-      font-size: 14px;
-      margin-bottom: 28px;
+      font-size: 13px;
+      margin-bottom: 24px;
     }
 
-    .btn-red-gradient {
-      background: linear-gradient(135deg, #E31E24 0%, #C91820 100%);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-weight: 600;
-      border-radius: 8px;
-      box-shadow: 0 4px 14px rgba(227, 30, 36, 0.28);
-      transition: all 0.2s;
-      text-decoration: none;
-      display: block;
-      text-align: center;
+    .role-option-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
       margin-bottom: 12px;
-    }
-
-    .btn-red-gradient:hover {
-      background: linear-gradient(135deg, #C91820 0%, #A9141B 100%);
-      color: white;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(201, 24, 32, 0.35);
-    }
-
-    .btn-red-outline {
-      background: #ffffff;
-      color: #E31E24;
-      border: 1px solid #e2e8f0;
-      padding: 12px 20px;
-      font-weight: 600;
-      border-radius: 8px;
-      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       text-decoration: none;
-      display: block;
-      text-align: center;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      cursor: pointer;
     }
 
-    .btn-red-outline:hover {
-      background: #f8fafc;
-      color: #C91820;
-      border-color: #E31E24;
+    .role-option-card:hover {
+      border-color: #9B1C1C;
+      background: #fff5f5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(155, 28, 28, 0.15);
+      color: #9B1C1C;
+    }
+
+    .role-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .icon-owner { background: #fef3c7; }
+    .icon-gm { background: #fee2e2; }
+    .icon-rsm { background: #e0f2fe; }
+    .icon-asm { background: #f0fdf4; }
+
+    .role-info {
+      text-align: left;
+      flex-grow: 1;
+    }
+
+    .role-name {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .role-desc {
+      font-size: 12px;
+      color: #64748b;
+      display: block;
+      line-height: 1.35;
+    }
+
+    .badge-scope {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
     }
   </style>
 </head>
@@ -87,42 +114,75 @@
 <body>
   <div class="portal-card text-center">
     <img src="assets/img/Teh Dandang.jpeg" alt="Teh Dandang"
-      style="width: 72px; height: 72px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);" />
+      style="width: 76px; height: 76px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 6px 18px rgba(155, 28, 28, 0.25);" />
     <h1 class="brand-title">TEH DANDANG</h1>
-    <p class="brand-sub">Sistem Monitoring &amp; Executive Analytics</p>
-    <!-- Role selection -->
-    <select id="role-select" class="form-select mb-3" style="max-width: 300px; margin: 0 auto;">
-      <option value="owner">Owner</option>
-      <option value="gm">General Manager (GM)</option>
-      <option value="rsm">Regional Sales Manager (RSM)</option>
-      <option value="asm">Area Sales Manager (ASM)</option>
-    </select>
-    <button class="btn btn-primary btn-red-gradient w-100" id="go-role-btn">Go to Dashboard</button>
+    <p class="brand-sub">Sistem Monitoring &amp; Hierarki Penjualan (90 Area &middot; 1.200 Personil)</p>
 
-    <script>
-      document.getElementById('go-role-btn').addEventListener('click', function() {
-        const role = document.getElementById('role-select').value;
-        let url = '';
-        switch(role) {
-          case 'owner':
-            url = 'dashboard%20OWNER/index.html';
-            break;
-          case 'gm':
-            url = 'dashboard%20GM/index.html';
-            break;
-          case 'rsm':
-            url = 'dashboard%20RSM/index.html';
-            break;
-          case 'asm':
-            url = 'dashboard%20ASM/index.html';
-            break;
-        }
-        if (url) window.location.href = url;
-      });
-    </script>
-    <!-- <a class="btn-red-outline" href="dashboard%20OWNER/index.html">
-    Buka Dashboard OWNER
-   </a> -->
+    <div class="text-start mb-3">
+      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;">
+        PILIH PERAN / ROLE DASHBOARD:
+      </span>
+    </div>
+
+    <!-- 1. Role Owner -->
+    <a href="dashboard%20ADMIN%20PUSAT/index.html" class="role-option-card">
+      <div class="d-flex align-items-center">
+        <div class="role-icon icon-owner">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M4 10l8-7 8 7"/></svg>
+        </div>
+        <div class="role-info">
+          <span class="role-name">Owner / Direksi Pusat</span>
+          <span class="role-desc">Ringkasan finansial, tren nasional &amp; peta outlet</span>
+        </div>
+      </div>
+      <span class="badge badge-scope bg-warning text-dark">Nasional</span>
+    </a>
+
+    <!-- 2. Role General Manager (GM) -->
+    <a href="dashboard%20GM/index.html" class="role-option-card">
+      <div class="d-flex align-items-center">
+        <div class="role-icon icon-gm">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="role-info">
+          <span class="role-name">General Manager (GM)</span>
+          <span class="role-desc">Strategis 90 Area (Jawa &amp; Luar Jawa), 1.200 personil &amp; 5 RSM</span>
+        </div>
+      </div>
+      <span class="badge badge-scope bg-danger">Seluruh RSM</span>
+    </a>
+
+    <!-- 3. Role Regional Sales Manager (RSM) -->
+    <a href="dashboard%20RSM/index.html" class="role-option-card">
+      <div class="d-flex align-items-center">
+        <div class="role-icon icon-rsm">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        </div>
+        <div class="role-info">
+          <span class="role-name">Regional Sales Manager (RSM)</span>
+          <span class="role-desc">Monitoring kinerja para ASM regional, ROA &amp; stok depo</span>
+        </div>
+      </div>
+      <span class="badge badge-scope bg-primary">Regional</span>
+    </a>
+
+    <!-- 4. Role Area Sales Manager (ASM) -->
+    <a href="dashboard%20ASM/index.html" class="role-option-card">
+      <div class="d-flex align-items-center">
+        <div class="role-icon icon-asm">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="role-info">
+          <span class="role-name">Area Sales Manager (ASM)</span>
+          <span class="role-desc">Pilih Sales &rarr; Toko, kunjungan 2 minggu, MMT &amp; RO Non-ROA</span>
+        </div>
+      </div>
+      <span class="badge badge-scope bg-success">Area Lapangan</span>
+    </a>
+
+    <div class="mt-4 pt-3 border-top text-muted" style="font-size: 12px;">
+      <span>Aturan Bisnis: ROA (Beli rutin &le; 1 bln) &middot; Kunjungan wajib per 2 minggu &middot; NOP (Varian ke-2+)</span>
+    </div>
   </div>
 </body>
 

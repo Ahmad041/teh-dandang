@@ -21,7 +21,7 @@
       drillBtn.classList.toggle("active", active);
       drillBtn.setAttribute("aria-pressed", active);
       const span = drillBtn.querySelector("span");
-      if (span) span.textContent = active ? "Drill Down: Aktif" : "Drill Down";
+      if (span) span.textContent = active ? "Penelusuran: Aktif" : "Penelusuran Hierarki";
     }
   }
 
@@ -59,7 +59,7 @@
     const titleEl = document.getElementById("trend-title");
     if (titleEl) titleEl.textContent = "Tren Penjualan";
     const subEl = document.getElementById("trend-subtitle");
-    if (subEl) subEl.textContent = "Aktual vs target, miliar Rp — klik periode untuk drilldown";
+    if (subEl) subEl.textContent = "Aktual vs target, miliar Rp — klik periode untuk rincian berjenjang";
     renderTrendChart(lastExecState);
     if (typeof execDrillReset === "function") execDrillReset();
   }
@@ -201,46 +201,52 @@
     // Outlet aktif detail untuk card NOO
     const nooSub = "<b>" + AF.pct(m.nooPct) + "</b> dari target · Outlet aktif: <b>" + AF.num(m.active) + "</b>";
 
+    // RO (Registered Outlet) & ROA (Active sebulan)
+    const totalRO = m.outlets || 128;
+    const roaActual = m.active || 104; // ROA: yang beli rutin dalam 1 bulan terakhir
+    const roaPct = totalRO ? Math.round((roaActual / totalRO) * 100) : 0;
+    const roNonRoa = Math.max(0, totalRO - roaActual); // Warning RO yang TIDAK ROA
+
     document.getElementById("exec-kpis").innerHTML = [
       // 1. Aktual Penjualan vs Target — dengan warna status
       kpiCard({ href: "penjualan.html", label: "Aktual Penjualan", value: AF.rupiah(m.actual),
         dl: AF.delta(m.actual, p.actual), prevRange: pr,
         bar: m.salesPct, statusPct: m.salesPct,
         sub: "<b>" + AF.pct(m.salesPct) + "</b> dari target " + AF.rupiah(m.target) }),
-      // 2. Effective Call
-      kpiCard({ href: "effective-call.html", label: "Effective Call", value: AF.pct(m.ecPct),
-        dl: AF.delta(m.ecPct, p.ecPct, true), prevRange: pr,
-        bar: m.ecPct, statusPct: m.ecPct,
-        sub: AF.num(m.visitsDone) + " / " + AF.num(m.visitsPlan) + " kunjungan" }),
-      // 3. NOO — dengan outlet aktif
+      // 2. ROA (Registered Outlet Active) - 1 Bulan Beli Rutin
+      kpiCard({ href: "roa.html", label: "ROA (Outlet Aktif)", value: AF.num(roaActual) + "<small> / " + AF.num(totalRO) + " RO</small>",
+        dl: AF.delta(roaActual, p.active), prevRange: pr,
+        bar: roaPct, statusPct: roaPct,
+        sub: "<b>" + roaPct + "%</b> ROA aktif beli rutin &le; 1 bulan" }),
+      // 3. WARNING: RO Non-ROA (> 1 Bulan Tidak Beli)
+      kpiCard({ href: "early-warning.html", label: "Warning: RO Non-ROA", value: AF.num(roNonRoa) + "<small> Outlet</small>",
+        dl: { dir: roNonRoa > 15 ? "up" : "flat", text: roNonRoa + " Toko" }, prevRange: pr, invert: true,
+        bar: totalRO ? Math.round((roNonRoa / totalRO) * 100) : 0, statusPct: roNonRoa > 20 ? 60 : (roNonRoa > 10 ? 88 : 100),
+        sub: "<b style='color:#dc2626'>Perlu Kunjungan 2 Mingguan!</b>" }),
+      // 4. NOO — Outlet Baru Dibuka
       kpiCard({ href: "noo.html", label: "Outlet Baru (NOO)", value: AF.num(m.nooActual) + "<small> / " + AF.num(m.nooTarget) + "</small>",
         dl: AF.delta(m.nooActual, p.nooActual), prevRange: pr,
         bar: m.nooPct, statusPct: m.nooPct, sub: nooSub }),
-      // 4. NOP — Produk Baru
-      kpiCard({ href: "nop.html", label: "Produk Baru (NOP)", value: AF.num(m.nopActual) + "<small> / " + AF.num(m.nopTarget) + "</small>",
+      // 5. NOP — Varian Ke-2, Ke-3 dst
+      kpiCard({ href: "nop.html", label: "Varian Baru Toko (NOP)", value: AF.num(m.nopActual) + "<small> / " + AF.num(m.nopTarget) + "</small>",
         dl: AF.delta(m.nopActual, p.nopActual), prevRange: pr,
         bar: m.nopPct, statusPct: m.nopPct,
-        sub: "<b>" + AF.pct(m.nopPct) + "</b> dari target" }),
-      // 5. Item Repeat Order (RO Item)
+        sub: "Penetrasi produk ke-2, ke-3 dst: <b>" + AF.pct(m.nopPct) + "</b>" }),
+      // 6. Item Repeat Order (RO Item)
       kpiCard({ href: "ro-item.html", label: "Item Repeat Order", value: AF.num(roItemActual) + "<small> SKU</small>",
         dl: AF.delta(roItemActual, prevRoItemActual), prevRange: pr,
         bar: roItemPct, statusPct: roItemPct,
         sub: "<b>" + AF.pct(roItemPct) + "</b> SKU aktif terjual" }),
-      // 6. Outlet Repeat Order (RO Outlet)
-      kpiCard({ href: "roa.html", label: "Outlet Repeat Order", value: AF.num(roOutletActual) + "<small> / " + AF.num(roOutletTarget) + "</small>",
-        dl: AF.delta(roOutletActual, prevRoOutletActual), prevRange: pr,
-        bar: roOutletPct, statusPct: roOutletPct,
-        sub: "<b>" + AF.pct(roOutletPct) + "</b> dari target" }),
-      // 7. Jumlah Sales Force Aktif
-      kpiCard({ href: "master-sales.html", label: "Sales Force Aktif", value: AF.num(D.sales.length) + "<small> Sales</small>",
-        dl: { dir: "flat", text: "0,0%" }, prevRange: pr,
+      // 7. Tim Sales & Operasional (1.200 Personil di 90 Area)
+      kpiCard({ href: "master-sales.html", label: "Tim Sales (90 Area)", value: "1.200<small> Personil</small>",
+        dl: { dir: "flat", text: "90 Area" }, prevRange: pr,
         bar: 100, statusPct: 100,
-        sub: "<b>" + AF.num(D.sales.length) + "</b> salesman di 5 Region" }),
-      // 8. Basis Mitra & Outlet Aktif
-      kpiCard({ href: "kesehatan-outlet.html", label: "Mitra Outlet Aktif", value: AF.num(m.active) + "<small> / " + AF.num(m.outlets) + "</small>",
+        sub: "Admin, Sales Lapangan &amp; Admin Gudang" }),
+      // 8. Total Registered Outlet (RO) & Promosi MMT Geber
+      kpiCard({ href: "kesehatan-outlet.html", label: "Total RO & MMT Geber", value: AF.num(totalRO) + "<small> RO</small>",
         dl: AF.delta(m.active, p.active), prevRange: pr,
-        bar: m.outlets ? m.active / m.outlets * 100 : 0, statusPct: m.outlets ? m.active / m.outlets * 100 : 0,
-        sub: "<b>" + AF.pct(m.outlets ? m.active / m.outlets * 100 : 0) + "</b> rasio outlet aktif" })
+        bar: 84, statusPct: 90,
+        sub: "MMT Geber terpasang: <b>" + Math.round(totalRO * 0.68) + "</b> warung" })
     ].join("");
 
     // Peta

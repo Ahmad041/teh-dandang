@@ -140,7 +140,7 @@ button svg.icon {
   font-weight: 600;
   border-radius: 4px;
   white-space: nowrap;
-  color: var(--primary);
+  color: #1e293b;
   background: var(--primary-soft);
 }
 
@@ -426,11 +426,7 @@ main {
 }
 
 .page-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 24px;
+  display: none !important;
 }
 
 .page-heading .muted {

@@ -1,20 +1,459 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>General Manager Dashboard</title>
-  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#9B1C1C" name="theme-color" />
+  <title>Dashboard General Manager (GM) | Teh Dandang</title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
+  <link href="../assets/css/styles.css" rel="stylesheet" />
+  <link href="../assets/css/admin-pusat.css" rel="stylesheet" />
+  <link href="../assets/css/dandang-theme.css" rel="stylesheet" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
   <style>
-    body {display:flex;align-items:center;justify-content:center;height:100vh;background:#f8fafc;}
-    .card{padding:2rem;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);background:white;}
+    .gm-badge-jawa { background: #fee2e2; color: #991b1b; font-weight: 700; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
+    .gm-badge-luar { background: #e0f2fe; color: #075985; font-weight: 700; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
+    .kpi-card-custom {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .kpi-card-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    .kpi-card-custom .kpi-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+    .kpi-card-custom .kpi-value { font-size: 26px; font-weight: 800; color: #0f172a; line-height: 1.1; margin-bottom: 8px; }
+    .kpi-card-custom .kpi-sub { font-size: 12px; color: #475569; }
+    .kpi-card-custom.border-red-alert { border-left: 4px solid #ef4444; }
+    .kpi-card-custom.border-green { border-left: 4px solid #10b981; }
+    .kpi-card-custom.border-blue { border-left: 4px solid #2563eb; }
+    .kpi-card-custom.border-purple { border-left: 4px solid #8b5cf6; }
+    .rsm-row:hover { background-color: #f8fafc; cursor: pointer; }
+    .badge-rsm-green { background: #dcfce7 !important; color: #166534 !important; font-weight: 700; }
+    .badge-rsm-yellow { background: #fef9c3 !important; color: #854d0e !important; font-weight: 700; }
+    .badge-rsm-red { background: #fee2e2 !important; color: #991b1b !important; font-weight: 700; }
   </style>
 </head>
-<body>
-  <div class="card text-center">
-    <h1>General Manager (GM) Dashboard</h1>
-    <p>This is a placeholder page for the GM role.</p>
-    <a href="../index.html" class="btn btn-primary">Back to Home</a>
+
+<body data-page="gm-dashboard">
+  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox" />
+  <label aria-label="Tutup navigasi" class="sidebar-backdrop" for="nav-toggle"></label>
+  <aside aria-label="Navigasi utama" class="sidebar" id="sidebar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img alt="Logo Teh Dandang" class="brand-logo" src="../assets/img/Teh Dandang.jpeg" /></span>
+      <span><strong>TEH DANDANG</strong><small>GENERAL MANAGER (GM)</small></span>
+    </a>
+    <div class="connection"><span class="dot"></span><span>Nasional · 90 Area Aktif</span><span class="demo-label">LIVE</span></div>
+
+    <!-- Role Switcher -->
+    <div style="padding: 10px 14px; background: rgba(0,0,0,0.22); border-radius: 8px; margin: 10px 14px 14px;">
+      <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #fca5a5; display: block; margin-bottom: 4px; font-weight: 700;">Ganti Peran (Role):</label>
+      <select class="form-select form-select-sm" style="background:#1e293b; color:#fff; border-color:#475569; font-size:12px; font-weight:600; cursor:pointer;" onchange="if(this.value) window.location.href=this.value">
+        <option value="../dashboard ADMIN PUSAT/index.html">Owner / Admin Pusat</option>
+        <option value="index.html" selected>General Manager (GM)</option>
+        <option value="../dashboard RSM/index.html">Regional Sales Manager (RSM)</option>
+        <option value="../dashboard ASM/index.html">Area Sales Manager (ASM)</option>
+      </select>
+    </div>
+
+    <nav id="navigation">
+      <section class="nav-group">
+        <h2>Executive GM View</h2>
+        <a aria-current="page" class="nav-link active" href="index.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"></path></svg>
+          <span>Ringkasan Nasional GM</span>
+        </a>
+        <a class="nav-link" href="../dashboard RSM/index.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8"></path></svg>
+          <span>Pantau Performa RSM</span>
+        </a>
+        <a class="nav-link" href="../dashboard ASM/index.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg>
+          <span>Pantau Performa ASM (90 Area)</span>
+        </a>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/early-warning.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg>
+          <span>Peringatan Dini RO Non-ROA</span>
+          <span class="count">2.320</span>
+        </a>
+      </section>
+      <section class="nav-group">
+        <h2>Operasional &amp; Tim</h2>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/master-sales.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Tim Sales (1.200 Personil)</span>
+        </a>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/master-area.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 5l6-3 6 3 6-3v17l-6 3-6-3-6 3z M9 2v17 M15 5v17"></path></svg>
+          <span>Wilayah Jawa &amp; Luar Jawa</span>
+        </a>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/kesehatan-outlet.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg>
+          <span>Rekap Branding MMT Geber</span>
+        </a>
+      </section>
+    </nav>
+    <div class="sidebar-profile">
+      <span class="avatar">GM</span>
+      <div><strong>Ir. H. Gunawan W.</strong><small>General Manager (GM)</small></div>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <!-- Header dihilangkan sesuai instruksi: heder di hilangkan -->
+    <main id="main" tabindex="-1">
+      <div id="views">
+        <div class="view dash">
+
+          <!-- Banner Pengenal GM -->
+          <section class="card" style="background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 60%, #b91c1c 100%); color: #ffffff; padding: 22px 26px; border:none; margin-bottom: 20px;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="badge" style="background: rgba(255,255,255,0.22); color:#fff; font-weight:700;">STRATEGIC EXECUTIVE DASHBOARD</span>
+                  <span class="badge" style="background:#22c55e; color:#fff;">Status Nasional: SEHAT (103.8%)</span>
+                </div>
+                <h1 style="font-size: 22px; font-weight: 800; margin: 0 0 4px 0; color:#fff;">Sistem Monitoring General Manager (GM) — Teh Dandang</h1>
+                <p style="font-size: 13px; color: #fecaca; margin: 0; max-width: 780px;">
+                  Mengawasi <strong>90 Area</strong> (Wilayah Jawa &amp; Luar Jawa) dengan total <strong>1.200 personil tim sales</strong> (salesman lapangan, admin depo, admin gudang, supervisor).
+                </p>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="../dashboard RSM/index.html" class="btn btn-sm btn-light font-weight-bold" style="font-weight:700;">Buka Level RSM &rarr;</a>
+                <a href="../dashboard ASM/index.html" class="btn btn-sm btn-outline-light" style="font-weight:700;">Buka Level ASM &rarr;</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 8 Indikator Kunci Utama GM (Tanpa Effective Call Header Sesuai Permintaan) -->
+          <div class="row g-3 mb-4">
+            <!-- 1. Omzet Nasional -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">Realisasi Omzet Nasional</span>
+                <div class="kpi-value text-success">Rp 95,5 M</div>
+                <span class="kpi-sub">Target: <b>Rp 92,0 M</b> · Capaian: <strong class="text-success">103.8%</strong></span>
+              </div>
+            </div>
+            <!-- 2. ROA (Registered Outlet Active) -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">ROA (Aktif Beli Rutin 1 Bln)</span>
+                <div class="kpi-value text-success">12.180 <small style="font-size:14px; font-weight:500; color:#64748b;">/ 14.500 RO</small></div>
+                <span class="kpi-sub"><strong class="text-success">84% Outlet ROA</strong> · Wajib belanja rutin &le; 1 bulan</span>
+              </div>
+            </div>
+            <!-- 3. Warning RO Non-ROA -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-red-alert">
+                <span class="kpi-label" style="color:#b91c1c;">Warning: RO Non-ROA</span>
+                <div class="kpi-value text-danger">2.320 <small style="font-size:14px; font-weight:500; color:#64748b;">Outlet</small></div>
+                <span class="kpi-sub" style="color:#b91c1c;">Toko RO yang &gt; 1 bln tidak beli · <b>Wajib Kunjungan!</b></span>
+              </div>
+            </div>
+            <!-- 4. Penetrasi NOP -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-purple">
+                <span class="kpi-label">Penetrasi NOP (Produk Ke-2+)</span>
+                <div class="kpi-value text-primary">4.320 <small style="font-size:14px; font-weight:500; color:#64748b;">Outlet</small></div>
+                <span class="kpi-sub">Variasi produk NOP hanya produk ke-2, ke-3 dst</span>
+              </div>
+            </div>
+            <!-- 5. Total Area Operasional -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-blue">
+                <span class="kpi-label">Cakupan Area Nasional</span>
+                <div class="kpi-value">90 <small style="font-size:14px; font-weight:500; color:#64748b;">Area</small></div>
+                <span class="kpi-sub"><span class="gm-badge-jawa">72 Area Jawa</span> · <span class="gm-badge-luar">18 Luar Jawa</span></span>
+              </div>
+            </div>
+            <!-- 6. Total Tim Sales Force -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-blue">
+                <span class="kpi-label">Total Tim Sales Nasional</span>
+                <div class="kpi-value">1.200 <small style="font-size:14px; font-weight:500; color:#64748b;">Personil</small></div>
+                <span class="kpi-sub">780 Sales, 210 Admin, 120 Gudang, 90 ASM</span>
+              </div>
+            </div>
+            <!-- 7. Fast vs Slow Moving Expired -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-red-alert">
+                <span class="kpi-label">Slow Moving Expired Risk</span>
+                <div class="kpi-value text-danger">34 <small style="font-size:14px; font-weight:500; color:#64748b;">Toko</small></div>
+                <span class="kpi-sub">Fast Moving aman · Slow Moving &gt; 1 bln tanpa ROA</span>
+              </div>
+            </div>
+            <!-- 8. MMT Geber Promosi Toko -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">Pemasangan MMT Geber</span>
+                <div class="kpi-value text-success">9.860 <small style="font-size:14px; font-weight:500; color:#64748b;">Toko</small></div>
+                <span class="kpi-sub">Tercatat: <b>68%</b> dari total 14.500 RO</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bagian Grafik: Perbandingan Wilayah Jawa vs Luar Jawa & Kinerja RSM -->
+          <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-7">
+              <section class="card h-100">
+                <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <h2 class="heading-title" style="font-size:16px;">Realisasi Penjualan per Regional Sales Manager (RSM)</h2>
+                    <p class="text-muted" style="font-size:12px; margin:0;">Target vs Realisasi (Rp Miliar) dan Porsi Tiap Region</p>
+                  </div>
+                  <span class="badge" style="background:#9B1C1C; color:#fff;">5 Region Nasional</span>
+                </div>
+                <div style="height: 280px; position: relative;">
+                  <canvas id="gmRsmBarChart"></canvas>
+                </div>
+              </section>
+            </div>
+
+            <div class="col-12 col-lg-5">
+              <section class="card h-100">
+                <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <h2 class="heading-title" style="font-size:16px;">Komposisi Wilayah: Jawa vs Luar Jawa</h2>
+                    <p class="text-muted" style="font-size:12px; margin:0;">Total 90 Area dan 14.500 Registered Outlet (RO)</p>
+                  </div>
+                  <span class="badge" style="background:#0f172a; color:#fff;">90 Area</span>
+                </div>
+                <div style="height: 240px; position: relative;">
+                  <canvas id="gmTerritoryChart"></canvas>
+                </div>
+                <div class="d-flex justify-content-around mt-2 pt-2 border-top text-center" style="font-size:12px;">
+                  <div><strong class="text-danger d-block">80% Volume</strong> Wilayah Jawa (72 Area)</div>
+                  <div><strong class="text-primary d-block">20% Volume</strong> Luar Jawa (18 Area)</div>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <!-- Tabel Kinerja 5 RSM (Regional Sales Manager) di Bawah GM -->
+          <section class="card mb-4">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">Monitoring Performa Regional Sales Manager (RSM) Nasional</h2>
+                <p class="text-muted" style="font-size:12px; margin:0;">Struktur kepemimpinan sales regional, jumlah area, pencapaian target, dan rasio ROA</p>
+              </div>
+              <a href="../dashboard RSM/index.html" class="button btn-sm" style="background:#9B1C1C; color:#fff;">Buka Detail RSM &rarr;</a>
+            </div>
+            <div class="table-scroll">
+              <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                <thead style="background:#f1f5f9; color:#475569; font-weight:700;">
+                  <tr>
+                    <th>Wilayah</th>
+                    <th>Nama Regional Sales Manager (RSM)</th>
+                    <th>Jumlah Area</th>
+                    <th>Tim Sales</th>
+                    <th>Target (Rp)</th>
+                    <th>Aktual (Rp)</th>
+                    <th>Capaian</th>
+                    <th>RO / ROA (Beli Rutin)</th>
+                    <th>Warning RO Non-ROA</th>
+                    <th>MMT Geber</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="rsm-row" onclick="location.href='../dashboard RSM/index.html?region=jateng'">
+                    <td><span class="gm-badge-jawa">Jawa</span> <strong>Region Jawa Tengah</strong></td>
+                    <td><strong>Bambang Trihatmodjo, S.E.</strong><br><small class="text-muted">RSM-01 Jateng</small></td>
+                    <td><span class="badge bg-secondary">24 Area</span></td>
+                    <td>320 personil</td>
+                    <td>Rp 32,0 M</td>
+                    <td><strong class="text-success">Rp 34,2 M</strong></td>
+                    <td><span class="badge badge-rsm-green">106.8%</span></td>
+                    <td>4.800 / <strong class="text-success">4.210</strong> (87.7%)</td>
+                    <td><span class="badge bg-warning text-dark">590 toko</span></td>
+                    <td>3.450 unit</td>
+                    <td><a href="../dashboard RSM/index.html?region=jateng" class="btn btn-sm btn-outline-danger">Audit RSM</a></td>
+                  </tr>
+                  <tr class="rsm-row" onclick="location.href='../dashboard RSM/index.html?region=jatim'">
+                    <td><span class="gm-badge-jawa">Jawa</span> <strong>Region Jawa Timur</strong></td>
+                    <td><strong>Haryanto Sutanto, M.M.</strong><br><small class="text-muted">RSM-02 Jatim</small></td>
+                    <td><span class="badge bg-secondary">22 Area</span></td>
+                    <td>290 personil</td>
+                    <td>Rp 28,0 M</td>
+                    <td><strong class="text-success">Rp 28,9 M</strong></td>
+                    <td><span class="badge badge-rsm-green">103.2%</span></td>
+                    <td>4.100 / <strong class="text-success">3.490</strong> (85.1%)</td>
+                    <td><span class="badge bg-warning text-dark">610 toko</span></td>
+                    <td>2.920 unit</td>
+                    <td><a href="../dashboard RSM/index.html?region=jatim" class="btn btn-sm btn-outline-danger">Audit RSM</a></td>
+                  </tr>
+                  <tr class="rsm-row" onclick="location.href='../dashboard RSM/index.html?region=jabar'">
+                    <td><span class="gm-badge-jawa">Jawa</span> <strong>Region Jawa Barat &amp; Banten</strong></td>
+                    <td><strong>Drs. H. Mulyadi Saputra</strong><br><small class="text-muted">RSM-03 Jabar</small></td>
+                    <td><span class="badge bg-secondary">16 Area</span></td>
+                    <td>220 personil</td>
+                    <td>Rp 18,0 M</td>
+                    <td><strong class="text-warning">Rp 17,6 M</strong></td>
+                    <td><span class="badge badge-rsm-yellow">97.7%</span></td>
+                    <td>2.800 / <strong class="text-success">2.280</strong> (81.4%)</td>
+                    <td><span class="badge bg-danger">520 toko</span></td>
+                    <td>1.890 unit</td>
+                    <td><a href="../dashboard RSM/index.html?region=jabar" class="btn btn-sm btn-outline-danger">Audit RSM</a></td>
+                  </tr>
+                  <tr class="rsm-row" onclick="location.href='../dashboard RSM/index.html?region=dki'">
+                    <td><span class="gm-badge-jawa">Jawa</span> <strong>Region DKI Jakarta &amp; DIY</strong></td>
+                    <td><strong>Taufik Hidayat, S.Sos.</strong><br><small class="text-muted">RSM-04 Metro</small></td>
+                    <td><span class="badge bg-secondary">10 Area</span></td>
+                    <td>170 personil</td>
+                    <td>Rp 8,5 M</td>
+                    <td><strong class="text-success">Rp 8,8 M</strong></td>
+                    <td><span class="badge badge-rsm-green">103.5%</span></td>
+                    <td>1.400 / <strong class="text-success">1.210</strong> (86.4%)</td>
+                    <td><span class="badge bg-warning text-dark">190 toko</span></td>
+                    <td>880 unit</td>
+                    <td><a href="../dashboard RSM/index.html?region=dki" class="btn btn-sm btn-outline-danger">Audit RSM</a></td>
+                  </tr>
+                  <tr class="rsm-row" onclick="location.href='../dashboard RSM/index.html?region=sumatera'">
+                    <td><span class="gm-badge-luar">Luar Jawa</span> <strong>Region Sumatera &amp; Sekitarnya</strong></td>
+                    <td><strong>Zulkifli Nasution, S.E.</strong><br><small class="text-muted">RSM-05 Luar Jawa</small></td>
+                    <td><span class="badge bg-primary">18 Area</span></td>
+                    <td>200 personil</td>
+                    <td>Rp 5,5 M</td>
+                    <td><strong class="text-warning">Rp 6,0 M</strong></td>
+                    <td><span class="badge badge-rsm-green">109.0%</span></td>
+                    <td>1.400 / <strong class="text-success">990</strong> (70.7%)</td>
+                    <td><span class="badge bg-danger">410 toko</span></td>
+                    <td>720 unit</td>
+                    <td><a href="../dashboard RSM/index.html?region=sumatera" class="btn btn-sm btn-outline-danger">Audit RSM</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Warning Dini GM: RO Non-ROA & Slow Moving Expired -->
+          <section class="card">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">
+                  <svg aria-hidden="true" width="18" height="18" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  Protokol Peringatan Dini Sistem (Tanpa AI — Berbasis Aturan Bisnis Teh Dandang)
+                </h2>
+                <p class="text-muted" style="font-size:12px; margin:0;">
+                  Deteksi otomatis outlet terdaftar (RO) yang tidak aktif (Non-ROA) &gt; 1 bulan dan risiko kadaluarsa produk Slow Moving.
+                </p>
+              </div>
+              <span class="badge bg-danger">Aturan Wajib Kunjungan 2 Minggu</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <div class="p-3 border rounded" style="background:#fef2f2; border-color:#fecaca !important;">
+                  <strong class="text-danger d-block mb-1">1. Aturan RO &amp; ROA</strong>
+                  <p style="font-size:12px; color:#475569; margin:0;">
+                    RO = Registered Outlet. ROA = Registered Outlet Active. Outlet <strong>wajib beli rutin dalam 1 bulan</strong> untuk menjaga status ROA. Jika &gt; 1 bulan nihil transaksi, sistem otomatis menerbitkan sinyal peringatan.
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="p-3 border rounded" style="background:#fffbeb; border-color:#fef3c7 !important;">
+                  <strong class="text-warning d-block mb-1" style="color:#b45309 !important;">2. Siklus Kunjungan 2 Mingguan</strong>
+                  <p style="font-size:12px; color:#475569; margin:0;">
+                    Salesman di 90 area <strong>wajib melakukan kunjungan lapangan per 2 minggu</strong> ke setiap toko RO. Pelanggaran jadwal &gt; 14 hari langsung dieskalasi ke Area Sales Manager (ASM).
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="p-3 border rounded" style="background:#f5f3ff; border-color:#ede9fe !important;">
+                  <strong class="text-primary d-block mb-1" style="color:#6d28d9 !important;">3. Fast Moving vs Slow Moving Expired</strong>
+                  <p style="font-size:12px; color:#475569; margin:0;">
+                    Produk <em>Fast Moving</em> (Dandang Biru, Dandang Merah) tidak memerlukan pemantauan expired karena perputaran cepat. Produk <em>Slow Moving</em> (White Tea, Green Tea) dipantau kadaluarsa jika toko tidak ROA &gt; 1 bulan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <footer class="mt-4 text-center text-muted" style="font-size:12px; padding:16px 0;">
+        <span>&copy; 2026 PT Kartini Teh Dandang &middot; Portal Eksekutif General Manager (GM)</span>
+      </footer>
+    </main>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 1. Chart RSM Performance
+      const ctxBar = document.getElementById('gmRsmBarChart');
+      if (ctxBar && window.Chart) {
+        new Chart(ctxBar, {
+          type: 'bar',
+          data: {
+            labels: ['Jawa Tengah', 'Jawa Timur', 'Jabar & Banten', 'DKI & DIY', 'Sumatera (Luar Jawa)'],
+            datasets: [
+              {
+                label: 'Target (Rp M)',
+                data: [32.0, 28.0, 18.0, 8.5, 5.5],
+                backgroundColor: '#cbd5e1',
+                borderRadius: 4
+              },
+              {
+                label: 'Realisasi (Rp M)',
+                data: [34.2, 28.9, 17.6, 8.8, 6.0],
+                backgroundColor: '#9B1C1C',
+                borderRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    return ctx.dataset.label + ': Rp ' + ctx.raw + ' Miliar';
+                  }
+                }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, title: { display: true, text: 'Miliar Rupiah' } }
+            }
+          }
+        });
+      }
+
+      // 2. Chart Territory Doughnut
+      const ctxTerritory = document.getElementById('gmTerritoryChart');
+      if (ctxTerritory && window.Chart) {
+        new Chart(ctxTerritory, {
+          type: 'doughnut',
+          data: {
+            labels: ['Wilayah Jawa (72 Area)', 'Wilayah Luar Jawa (18 Area)'],
+            datasets: [{
+              data: [72, 18],
+              backgroundColor: ['#9B1C1C', '#0284c7'],
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+      }
+    });
+  </script>
 </body>
+
 </html>

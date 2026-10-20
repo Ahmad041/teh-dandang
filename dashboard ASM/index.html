@@ -1,20 +1,548 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Area Sales Manager Dashboard</title>
-  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#9B1C1C" name="theme-color" />
+  <title>Dashboard Area Sales Manager (ASM) | Teh Dandang</title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" rel="stylesheet" />
+  <link href="../assets/css/styles.css" rel="stylesheet" />
+  <link href="../assets/css/admin-pusat.css" rel="stylesheet" />
+  <link href="../assets/css/dandang-theme.css" rel="stylesheet" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
   <style>
-    body {display:flex;align-items:center;justify-content:center;height:100vh;background:#f8fafc;}
-    .card{padding:2rem;border-radius:1rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);background:white;}
+    .kpi-card-custom {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .kpi-card-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    .kpi-card-custom .kpi-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 4px; }
+    .kpi-card-custom .kpi-value { font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.1; margin-bottom: 6px; }
+    .kpi-card-custom .kpi-sub { font-size: 11px; color: #475569; }
+    .kpi-card-custom.border-red-alert { border-left: 4px solid #ef4444; }
+    .kpi-card-custom.border-green { border-left: 4px solid #10b981; }
+    .kpi-card-custom.border-blue { border-left: 4px solid #2563eb; }
+    .kpi-card-custom.border-purple { border-left: 4px solid #8b5cf6; }
+
+    .sales-pill-btn {
+      padding: 8px 14px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .sales-pill-btn:hover {
+      border-color: #9B1C1C;
+      background: #fff5f5;
+    }
+    .sales-pill-btn.active {
+      background: #9B1C1C;
+      color: #ffffff;
+      border-color: #9B1C1C;
+      box-shadow: 0 2px 8px rgba(155, 28, 28, 0.25);
+    }
+
+    .badge-ro { background: #e2e8f0 !important; color: #1e293b !important; font-weight: 700; font-size: 11px; }
+    .badge-roa { background: #dcfce7 !important; color: #14532d !important; font-weight: 700; font-size: 11px; }
+    .badge-non-roa { background: #fee2e2 !important; color: #991b1b !important; font-weight: 700; font-size: 11px; }
+    .badge-mmt-ok { background: #f0fdf4 !important; color: #15803d !important; border: 1px solid #bbf7d0; font-weight: 600; font-size: 11px; }
+    .badge-mmt-no { background: #f8fafc !important; color: #475569 !important; border: 1px dashed #cbd5e1; font-weight: 600; font-size: 11px; }
+    .badge-visit-ok { background: #dcfce7 !important; color: #14532d !important; font-weight: 700; }
+    .badge-visit-late { background: #fee2e2 !important; color: #991b1b !important; font-weight: 700; }
+
+    /* NOP Badges - Kontras Tinggi, Lembut & Jelas (Anti-Nyaru) */
+    .badge-nop-success {
+      background: #ecfdf5 !important;
+      color: #065f46 !important;
+      border: 1px solid #6ee7b7 !important;
+      font-weight: 700 !important;
+    }
+    .badge-nop-multi {
+      background: #eff6ff !important;
+      color: #1e40af !important;
+      border: 1px solid #93c5fd !important;
+      font-weight: 700 !important;
+    }
+    .badge-nop-single {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      border: 1px solid #cbd5e1 !important;
+      font-weight: 600 !important;
+    }
   </style>
 </head>
-<body>
-  <div class="card text-center">
-    <h1>Area Sales Manager (ASM) Dashboard</h1>
-    <p>This is a placeholder page for the ASM role.</p>
-    <a href="../index.html" class="btn btn-primary">Back to Home</a>
+
+<body data-page="asm-dashboard">
+  <input aria-label="Buka atau tutup navigasi" class="sr-only" id="nav-toggle" type="checkbox" />
+  <label aria-label="Tutup navigasi" class="sidebar-backdrop" for="nav-toggle"></label>
+  <aside aria-label="Navigasi utama" class="sidebar" id="sidebar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img alt="Logo Teh Dandang" class="brand-logo" src="../assets/img/Teh Dandang.jpeg" /></span>
+      <span><strong>TEH DANDANG</strong><small>AREA SALES MANAGER (ASM)</small></span>
+    </a>
+    <div class="connection"><span class="dot"></span><span>Area Solo Raya (Boyolali)</span><span class="demo-label">AREA</span></div>
+
+    <!-- Role Switcher -->
+    <div style="padding: 10px 14px; background: rgba(0,0,0,0.22); border-radius: 8px; margin: 10px 14px 14px;">
+      <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #fca5a5; display: block; margin-bottom: 4px; font-weight: 700;">Ganti Peran (Role):</label>
+      <select class="form-select form-select-sm" style="background:#1e293b; color:#fff; border-color:#475569; font-size:12px; font-weight:600; cursor:pointer;" onchange="if(this.value) window.location.href=this.value">
+        <option value="../dashboard ADMIN PUSAT/index.html">Owner / Admin Pusat</option>
+        <option value="../dashboard GM/index.html">General Manager (GM)</option>
+        <option value="../dashboard RSM/index.html">Regional Sales Manager (RSM)</option>
+        <option value="index.html" selected>Area Sales Manager (ASM)</option>
+      </select>
+    </div>
+
+    <nav id="navigation">
+      <section class="nav-group">
+        <h2>Area Operasional</h2>
+        <a aria-current="page" class="nav-link active" href="index.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"></path></svg>
+          <span>Dashboard Area ASM</span>
+        </a>
+        <a class="nav-link" href="#section-sales-select">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M16 3a4 4 0 0 1 0 8 M22 21v-3a4 4 0 0 0-3-4 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8"></path></svg>
+          <span>Pilih Sales &rarr; Toko</span>
+        </a>
+        <a class="nav-link" href="#section-mmt-record">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0 M12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6"></path></svg>
+          <span>Pencatatan MMT Geber</span>
+        </a>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/early-warning.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z M12 8v5 M12 16h.01"></path></svg>
+          <span>Warning RO Non-ROA</span>
+          <span class="count">24</span>
+        </a>
+      </section>
+      <section class="nav-group">
+        <h2>Inventori &amp; Toko</h2>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/master-product.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 7l9-5 9 5v10l-9 5-9-5z M3 7l9 5 9-5 M12 12v10"></path></svg>
+          <span>Fast / Slow Moving Expired</span>
+        </a>
+        <a class="nav-link" href="../dashboard ADMIN PUSAT/master-outlet.html">
+          <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 10h18l-2-7H5z M4 10v11h16V10 M9 21v-7h6v7 M3 10q3 4 6 0 3 4 6 0 3 4 6 0"></path></svg>
+          <span>Database Outlet (RO)</span>
+        </a>
+      </section>
+    </nav>
+    <div class="sidebar-profile">
+      <span class="avatar">AS</span>
+      <div><strong>Hendra Kurniawan</strong><small>ASM Solo Raya (Boyolali)</small></div>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <!-- Header dihilangkan sesuai instruksi: heder di hilangkan -->
+    <main id="main" tabindex="-1">
+      <div id="views">
+        <div class="view dash">
+
+          <!-- Bar Info ASM -->
+          <section class="card mb-3" style="padding: 16px 20px;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge" style="background:#9B1C1C; color:#fff; font-size:12px; padding:6px 12px;">AREA VIEW (1 DARI 90 AREA)</span>
+                <div>
+                  <h1 style="font-size: 18px; font-weight: 800; margin: 0; color:#0f172a;">Dashboard Area Sales Manager (ASM) — Solo Raya &amp; Boyolali</h1>
+                  <p class="text-muted" style="font-size: 12px; margin: 0;">Alur Operasional: Pilih Sales Lapangan &rarr; Tinjau Toko Binaan, Siklus 2 Mingguan &amp; Status ROA</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-success" style="font-size:12px; font-weight:700;">Target Tercapai: 108.5%</span>
+                <a href="../dashboard RSM/index.html" class="btn btn-sm btn-outline-danger font-weight-bold">&larr; Kembali ke Level RSM</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 8 Indikator Kunci ASM (Tanpa Effective Call Header Sesuai Instruksi) -->
+          <div class="row g-3 mb-4">
+            <!-- 1. Target vs Realisasi Area -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">Realisasi Area Boyolali</span>
+                <div class="kpi-value text-success">Rp 8,9 M</div>
+                <span class="kpi-sub">Target: <b>Rp 8,2 M</b> · Capaian: <strong class="text-success">108.5%</strong></span>
+              </div>
+            </div>
+            <!-- 2. ROA (Registered Outlet Active) -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">ROA (Beli Rutin 1 Bulan)</span>
+                <div class="kpi-value text-success">1.120 <small style="font-size:14px; font-weight:500; color:#64748b;">/ 1.250 RO</small></div>
+                <span class="kpi-sub"><strong class="text-success">89.6% Toko ROA</strong> · Wajib beli rutin &le; 1 bln</span>
+              </div>
+            </div>
+            <!-- 3. WARNING UTAMA: RO yang TIDAK ROA -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-red-alert">
+                <span class="kpi-label" style="color:#b91c1c;">Warning: RO Non-ROA</span>
+                <div class="kpi-value text-danger">130 <small style="font-size:14px; font-weight:500; color:#64748b;">Outlet</small></div>
+                <span class="kpi-sub" style="color:#b91c1c;">Toko RO &gt; 1 bln belum order · <b>Wajib Kunjungan!</b></span>
+              </div>
+            </div>
+            <!-- 4. Penetrasi NOP -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-purple">
+                <span class="kpi-label">Penetrasi NOP (Varian Ke-2+)</span>
+                <div class="kpi-value text-primary">420 <small style="font-size:14px; font-weight:500; color:#64748b;">Outlet</small></div>
+                <span class="kpi-sub">Hanya variasi produk ke-2, ke-3 dst yang dihitung</span>
+              </div>
+            </div>
+            <!-- 5. Kepatuhan Kunjungan 2 Mingguan -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-blue">
+                <span class="kpi-label">Kunjungan 2 Mingguan</span>
+                <div class="kpi-value">96.2% <small style="font-size:14px; font-weight:500; color:#64748b;">Tepat Waktu</small></div>
+                <span class="kpi-sub">Wajib kunjungan toko per 2 minggu &le; 14 hari</span>
+              </div>
+            </div>
+            <!-- 6. Sales Force Lapangan Area -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-blue">
+                <span class="kpi-label">Tim Sales Area Boyolali</span>
+                <div class="kpi-value">58 <small style="font-size:14px; font-weight:500; color:#64748b;">Personil</small></div>
+                <span class="kpi-sub">42 Sales Lapangan, 10 Admin, 6 Gudang</span>
+              </div>
+            </div>
+            <!-- 7. Slow Moving Expired Risk -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-red-alert">
+                <span class="kpi-label">Slow Moving Expired Risk</span>
+                <div class="kpi-value text-danger">3 <small style="font-size:14px; font-weight:500; color:#64748b;">Toko</small></div>
+                <span class="kpi-sub">Fast Moving bebas exp · Slow Moving terancam</span>
+              </div>
+            </div>
+            <!-- 8. Pencatatan MMT Geber -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card-custom border-green">
+                <span class="kpi-label">Pencatatan MMT Geber</span>
+                <div class="kpi-value text-success">890 <small style="font-size:14px; font-weight:500; color:#64748b;">Toko</small></div>
+                <span class="kpi-sub">Tercatat: <b>71.2%</b> warung terpasang MMT Geber</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEKSI ALUR OPERASIONAL: PILIH SALES TERLEBIH DAHULU BARU TOKO (Poin 5 Rekomendasi) -->
+          <section class="card mb-4" id="section-sales-select">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">
+                  <span class="badge" style="background:#9B1C1C; color:#fff; margin-right:6px;">Langkah 1</span>
+                  Pilih Salesman Terlebih Dahulu
+                </h2>
+                <p class="text-muted" style="font-size:12px; margin:0;">
+                  Alur operasional ASM: Tentukan salesperson yang akan dipantau kinerjanya sebelum meninjau daftar outlet binaannya.
+                </p>
+              </div>
+              <span class="badge bg-secondary" id="selected-sales-badge">Sales Terpilih: Eko Prasetyo (Top)</span>
+            </div>
+
+            <!-- List Sales Selector -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button type="button" class="sales-pill-btn active" onclick="selectSalesman('S006', 'Eko Prasetyo (Top Performer)', 'Cepogo &amp; Boyolali Kota', 125, 118, 7, 28)">
+                <span style="display:inline-block; width:10px; height:10px; background:#22c55e; border-radius:50%;"></span>
+                <strong>Eko Prasetyo (Top)</strong> &middot; Cepogo &middot; 125 Toko
+              </button>
+              <button type="button" class="sales-pill-btn" onclick="selectSalesman('S001', 'Andi Pratama', 'Selo &amp; Ampel', 110, 98, 12, 22)">
+                <span style="display:inline-block; width:10px; height:10px; background:#22c55e; border-radius:50%;"></span>
+                <strong>Andi Pratama</strong> &middot; Selo &middot; 110 Toko
+              </button>
+              <button type="button" class="sales-pill-btn" onclick="selectSalesman('S002', 'Budi Raharjo', 'Musuk &amp; Mojosongo', 95, 76, 19, 18)">
+                <span style="display:inline-block; width:10px; height:10px; background:#ef4444; border-radius:50%;"></span>
+                <strong>Budi Raharjo</strong> &middot; Musuk &middot; 95 Toko (19 Non-ROA)
+              </button>
+              <button type="button" class="sales-pill-btn" onclick="selectSalesman('S003', 'Rudi Wicaksono', 'Boyolali Kota Utara', 105, 96, 9, 24)">
+                <span style="display:inline-block; width:10px; height:10px; background:#22c55e; border-radius:50%;"></span>
+                <strong>Rudi Wicaksono</strong> &middot; Kota Utara &middot; 105 Toko
+              </button>
+              <button type="button" class="sales-pill-btn" onclick="selectSalesman('S004', 'Deni Kurniadi', 'Sawit &amp; Banyudono', 115, 106, 9, 25)">
+                <span style="display:inline-block; width:10px; height:10px; background:#22c55e; border-radius:50%;"></span>
+                <strong>Deni Kurniadi</strong> &middot; Sawit &middot; 115 Toko
+              </button>
+            </div>
+
+            <!-- Card Profil Singkat Sales Terpilih -->
+            <div class="p-3 border rounded" style="background:#f8fafc;">
+              <div class="row align-items-center g-3">
+                <div class="col-12 col-md-4">
+                  <span class="text-muted d-block" style="font-size:11px;">Salesperson:</span>
+                  <strong style="font-size:15px; color:#0f172a;" id="sales-name-display">Eko Prasetyo (Top Performer)</strong>
+                  <span class="text-muted d-block" style="font-size:12px;" id="sales-area-display">Wilayah Rute: Cepogo &amp; Boyolali Kota</span>
+                </div>
+                <div class="col-6 col-md-2">
+                  <span class="text-muted d-block" style="font-size:11px;">Total Toko (RO):</span>
+                  <strong style="font-size:16px;" id="sales-ro-display">125 Outlet</strong>
+                </div>
+                <div class="col-6 col-md-2">
+                  <span class="text-muted d-block" style="font-size:11px;">Aktif ROA (1 Bln):</span>
+                  <strong style="font-size:16px; color:#16a34a;" id="sales-roa-display">118 Outlet (94.4%)</strong>
+                </div>
+                <div class="col-6 col-md-2">
+                  <span class="text-muted d-block" style="font-size:11px;">Warning Non-ROA:</span>
+                  <strong style="font-size:16px; color:#dc2626;" id="sales-warn-display">7 Toko Macet</strong>
+                </div>
+                <div class="col-6 col-md-2">
+                  <span class="text-muted d-block" style="font-size:11px;">MMT Geber Pasang:</span>
+                  <strong style="font-size:16px; color:#2563eb;" id="sales-mmt-display">98 Toko (78.4%)</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKSI DAFTAR TOKO / OUTLET DI BAWAH SALES TERPILIH (Langkah 2) -->
+          <section class="card mb-4">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">
+                  <span class="badge" style="background:#9B1C1C; color:#fff; margin-right:6px;">Langkah 2</span>
+                  Daftar Outlet (RO) Binaan Sales Terpilih
+                </h2>
+                <p class="text-muted" style="font-size:12px; margin:0;">
+                  Status ROA (Beli rutin 1 bulan), Kepatuhan Kunjungan 2 Mingguan, Status Expired Produk Slow Moving &amp; MMT Geber.
+                </p>
+              </div>
+              <div class="d-flex gap-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Cari nama toko / alamat..." style="width:220px;" oninput="filterOutletTable(this.value)">
+              </div>
+            </div>
+
+            <div class="table-scroll">
+              <table class="table table-hover align-middle mb-0" id="outlet-table" style="font-size:13px;">
+                <thead style="background:#f1f5f9; color:#475569; font-weight:700;">
+                  <tr>
+                    <th>No. / Kode Toko</th>
+                    <th>Nama Toko / Outlet</th>
+                    <th>Segmen</th>
+                    <th>Status RO &amp; ROA</th>
+                    <th>Terakhir Beli (Siklus 1 Bln)</th>
+                    <th>Kunjungan Sales (2 Minggu Wajib)</th>
+                    <th>Variasi Produk NOP (Ke-2+)</th>
+                    <th>Slow Moving &amp; Expired</th>
+                    <th>Pemasangan MMT Geber</th>
+                    <th>Tindakan ASM</th>
+                  </tr>
+                </thead>
+                <tbody id="outlet-table-body">
+                  <!-- Toko 1: Aktif Sehat -->
+                  <tr>
+                    <td><strong>TK-BOY-001</strong></td>
+                    <td><strong>Toko Berkah Cepogo</strong><br><small class="text-muted">Jl. Raya Cepogo KM 4</small></td>
+                    <td><span class="badge bg-light text-dark">GT</span></td>
+                    <td><span class="badge badge-roa">ROA (Aktif Beli)</span></td>
+                    <td><strong class="text-success">5 hari lalu</strong><br><small class="text-muted">15 Okt 2026</small></td>
+                    <td><span class="badge badge-visit-ok">Tepat Waktu (6 hari lalu)</span></td>
+                    <td><span class="badge badge-nop-multi">3 Varian (Teh Merah, Biru, Jasmine)</span></td>
+                    <td><span class="text-success font-weight-bold">&#10003; Aman (Fast &amp; Slow Moving)</span></td>
+                    <td><span class="badge badge-mmt-ok">&#10003; Terpasang (MMT 2x1m)</span></td>
+                    <td><button class="btn btn-sm btn-outline-secondary" onclick="alert('Detail Toko Berkah Cepogo dibuka.')">Detail</button></td>
+                  </tr>
+
+                  <!-- Toko 2: WARNING UTAMA RO NON-ROA (Sudah 35 Hari Tidak Beli) -->
+                  <tr style="background-color: #fef2f2;">
+                    <td><strong class="text-danger">TK-BOY-002</strong></td>
+                    <td><strong>RM Maju Jaya Cepogo</strong><br><small class="text-muted">Pasar Sayur Cepogo No. 12</small></td>
+                    <td><span class="badge bg-light text-dark">Horeka</span></td>
+                    <td><span class="badge badge-non-roa">&#9888; RO NON-ROA (Macet)</span></td>
+                    <td><strong class="text-danger">35 hari lalu</strong><br><small class="text-danger">&gt; 1 bln tidak beli!</small></td>
+                    <td><span class="badge badge-visit-late">&#9888; Telat (18 hari lalu)</span></td>
+                    <td><span class="badge badge-nop-single">Hanya 1 Varian (Belum NOP)</span></td>
+                    <td><span class="badge bg-danger text-white">&#9888; Risk Expired Slow Moving</span></td>
+                    <td><span class="badge badge-mmt-ok">&#10003; Terpasang (MMT Geber)</span></td>
+                    <td><button class="btn btn-sm btn-danger" onclick="alert('Perintah Kunjungan Darurat dikirim ke Eko Prasetyo.')">Instruksi Kunjungan</button></td>
+                  </tr>
+
+                  <!-- Toko 3: Aktif dengan NOP Sukses -->
+                  <tr>
+                    <td><strong>TK-BOY-003</strong></td>
+                    <td><strong>Kios Nusantara Cepogo</strong><br><small class="text-muted">Jl. Merbabu No. 8</small></td>
+                    <td><span class="badge bg-light text-dark">GT</span></td>
+                    <td><span class="badge badge-roa">ROA (Aktif Beli)</span></td>
+                    <td><strong class="text-success">8 hari lalu</strong><br><small class="text-muted">12 Okt 2026</small></td>
+                    <td><span class="badge badge-visit-ok">Tepat Waktu (8 hari lalu)</span></td>
+                    <td><span class="badge badge-nop-success">&#10003; NOP Sukses (Masuk Produk Ke-2: White Tea)</span></td>
+                    <td><span class="text-muted">Expired: Des 2027 (Aman)</span></td>
+                    <td><span class="badge badge-mmt-ok">&#10003; Terpasang (MMT 3x1m)</span></td>
+                    <td><button class="btn btn-sm btn-outline-secondary" onclick="alert('Detail Kios Nusantara dibuka.')">Detail</button></td>
+                  </tr>
+
+                  <!-- Toko 4: Belum Pasang MMT Geber -->
+                  <tr>
+                    <td><strong>TK-BOY-004</strong></td>
+                    <td><strong>Warung Bu Darmi Cepogo</strong><br><small class="text-muted">Simpang Tiga Selo</small></td>
+                    <td><span class="badge bg-light text-dark">GT</span></td>
+                    <td><span class="badge badge-roa">ROA (Aktif Beli)</span></td>
+                    <td><strong class="text-success">14 hari lalu</strong><br><small class="text-muted">06 Okt 2026</small></td>
+                    <td><span class="badge badge-visit-ok">Tepat Waktu (11 hari lalu)</span></td>
+                    <td><span class="badge badge-nop-multi">2 Varian (Teh Celup &amp; Tubruk)</span></td>
+                    <td><span class="text-success">Fast Moving (Bebas Exp)</span></td>
+                    <td><span class="badge badge-mmt-no">&#9888; Belum Pasang MMT</span></td>
+                    <td><button class="btn btn-sm btn-outline-primary" onclick="alert('Form Permintaan Pasang MMT Geber dibuka.')">Ajukan MMT</button></td>
+                  </tr>
+
+                  <!-- Toko 5: WARNING NON-ROA KEDUA -->
+                  <tr style="background-color: #fef2f2;">
+                    <td><strong class="text-danger">TK-BOY-005</strong></td>
+                    <td><strong>Toko Kelontong Nusantara Cepogo</strong><br><small class="text-muted">Jl. Pandanaran Barat</small></td>
+                    <td><span class="badge bg-light text-dark">GT</span></td>
+                    <td><span class="badge badge-non-roa">&#9888; RO NON-ROA (Macet)</span></td>
+                    <td><strong class="text-danger">42 hari lalu</strong><br><small class="text-danger">Tidak order &gt; 1 bln</small></td>
+                    <td><span class="badge badge-visit-late">&#9888; Telat (16 hari lalu)</span></td>
+                    <td><span class="badge badge-nop-single">1 Varian (Belum NOP)</span></td>
+                    <td><span class="badge bg-warning text-dark">White Tea Exp: Nov 2026</span></td>
+                    <td><span class="badge badge-mmt-ok">&#10003; Terpasang (MMT Geber)</span></td>
+                    <td><button class="btn btn-sm btn-danger" onclick="alert('Peringatan Retur/Tukar Produk Slow Moving dikirim.')">Tarik / Tukar Stok</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- SEKSI FORM PENCATATAN MMT GEBER PROMOSI TOKO -->
+          <section class="card mb-4" id="section-mmt-record">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">
+                  <svg aria-hidden="true" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  Pencatatan Pemasangan MMT Geber (Promosi Spanduk Toko)
+                </h2>
+              </div>
+              <span class="badge bg-primary">Modul Wajib Dicatat</span>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12 col-md-3">
+                <label class="form-label" style="font-size:12px; font-weight:600;">Nomor / Kode Toko:</label>
+                <input type="text" class="form-control form-control-sm" id="mmt-cardcode" placeholder="Contoh: TK-BOY-004" value="TK-BOY-004">
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label" style="font-size:12px; font-weight:600;">Nama Warung / Outlet:</label>
+                <input type="text" class="form-control form-control-sm" id="mmt-storename" placeholder="Nama Toko" value="Warung Bu Darmi Cepogo">
+              </div>
+              <div class="col-12 col-md-2">
+                <label class="form-label" style="font-size:12px; font-weight:600;">Ukuran MMT Geber:</label>
+                <select class="form-select form-select-sm" id="mmt-size">
+                  <option value="2x1">2 x 1 Meter</option>
+                  <option value="3x1" selected>3 x 1 Meter</option>
+                  <option value="4x1">4 x 1 Meter (Spesial)</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-2">
+                <label class="form-label" style="font-size:12px; font-weight:600;">Tanggal Pemasangan:</label>
+                <input type="date" class="form-control form-control-sm" id="mmt-date" value="2026-10-20">
+              </div>
+              <div class="col-12 col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-sm btn-danger w-100" style="background:#9B1C1C; font-weight:700;" onclick="saveMmtRecord()">
+                  Simpan Catatan MMT
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKSI KEBIJAKAN PRODUK: FAST MOVING VS SLOW MOVING BERKADALUARSA -->
+          <section class="card">
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="heading-title" style="font-size:16px;">Klasifikasi Produk Teh Dandang: Fast Moving vs Slow Moving Expired</h2>
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded h-100" style="background:#f0fdf4; border-color:#bbf7d0 !important;">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong style="color:#166534; font-size:14px;">1. Fast Moving (Perputaran Cepat &mdash; Bebas Expired Tracking)</strong>
+                    <span class="badge bg-success">Turnover Cepat</span>
+                  </div>
+                  <p style="font-size:12px; color:#334155; margin-bottom:8px;">
+                    Produk dengan konsumsi harian sangat tinggi di pasar GT/Warung. <strong>Tidak perlu dicatat tanggal kadaluarsanya</strong> karena habis terjual dalam 1-2 minggu:
+                  </p>
+                  <ul style="font-size:12px; color:#1e293b; margin:0; padding-left:18px;">
+                    <li><strong>Teh Dandang Biru Celup 25s</strong> (SKU DP001) &mdash; Produk Utama / Parettor 55%</li>
+                    <li><strong>Teh Dandang Merah Tubruk 40g</strong> (SKU DM001) &mdash; Produk Tradisional Parettor 35%</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="p-3 border rounded h-100" style="background:#fff7ed; border-color:#fed7aa !important;">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong style="color:#9a3412; font-size:14px;">2. Slow Moving (Wajib Dicatat Tanggal Kadaluarsa &amp; Warning 1 Bln)</strong>
+                    <span class="badge bg-warning text-dark">Wajib Pantau Expired</span>
+                  </div>
+                  <p style="font-size:12px; color:#334155; margin-bottom:8px;">
+                    Produk premium/spesifik dengan perputaran lebih lambat. <strong>Wajib dicatat tanggal kadaluarsanya</strong>. Jika toko <strong>tidak ROA (&gt; 1 bulan)</strong>, sistem otomatis memberikan peringatan risiko kadaluarsa:
+                  </p>
+                  <ul style="font-size:12px; color:#1e293b; margin:0; padding-left:18px;">
+                    <li><strong>Teh Dandang White Tea Special</strong> (SKU DW001) &mdash; Shelf life diperhatikan</li>
+                    <li><strong>Teh Dandang Jasmine Premium Box</strong> (SKU DJ001) &mdash; Segel aroma wajib dijaga</li>
+                    <li><strong>Teh Dandang Hijau Herbal 20s</strong> (SKU DH001) &mdash; Masa simpan toko &le; 6 bulan</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <footer class="mt-4 text-center text-muted" style="font-size:12px; padding:16px 0;">
+        <span>&copy; 2026 PT Kartini Teh Dandang &middot; Portal Area Sales Manager (ASM)</span>
+      </footer>
+    </main>
   </div>
+
+  <script>
+    function selectSalesman(code, name, area, ro, roa, warn, mmt) {
+      // Toggle active class on pills
+      const buttons = document.querySelectorAll('.sales-pill-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      // Update card displays
+      document.getElementById('selected-sales-badge').innerText = 'Sales Terpilih: ' + name;
+      document.getElementById('sales-name-display').innerText = name + ' (' + code + ')';
+      document.getElementById('sales-area-display').innerText = 'Wilayah Rute: ' + area;
+      document.getElementById('sales-ro-display').innerText = ro + ' Outlet';
+      document.getElementById('sales-roa-display').innerText = roa + ' Outlet (' + Math.round((roa/ro)*100) + '%)';
+      document.getElementById('sales-warn-display').innerText = warn + ' Toko Macet';
+      document.getElementById('sales-mmt-display').innerText = mmt + ' Toko (' + Math.round((mmt/ro)*100) + '%)';
+    }
+
+    function filterOutletTable(keyword) {
+      const q = keyword.toLowerCase();
+      const rows = document.querySelectorAll('#outlet-table-body tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    function saveMmtRecord() {
+      const code = document.getElementById('mmt-cardcode').value;
+      const name = document.getElementById('mmt-storename').value;
+      const size = document.getElementById('mmt-size').value;
+      const date = document.getElementById('mmt-date').value;
+      alert('Pencatatan MMT Geber Berhasil Disimpan!\n\nToko: ' + name + ' (' + code + ')\nUkuran: ' + size + ' Meter\nTanggal Pasang: ' + date + '\nStatus: Terverifikasi oleh ASM.');
+    }
+  </script>
 </body>
+
 </html>

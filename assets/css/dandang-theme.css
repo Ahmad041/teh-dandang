@@ -298,25 +298,9 @@ nav {
   border: 2px solid rgba(155, 28, 28, 0.2) !important;
 }
 
-/* ── 6. PAGE HEADING ───────────────────────────────────── */
+/* ── 6. PAGE HEADING — Dihilangkan sesuai instruksi pengguna ──── */
 .page-heading {
-  background: #FFF5F5 !important;
-  border: 1px solid #FDDADA !important;
-  border-radius: 12px !important;
-  border-left: 4px solid #9B1C1C !important;
-  padding: 20px 22px !important;
-}
-
-.page-heading h1 {
-  color: #0F172A !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.5px !important;
-}
-
-.eyebrow {
-  color: #9B1C1C !important;
-  font-weight: 700 !important;
-  letter-spacing: 1.8px !important;
+  display: none !important;
 }
 
 /* ── 7. CARDS ──────────────────────────────────────────── */
@@ -500,10 +484,6 @@ footer a:hover {
     padding: 0 16px !important;
     height: 56px !important;
   }
-
-  .page-heading {
-    padding: 16px 18px !important;
-  }
 }
 
 /* ── 22. Micro animations ───────────────────────────────── */
@@ -554,3 +534,53 @@ select:focus-visible {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Hilangkan header topbar sesuai instruksi: heder di hilangkan */
+.topbar {
+  display: none !important;
+}
+.workspace {
+  padding-top: 16px !important;
+}
+
+/* ── 25. Badge Contrast & Readability Fix (Anti-Nyaru) ──────── */
+.badge {
+  font-family: var(--dan-font) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+}
+
+/* Pastikan warna teks putih solid pada latar belakang berwarna pekat */
+.badge.bg-primary,
+.badge.bg-success,
+.badge.bg-danger,
+.badge.bg-secondary,
+.badge.bg-dark,
+.badge.bg-info,
+.text-bg-primary,
+.text-bg-success,
+.text-bg-danger,
+.text-bg-secondary,
+.text-bg-dark,
+.text-bg-info {
+  color: #ffffff !important;
+}
+
+/* Latar belakang terang dengan teks gelap kontras tinggi */
+.badge.bg-light,
+.text-bg-light {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.badge.bg-warning,
+.text-bg-warning {
+  color: #78350f !important;
+  background-color: #fef08a !important;
+  border: 1px solid #fde047 !important;
+}
+
