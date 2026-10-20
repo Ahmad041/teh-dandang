@@ -69,7 +69,7 @@ Tahap 1 (Monitoring & Analytics):
 | `index.html` | Executive Dashboard (`/dashboard/executive`) |
 | `sales-dashboard.html` | Sales Dashboard (`/dashboard/sales`) |
 | `area.html` | Area Dashboard (`/dashboard/area`) |
-| `drilldown.html` | Grafik Drilldown 7 Level (`/dashboard/drilldown`) |
+| `drilldown.html` | Analisis Penjualan Berjenjang (`/dashboard/drilldown`) |
 | `early-warning.html` | Risk & Fraud / Early Warning (`/dashboard/early-warning`) |
 
 Tahap 2 (Master Data):

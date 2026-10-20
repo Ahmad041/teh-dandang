@@ -552,6 +552,120 @@ aside .sidebar-profile {
   display: none !important;
 }
 
+/* ── 25. Badge Contrast & Readability Fix (Anti-Nyaru) ──────── */
+.badge {
+  font-family: var(--dan-font, inherit) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 1. BADGE STATUS SOFT / LIGHT DENGAN TEKS GELAP KONTRAS TINGGI (Anti-Nyaru) */
+/* Status Kritis / Danger */
+.badge.danger,
+.badge.kritis,
+.badge[class*="danger"]:not(.bg-danger):not(.text-bg-danger),
+td .badge.danger,
+table .badge.danger {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border: 1px solid #f87171 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 2px rgba(153, 27, 27, 0.08) !important;
+}
+
+/* Status Waspada / Warning */
+.badge.warning,
+.badge.waspada,
+.badge[class*="warning"]:not(.bg-warning):not(.text-bg-warning),
+td .badge.warning,
+table .badge.warning {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #f59e0b !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 2px rgba(146, 64, 14, 0.08) !important;
+}
+
+/* Status Baik / Normal / Aktif */
+.badge.success,
+.badge.baik,
+.badge.good,
+td .badge.success,
+table .badge.success,
+.badge:not([class*="danger"]):not([class*="warning"]):not([class*="blue"]):not([class*="neutral"]):not([class*="bg-"]):not([class*="text-bg-"]):not([style*="background"]) {
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+  border: 1px solid #4ade80 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 2px rgba(22, 101, 52, 0.08) !important;
+}
+
+/* Status Netral / Abu-abu */
+.badge.neutral,
+.badge.bg-light,
+.text-bg-light,
+td .badge.neutral,
+table .badge.neutral {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+/* 2. BADGE BACKGROUND SOLID (PEKAT) DENGAN TEKS PUTIH KRISP */
+.badge.bg-primary,
+.badge.bg-success,
+.badge.bg-danger,
+.badge.bg-secondary,
+.badge.bg-dark,
+.badge.bg-info,
+.badge.text-bg-primary,
+.badge.text-bg-success,
+.badge.text-bg-danger,
+.badge.text-bg-secondary,
+.badge.text-bg-dark,
+.badge.text-bg-info,
+.badge[style*="#9B1C1C"],
+.badge[style*="#9b1c1c"],
+.badge[style*="background:#9B1C1C"],
+.badge[style*="background: #9B1C1C"],
+.badge[style*="background:#9b1c1c"],
+.badge[style*="background: #9b1c1c"],
+.badge[style*="background:#1e40af"],
+.badge[style*="background:#15803d"],
+.badge[style*="background:#6d28d9"] {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* Khusus rank nomor 1, 2, 3, 4, 5 dalam tabel (ASM / Sales) */
+td .badge.bg-success,
+td .badge.bg-primary,
+td .badge.bg-secondary,
+td .badge.bg-danger,
+td .badge.bg-dark {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+}
+
+/* Warning solid bootstrap tetap teks gelap */
+.badge.bg-warning,
+.text-bg-warning,
+.badge.bg-warning.text-dark {
+  color: #78350f !important;
+  background-color: #fef08a !important;
+  border: 1px solid #fde047 !important;
+}
+
 /* ── 26. Profile di Pojok Kanan Atas (Tetap di Atas, Tidak Melayang) ── */
 .top-right-profile-widget {
   position: relative !important;

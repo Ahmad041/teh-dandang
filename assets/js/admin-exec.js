@@ -800,7 +800,7 @@
           '<td class="numeric">' + formatRupiah(i.actual) + '</td>' +
           '<td class="numeric mono ' + (gap >= 0 ? "up-text" : "down-text") + '">' + (gap >= 0 ? "+" : "−") + formatRupiah(Math.abs(gap)) + '</td>' +
           '<td class="numeric mono">' + i.achievement.toFixed(1) + '%</td>' +
-          '<td>' + (i.statusEmoji === "🔴" ? '<span class="badge danger">Kritis</span>' : i.statusEmoji === "🟡" ? '<span class="badge warning">Waspada</span>' : '<span class="badge">Baik</span>') + '</td>' +
+          '<td>' + (i.statusEmoji === "🔴" ? '<span class="badge danger">Kritis</span>' : i.statusEmoji === "🟡" ? '<span class="badge warning">Waspada</span>' : '<span class="badge success">Baik</span>') + '</td>' +
           '<td>' + action + '</td></tr>';
       }).join("") || '<tr><td class="table-empty" colspan="7">Tidak ada data.</td></tr>';
     }

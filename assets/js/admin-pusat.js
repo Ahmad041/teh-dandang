@@ -72,14 +72,14 @@ function escapeHtml(text) {
   });
 }
 
-/* ---------- Grafik Drilldown 7 Level ---------- */
+/* ---------- Analisis Penjualan Berjenjang ---------- */
 const DRILL_LEVELS = ["Wilayah", "Daerah", "Area", "Salesperson", "Segmen", "Toko", "Produk SKU"];
 let drillChartType = "bar";
 
 function drillStatusBadge(item) {
   if (item.statusEmoji === "🔴") return '<span class="badge danger">Kritis</span>';
   if (item.statusEmoji === "🟡") return '<span class="badge warning">Waspada</span>';
-  return '<span class="badge">Baik</span>';
+  return '<span class="badge success">Baik</span>';
 }
 
 function drillGenerateItems(parentLabel, isLowest) {
@@ -151,8 +151,10 @@ function buildAFTree(month) {
   function item(label, outlets, i) {
     const now = sum(outlets, month), prev = sum(outlets, month - 1);
     const ach = now.t ? now.a / now.t * 100 : 0;
-    return { label: label, target: Math.round(now.t), actual: Math.round(now.a), achievement: ach, growth: prev.a ? (now.a / prev.a - 1) * 100 : 0,
-      statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length] };
+    return {
+      label: label, target: Math.round(now.t), actual: Math.round(now.a), achievement: ach, growth: prev.a ? (now.a / prev.a - 1) * 100 : 0,
+      statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length]
+    };
   }
   function node(title, levelName, depth, groups, childFn) {
     const n = { title: title, levelName: levelName, depth: depth, items: [], children: {} };
@@ -172,8 +174,10 @@ function buildAFTree(month) {
       const tg = o.target * tfactor(month) * share;
       const prevA = o.units[p.code] * p.price * factor(o, month - 1);
       const ach = tg ? a / tg * 100 : 0;
-      n.items.push({ label: p.name, target: Math.round(tg), actual: Math.round(a), achievement: ach, growth: prevA ? (a / prevA - 1) * 100 : 0,
-        statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length] });
+      n.items.push({
+        label: p.name, target: Math.round(tg), actual: Math.round(a), achievement: ach, growth: prevA ? (a / prevA - 1) * 100 : 0,
+        statusEmoji: ach >= 100 ? "🟢" : ach >= 90 ? "🟡" : "🔴", color: COLORS[i % COLORS.length]
+      });
     });
     return n;
   }
@@ -304,12 +308,16 @@ function renderDrill() {
     indexAxis: horizontal ? "y" : "x",
     plugins: {
       legend: { position: "top" },
-      tooltip: { callbacks: { label: function (item) {
-        let value = item.parsed.y;
-        if (horizontal) value = item.parsed.x;
-        if (donut) value = item.parsed;
-        return item.dataset.label + ": Rp " + value.toLocaleString("id-ID") + " Jt";
-      } } }
+      tooltip: {
+        callbacks: {
+          label: function (item) {
+            let value = item.parsed.y;
+            if (horizontal) value = item.parsed.x;
+            if (donut) value = item.parsed;
+            return item.dataset.label + ": Rp " + value.toLocaleString("id-ID") + " Jt";
+          }
+        }
+      }
     },
     onClick: function (_event, elements) {
       if (elements.length && !lowest) drillDown(labels[elements[0].index]);
