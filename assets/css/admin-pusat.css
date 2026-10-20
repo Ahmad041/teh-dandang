@@ -1582,3 +1582,16 @@ table tbody tr[data-href]:hover td { background: #f8fafc; }
 #map-groups .child-row { cursor: pointer; }
 #map-groups .child-row:hover td { background: #f8fafc; }
 #map-groups tbody tr { cursor: default; }
+.toolbar .heading-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.kpi-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 720px) { .kpi-grid.three { grid-template-columns: 1fr; } }
+.warn-card { text-align: left; font: inherit; cursor: pointer; }
+.warn-card.selected { outline: 2px solid var(--primary); }
+.group-sub { display: block; margin-left: 32px; font-size: 11px; }
+.breadcrumb a { color: var(--primary-dark); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.table-scroll.limit { max-height: 620px; overflow-y: auto; }
+.table-scroll.limit thead th { position: sticky; top: 0; z-index: 1; background: #f8fafc; }
+.filter-bar .search-field { flex: 1 1 220px; max-width: 320px; min-height: 36px; margin-left: auto; border-color: #cbd5e1; border-radius: 8px; }
+.filter-bar .search-field input { padding: 8px 0; font-size: 13px; }
+@media (max-width: 720px) { .filter-bar .search-field { max-width: none; flex-basis: 100%; margin-left: 0; } }

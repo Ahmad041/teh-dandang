@@ -55,23 +55,23 @@ Bootstrap CSS 5.3.8 tersedia lewat CDN jsDelivr pada semua halaman. CSS proyek d
 
 Halaman `dashboard OWNER/achievement.html` menggabungkan Target vs Realisasi dan drilldown dalam satu menu, dengan gaya batang aktual biru di atas target abu-abu. Halaman ini memakai satu grafik per level. Dropdown memilih Target vs Realisasi (Rp) atau Barang Terjual (Unit), serta semua barang atau produk tertentu. Pilihan tetap aktif saat menelusuri Nasional → Region → Area → Kabupaten → Kecamatan → Sales → Outlet → Produk. Breadcrumb dan tombol kembali membuka level sebelumnya; klik produk terakhir membuka popup detail. Data grafik ini adalah contoh statis, dengan total anak yang menjumlah ke total induk. Nama produk mengacu pada katalog resmi Teh Dandang.
 
-## Dashboard OWNER (gabungan dari Admin Pusat)
+## Dashboard OWNER
 
-Role Admin Pusat tidak dipakai, jadi seluruh halamannya dipindah ke `dashboard OWNER/`. Halaman dengan nama sama (`index`, `drilldown`, `noo`, `nop`, `master-sales`) memakai versi baru; halaman Owner lain (`achievement`, `visits`, `orders`, `ro`, `gps`, `audit`, dll) tetap ada dan masuk sidebar yang sama.
+Semua halaman dashboard ada di `dashboard OWNER/`. Data contoh dibuat oleh skrip dan disimpan di `assets/js/admin-data.js`.
+
+Struktur data (revisi 20 Okt):
+
+- Wilayah: **Jawa** dan **Luar Jawa** → 9 region (dipegang RSM) → **90 area** (dipegang ASM) → sales → toko → produk.
+- Tim ±1.200 orang: GM per pulau, RSM, ASM, sales, admin & admin gudang.
+- **RO** = Registered Outlet. **ROA** = Registered Outlet Active (beli rutin dalam 1 bulan). Toko wajib dikunjungi tiap 2 minggu.
+- **NOP** dihitung hanya saat toko menambah produk ke-2, ke-3, dst.
+- Produk fast moving (Merah Tubruk, Biru Celup) tanpa kedaluwarsa; slow moving punya risiko kedaluwarsa.
+- Peringatan Dini: RO tidak ROA, risiko kedaluwarsa (produk slow moving di RO tidak ROA > 1 bulan), dan RO belum dikunjungi > 14 hari.
+
+Filter di semua halaman: periode → Wilayah (Jawa / Luar Jawa / region) → Area → Sales → Toko.
 
 File tambahan:
 
-- `assets/css/admin-pusat.css`: gaya tambahan (layout dashboard, datepicker, kartu naik/turun).
-- `assets/js/admin-data.js`: data contoh (Region 1–5 → area → kecamatan → sales → toko → produk).
-- `assets/js/admin-filter.js`: filter periode (datepicker) + wilayah/area/toko, perbandingan periode sebelumnya.
-- `assets/js/admin-exec.js`, `admin-detail.js`, `admin-tracking.js`, `admin-pusat.js`: Executive, halaman detail KPI, live tracking, drilldown, master.
-
-| Halaman | Isi |
-|---|---|
-| `index.html` | Executive Dashboard: 6 KPI (naik/turun vs periode lalu), peta outlet + tren penjualan, produk paling laku, kesehatan outlet, fleet |
-| `penjualan.html`, `effective-call.html`, `noo.html`, `nop.html`, `roa.html`, `ro-item.html` | Detail KPI, turun Wilayah → Area → Toko (level toko berupa tabel) |
-| `peta-outlet.html`, `tren-penjualan.html`, `kesehatan-outlet.html`, `fleet.html`, `notifikasi.html` | Halaman detail pengganti popup |
-| `drilldown.html` | Trend Penjualan 7 level (Wilayah → Area → Kecamatan → Sales → Segmen → Toko → Produk) |
-| `live-tracking.html` | Posisi kendaraan sales (simulasi) |
-| `sales-dashboard.html`, `area.html`, `early-warning.html` | Monitoring lain |
-| `master-*.html`, `sales-detail.html`, `outlet-detail.html` | Master data |
+- `assets/css/admin-pusat.css`: gaya tambahan (layout, pemilih tanggal, kartu naik/turun).
+- `assets/js/admin-filter.js`: filter, perbandingan periode sebelumnya, hierarki wilayah.
+- `assets/js/admin-exec.js`, `admin-detail.js`, `admin-tracking.js`, `admin-pusat.js`: Dashboard Utama, halaman detail, pelacakan, rincian penjualan, data master.

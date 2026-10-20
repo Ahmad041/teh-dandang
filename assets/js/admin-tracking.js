@@ -2,22 +2,22 @@
 (function () {
   if (!window.AF || !document.getElementById("live-map")) return;
   const AF = window.AF, D = AF.D;
-  const PLATE = { R1: "AD", R2: "H", R3: "AA", R4: "K", R5: "R" };
+  const PLATE = { R1: "AD", R2: "H", R3: "AB", R4: "L", R5: "B", R6: "BK", R7: "KT", R8: "DK", R9: "DD" };
   const TYPES = ["GrandMax", "Blindvan", "Canter Box", "Motor Box"];
   const STATUS = {
     moving: { label: "Bergerak", color: "#2563eb", badge: "blue" },
     visit: { label: "Sedang kunjungan", color: "#10b981", badge: "" },
-    idle: { label: "Idle", color: "#f59e0b", badge: "warning" },
-    offline: { label: "Offline", color: "#94a3b8", badge: "neutral" },
+    idle: { label: "Diam", color: "#f59e0b", badge: "warning" },
+    offline: { label: "Tidak terhubung", color: "#94a3b8", badge: "neutral" },
     offroute: { label: "Keluar rute", color: "#ef4444", badge: "danger" }
   };
 
-  // satu kendaraan untuk setiap 2 sales (urut), rute = outlet di kecamatan sales tsb
+  // satu kendaraan untuk setiap 4 sales (urut), rute = toko sales tsb
   let seed = 7;
   function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
   const vehicles = [];
   D.sales.forEach(function (s, i) {
-    if (i % 2) return;
+    if (i % 4) return;
     const stops = D.outlets.filter(function (o) { return o.sales === s.id; });
     if (!stops.length) return;
     const r = rnd();
@@ -58,7 +58,8 @@
   let map, markers = {}, routeLayer, selected = null;
   const regionSel = document.getElementById("lt-region");
   const statusSel = document.getElementById("lt-status");
-  for (const r of D.regions) regionSel.insertAdjacentHTML("beforeend", '<option value="' + r.code + '">' + AF.esc(r.name) + "</option>");
+  for (const pl of D.pulau) regionSel.insertAdjacentHTML("beforeend", '<optgroup label="' + AF.esc(pl.name) + '">' + D.regions.filter(function (r) { return r.pulau === pl.code; }).map(function (r) {
+    return '<option value="' + r.code + '">' + AF.esc(r.name) + "</option>"; }).join("") + "</optgroup>");
 
   function visible() {
     const kw = (document.getElementById("search").value || "").toLowerCase();
@@ -73,7 +74,7 @@
     for (const v of list) c[v.status]++;
     document.getElementById("lt-kpis").innerHTML = [
       ["Kendaraan dipantau", list.length, "neutral"], ["Bergerak / kunjungan", c.moving + c.visit, "good"],
-      ["Idle / offline", c.idle + c.offline, c.idle + c.offline ? "warn" : "good"], ["Keluar rute", c.offroute, c.offroute ? "bad" : "good"]
+      ["Diam / tidak terhubung", c.idle + c.offline, c.idle + c.offline ? "warn" : "good"], ["Keluar rute", c.offroute, c.offroute ? "bad" : "good"]
     ].map(function (k) { return '<article class="card kpi tone-' + k[2] + '"><h2 class="kpi-label">' + k[0] + '</h2><div class="kpi-value">' + k[1] + "</div></article>"; }).join("");
     document.getElementById("lt-legend").innerHTML = Object.keys(STATUS).map(function (k) {
       return '<span><i style="background:' + STATUS[k].color + '"></i>' + STATUS[k].label + " <b>" + c[k] + "</b></span>";

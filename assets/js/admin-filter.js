@@ -1,4 +1,4 @@
-// Filter & agregasi data Admin Pusat (periode, wilayah, area, toko/item). Dipakai Executive dan halaman detail KPI.
+// Filter & agregasi data dashboard (periode, wilayah, area, sales, toko/item). Dipakai Dashboard Utama dan halaman detail.
 (function () {
   const D = window.ADMIN_DATA;
   if (!D) return;
@@ -6,12 +6,26 @@
   const SNAPSHOT = new Date(D.snapshot + "T00:00:00");
   const PRICE = {};
   for (const p of D.products) PRICE[p.code] = p.price;
+  const PULAU = {};
+  for (const p of D.pulau) PULAU[p.code] = p;
   const REGION = {};
   for (const r of D.regions) REGION[r.code] = r;
   const AREA = {};
   for (const a of D.areas) AREA[a.id] = a;
-  const KEC = {};
-  for (const k of D.kecamatan) KEC[k.id] = k;
+
+  // buka data ringkas (array) menjadi objek
+  if (Array.isArray(D.sales[0])) {
+    D.sales = D.sales.map(function (x) { const a = D.areas[x[2]]; return { id: x[0], name: x[1], area: a.id, region: a.region, pulau: a.pulau }; });
+    const codes = D.products.map(function (p) { return p.code; });
+    const STATUS = ["Active", "At Risk", "Inactive"];
+    const RISK = [null, "Belum dikunjungi > 14 hari", "Tidak beli > 1 bulan"];
+    D.outlets = D.outlets.map(function (x) {
+      const s = D.sales[x[4]], units = {};
+      codes.forEach(function (c, i) { units[c] = x[5][i]; });
+      return { id: x[0], name: x[1], lat: x[2], lng: x[3], sales: s.id, area: s.area, region: s.region, pulau: s.pulau, units: units, target: x[6],
+        visits_plan: 2, visits_done: x[7], noo: !!x[8], nop: x[9] >= 0 ? codes[x[9]] : null, status: STATUS[x[10]], risk: RISK[x[10]], slow: x[11] };
+    });
+  }
   const SALES = {};
   for (const s of D.sales) SALES[s.id] = s;
   const OUTLET = {};
@@ -73,11 +87,14 @@
       period: period,
       from: q.get("dari") || "",
       to: q.get("sampai") || "",
+      pulau: q.get("pulau") || "all",
       region: q.get("wilayah") || "all",
       area: q.get("area") || "all",
+      sales: q.get("sales") || "all",
       outlet: q.get("toko") || "all",
       item: q.get("item") || "all"
     };
+    if (st.region !== "all" && REGION[st.region]) st.pulau = REGION[st.region].pulau;
     if (st.period !== "custom" && !PRESET[st.period]) st.period = DEFAULT_PRESET;
     if (st.period === "custom" && (!st.from || !st.to)) st.period = DEFAULT_PRESET;
     return st;
@@ -90,8 +107,10 @@
       q.set("dari", state.from);
       q.set("sampai", state.to);
     }
+    if (state.pulau !== "all") q.set("pulau", state.pulau);
     if (state.region !== "all") q.set("wilayah", state.region);
     if (state.area !== "all") q.set("area", state.area);
+    if (state.sales !== "all") q.set("sales", state.sales);
     if (state.outlet !== "all") q.set("toko", state.outlet);
     if (state.item !== "all") q.set("item", state.item);
     if (extra) for (const k in extra) q.set(k, extra[k]);
@@ -140,8 +159,10 @@
 
   function scopeOutlets(state, ignoreOutlet) {
     return D.outlets.filter(function (o) {
+      if (state.pulau !== "all" && o.pulau !== state.pulau) return false;
       if (state.region !== "all" && o.region !== state.region) return false;
       if (state.area !== "all" && o.area !== state.area) return false;
+      if (state.sales !== "all" && o.sales !== state.sales) return false;
       if (!ignoreOutlet && state.outlet !== "all" && o.id !== state.outlet) return false;
       return true;
     });
@@ -254,22 +275,49 @@
     return '<span class="delta ' + deltaTone(dl, invert) + '"' + (title ? ' title="' + esc(title) + '"' : "") + ">" + dl.text + "</span>";
   }
 
-  // level anak sesuai filter: semua -> wilayah, wilayah -> area, area -> toko
+  // level anak sesuai filter: semua -> pulau -> wilayah (region) -> area -> sales -> toko
   function childGroups(state) {
     const outlets = scopeOutlets(state, true);
+    const by = function (key, id) { return outlets.filter(function (o) { return o[key] === id; }); };
+    if (state.pulau === "all" && state.region === "all") {
+      return { level: "Pulau", key: "pulau", groups: D.pulau.map(function (p) { return { id: p.code, name: p.name, sub: "GM " + p.gm, outlets: by("pulau", p.code) }; }) };
+    }
     if (state.region === "all") {
-      return { level: "Wilayah", key: "wilayah", groups: D.regions.map(function (r) {
-        return { id: r.code, name: r.name, outlets: outlets.filter(function (o) { return o.region === r.code; }) };
+      return { level: "Wilayah", key: "wilayah", groups: D.regions.filter(function (r) { return r.pulau === state.pulau; }).map(function (r) {
+        return { id: r.code, name: r.name, sub: "RSM " + r.rsm, outlets: by("region", r.code) };
       }) };
     }
     if (state.area === "all") {
       return { level: "Area", key: "area", groups: D.areas.filter(function (a) { return a.region === state.region; }).map(function (a) {
-        return { id: a.id, name: a.name, outlets: outlets.filter(function (o) { return o.area === a.id; }) };
+        return { id: a.id, name: a.name, sub: "ASM " + a.asm, outlets: by("area", a.id) };
+      }) };
+    }
+    if (state.sales === "all") {
+      return { level: "Sales", key: "sales", groups: D.sales.filter(function (x) { return x.area === state.area; }).map(function (x) {
+        return { id: x.id, name: x.name, sub: x.id, outlets: by("sales", x.id) };
       }) };
     }
     return { level: "Toko", key: "toko", groups: outlets.map(function (o) {
       return { id: o.id, name: o.name, outlets: [o], outlet: o };
     }) };
+  }
+
+  // set filter ke satu grup hasil childGroups
+  function drillPatch(key, id) {
+    if (key === "pulau") return { pulau: id, region: "all", area: "all", sales: "all", outlet: "all" };
+    if (key === "wilayah") return { pulau: REGION[id].pulau, region: id, area: "all", sales: "all", outlet: "all" };
+    if (key === "area") return { area: id, sales: "all", outlet: "all" };
+    if (key === "sales") return { sales: id, outlet: "all" };
+    return { outlet: id };
+  }
+
+  function scopeName(state) {
+    if (state.outlet !== "all") return OUTLET[state.outlet].name;
+    if (state.sales !== "all") return SALES[state.sales].name;
+    if (state.area !== "all") return AREA[state.area].name;
+    if (state.region !== "all") return REGION[state.region].name;
+    if (state.pulau !== "all") return PULAU[state.pulau].name;
+    return "Semua Wilayah";
   }
 
   function rupiah(v, short) {
@@ -404,36 +452,61 @@
         return '<option value="' + esc(x.id) + '"' + (x.id === value ? " selected" : "") + ">" + esc(x.name) + "</option>";
       }).join("");
     }
+    let searchField = null;
     function draw() {
-      const regions = D.regions.map(function (r) { return { id: r.code, name: r.name }; });
+      // kolom cari disimpan dulu supaya tidak ikut terhapus saat filter digambar ulang
+      searchField = searchField || document.querySelector(".toolbar .search-field");
+      if (searchField && searchField.parentNode) searchField.parentNode.removeChild(searchField);
+      // Wilayah: Jawa / Luar Jawa (semua region di dalamnya) atau satu region
+      const wil = state.region !== "all" ? state.region : state.pulau !== "all" ? "P:" + state.pulau : "all";
+      const wilOpts = '<option value="all">Semua Wilayah</option>' + D.pulau.map(function (p) {
+        return '<optgroup label="' + esc(p.name) + '"><option value="P:' + p.code + '"' + (wil === "P:" + p.code ? " selected" : "") + ">Semua " + esc(p.name) + "</option>" +
+          D.regions.filter(function (r) { return r.pulau === p.code; }).map(function (r) {
+            return '<option value="' + r.code + '"' + (wil === r.code ? " selected" : "") + ">" + esc(r.name) + "</option>";
+          }).join("") + "</optgroup>";
+      }).join("");
       const areas = state.region === "all" ? [] : D.areas.filter(function (a) { return a.region === state.region; });
-      const outlets = state.area === "all" ? [] : D.outlets.filter(function (o) { return o.area === state.area; }).map(function (o) { return { id: o.id, name: o.name }; });
+      const sales = state.area === "all" ? [] : D.sales.filter(function (x) { return x.area === state.area; });
+      const outlets = state.sales === "all" ? [] : D.outlets.filter(function (o) { return o.sales === state.sales; }).map(function (o) { return { id: o.id, name: o.name }; });
       const items = D.products.map(function (p) { return { id: p.code, name: p.name }; });
-      const dirty = state.period !== DEFAULT_PRESET || state.region !== "all" || state.area !== "all" || state.outlet !== "all" || state.item !== "all";
+      const dirty = state.period !== DEFAULT_PRESET || wil !== "all" || state.item !== "all";
       container.innerHTML =
         '<div class="filter-bar">' +
         '<div class="dp" id="f-date"></div>' +
-        '<div class="filter-field"><label class="sr-only" for="f-region">Wilayah</label><select id="f-region">' + opts(regions, state.region, "Semua Wilayah") + "</select></div>" +
+        '<div class="filter-field"><label class="sr-only" for="f-region">Wilayah</label><select id="f-region">' + wilOpts + "</select></div>" +
         '<div class="filter-field"><label class="sr-only" for="f-area">Area</label><select id="f-area"' + (state.region === "all" ? " disabled" : "") + ">" + opts(areas, state.area, "Semua Area") + "</select></div>" +
         (third === "item"
-          ? '<div class="filter-field"><label class="sr-only" for="f-item">Item</label><select id="f-item">' + opts(items, state.item, "Semua Item") + "</select></div>"
+          ? '<div class="filter-field"><label class="sr-only" for="f-item">Produk</label><select id="f-item">' + opts(items, state.item, "Semua Produk") + "</select></div>"
           : third === "none" ? ""
-          : '<div class="filter-field"><label class="sr-only" for="f-outlet">Toko</label><select id="f-outlet"' + (state.area === "all" ? " disabled" : "") + ">" + opts(outlets, state.outlet, "Semua Toko") + "</select></div>") +
+          : '<div class="filter-field"><label class="sr-only" for="f-sales">Sales</label><select id="f-sales"' + (state.area === "all" ? " disabled" : "") + ">" + opts(sales, state.sales, "Semua Sales") + "</select></div>" +
+            '<div class="filter-field"><label class="sr-only" for="f-outlet">Toko</label><select id="f-outlet"' + (state.sales === "all" ? " disabled" : "") + ">" + opts(outlets, state.outlet, "Semua Toko") + "</select></div>") +
         (dirty ? '<button type="button" class="button ghost" id="f-reset">Reset</button>' : "") +
         "</div>";
+      // kolom cari ikut di baris filter (satu kartu)
+      const sf = searchField;
+      if (sf && !sf.hidden) container.querySelector(".filter-bar").appendChild(sf);
+      const tb = document.querySelector(".toolbar");
+      if (tb && !tb.children.length) tb.hidden = true;
       datePicker(container.querySelector("#f-date"), state, function (patch) {
         for (const k in patch) state[k] = patch[k];
         commit();
       });
-      container.querySelector("#f-region").onchange = function () { state.region = this.value; state.area = "all"; state.outlet = "all"; commit(); };
-      container.querySelector("#f-area").onchange = function () { state.area = this.value; state.outlet = "all"; commit(); };
+      container.querySelector("#f-region").onchange = function () {
+        const v = this.value;
+        state.pulau = v === "all" ? "all" : v.indexOf("P:") === 0 ? v.slice(2) : REGION[v].pulau;
+        state.region = v === "all" || v.indexOf("P:") === 0 ? "all" : v;
+        state.area = "all"; state.sales = "all"; state.outlet = "all"; commit();
+      };
+      container.querySelector("#f-area").onchange = function () { state.area = this.value; state.sales = "all"; state.outlet = "all"; commit(); };
+      const sl = container.querySelector("#f-sales");
+      if (sl) sl.onchange = function () { state.sales = this.value; state.outlet = "all"; commit(); };
       const o = container.querySelector("#f-outlet");
       if (o) o.onchange = function () { state.outlet = this.value; commit(); };
       const it = container.querySelector("#f-item");
       if (it) it.onchange = function () { state.item = this.value; commit(); };
       const rs = container.querySelector("#f-reset");
       if (rs) rs.onclick = function () {
-        state.period = DEFAULT_PRESET; state.from = ""; state.to = ""; state.region = "all"; state.area = "all"; state.outlet = "all"; state.item = "all"; commit();
+        state.period = DEFAULT_PRESET; state.from = ""; state.to = ""; state.pulau = "all"; state.region = "all"; state.area = "all"; state.sales = "all"; state.outlet = "all"; state.item = "all"; commit();
       };
     }
     function syncLinks() {
@@ -459,9 +532,9 @@
   }
 
   window.AF = {
-    D: D, PRICE: PRICE, REGION: REGION, AREA: AREA, KEC: KEC, SALES: SALES, OUTLET: OUTLET, MONTHS: MONTHS,
+    D: D, PRICE: PRICE, PULAU: PULAU, REGION: REGION, AREA: AREA, SALES: SALES, OUTLET: OUTLET, MONTHS: MONTHS,
     readState: readState, stateQuery: stateQuery, periodInfo: periodInfo, scopeOutlets: scopeOutlets, outletActual: outletActual,
-    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, childGroups: childGroups, renderFilterBar: renderFilterBar,
+    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, childGroups: childGroups, drillPatch: drillPatch, scopeName: scopeName, renderFilterBar: renderFilterBar,
     rupiah: rupiah, num: num, pct: pct, tone: tone, esc: esc
   };
 })();

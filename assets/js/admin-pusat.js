@@ -72,7 +72,7 @@ function escapeHtml(text) {
   });
 }
 
-/* ---------- Grafik Drilldown 7 Level ---------- */
+/* ---------- Rincian Penjualan 7 level ---------- */
 const DRILL_LEVELS = ["Nasional", "Region", "Area", "Kabupaten", "Kecamatan", "Salesperson", "Outlet (SKU)", "Produk SKU"];
 let drillChartType = "bar";
 
@@ -104,9 +104,13 @@ function initDrill() {
     sel.innerHTML = window.AF.D.trend.labels.map(function (l, i) { return '<option value="' + i + '"' + (i === month ? " selected" : "") + ">" + l + " 2026</option>"; }).join("");
     document.getElementById("drill-month-field").hidden = false;
     window.drillState = [buildAFTree(month)];
-    const reg = q.get("wilayah");
-    if (reg && window.AF.REGION[reg]) drillDown(window.AF.REGION[reg].name);
-    else renderDrill();
+    const reg = q.get("wilayah"), pul = q.get("pulau");
+    const R = window.AF.REGION[reg], P = window.AF.PULAU[pul || (R && R.pulau)];
+    if (P) {
+      window.drillState.push(window.drillState[0].children[P.name]);
+      if (R) window.drillState.push(drillCurrent().children[R.name]);
+    }
+    renderDrill();
     return;
   }
   const data = JSON.parse(source.textContent);
@@ -164,7 +168,7 @@ function buildAFTree(month) {
     return n;
   }
   function productNode(o) {
-    const n = { title: "Toko: " + o.name + " · " + mName, levelName: "Produk SKU", depth: 7, isLowest: true, items: [] };
+    const n = { title: o.name + " · " + mName, levelName: "Toko", depth: 6, isLowest: true, items: [] };
     D.products.forEach(function (p, i) {
       const f = factor(o, month);
       const a = o.units[p.code] * p.price * f;
@@ -178,15 +182,18 @@ function buildAFTree(month) {
     return n;
   }
   const by = function (list, key, id) { return list.filter(function (o) { return o[key] === id; }); };
-  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.regions.map(function (r) { return { label: r.name, id: r.code, outlets: by(D.outlets, "region", r.code) }; }), function (rg) {
-    return node(rg.label + " · " + mName, "Wilayah", 2, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
-      return node("Area " + ag.label + " · " + mName, "Area", 3, D.kecamatan.filter(function (k) { return k.area === ag.id; }).map(function (k) { return { label: "Kec. " + k.name, id: k.id, outlets: by(ag.outlets, "kecamatan", k.id) }; }), function (kg) {
-        return node(kg.label + " · " + mName, "Kecamatan", 4, D.sales.filter(function (s) { return s.kecamatan === kg.id; }).map(function (s) { return { label: "Sales: " + s.name, id: s.id, outlets: by(kg.outlets, "sales", s.id) }; }), function (sg) {
-          const segs = ["GT", "MT", "HOREKA"].filter(function (s) { return sg.outlets.some(function (o) { return o.segment === s; }); });
-          return node(sg.label + " · " + mName, "Salesperson", 5, segs.map(function (s) { return { label: "Segmen " + s, id: s, outlets: by(sg.outlets, "segment", s) }; }), function (seg) {
-            return node(sg.label + " · " + seg.label + " · " + mName, "Segmen", 6, seg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; }), function (og) {
-              return productNode(og.o);
-            });
+  // label harus unik di satu level (dipakai sebagai kunci anak)
+  function uniq(groups) {
+    const seen = {};
+    for (const g of groups) { if (seen[g.label]) g.label += " (" + g.id + ")"; seen[g.label] = 1; }
+    return groups;
+  }
+  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.pulau.map(function (p) { return { label: p.name, id: p.code, outlets: by(D.outlets, "pulau", p.code) }; }), function (pg) {
+    return node(pg.label + " · " + mName, "Pulau", 2, D.regions.filter(function (r) { return r.pulau === pg.id; }).map(function (r) { return { label: r.name, id: r.code, outlets: by(pg.outlets, "region", r.code) }; }), function (rg) {
+      return node(rg.label + " · " + mName, "Wilayah", 3, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
+        return node(ag.label + " · " + mName, "Area", 4, uniq(D.sales.filter(function (x) { return x.area === ag.id; }).map(function (x) { return { label: "Sales: " + x.name, id: x.id, outlets: by(ag.outlets, "sales", x.id) }; })), function (sg) {
+          return node(sg.label + " · " + mName, "Sales", 5, uniq(sg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; })), function (og) {
+            return productNode(og.o);
           });
         });
       });
@@ -249,7 +256,7 @@ function renderDrill() {
   const totalTarget = items.reduce(function (sum, i) { return sum + i.target; }, 0);
   const totalActual = items.reduce(function (sum, i) { return sum + i.actual; }, 0);
 
-  document.getElementById("drill-depth").textContent = "Level " + depth + " dari 7";
+  document.getElementById("drill-depth").textContent = "Level " + depth + " dari 6";
   document.getElementById("drill-back").disabled = window.drillState.length <= 1;
   document.getElementById("drill-reset").disabled = window.drillState.length <= 1;
 
@@ -266,7 +273,7 @@ function renderDrill() {
   document.getElementById("drill-achievement").textContent = "Capaian: " + (totalTarget ? (totalActual / totalTarget * 100).toFixed(1) : 0) + "%";
   if (document.getElementById("drill-status")) document.getElementById("drill-status").textContent = lowest ? "Level terbawah (Produk SKU)" : "Level " + depth + " (bisa diklik)";
   document.getElementById("drill-chart-title").textContent = "Grafik Penjualan: " + node.title;
-  document.getElementById("drill-instruction").textContent = lowest ? "Level terbawah" : "Klik batang untuk turun ke level " + (depth + 1);
+  document.getElementById("drill-instruction").textContent = "";
 
   for (const button of document.querySelectorAll("[data-drill-type]")) button.setAttribute("aria-pressed", button.dataset.drillType === drillChartType);
 
@@ -276,7 +283,7 @@ function renderDrill() {
   const body = document.getElementById("drill-rows");
   body.innerHTML = rows.map(function (i) {
     const growth = (i.growth > 0 ? "+" : "") + i.growth.toFixed(1) + "%";
-    const action = lowest ? '<span class="subtext">Level terbawah</span>' : '<button class="detail-button" onclick="drillDown(' + escapeHtml(JSON.stringify(i.label)) + ')">Drill Down</button>';
+    const action = lowest ? "" : '<button class="detail-button" onclick="drillDown(' + escapeHtml(JSON.stringify(i.label)) + ')">Rincian</button>';
     const gap = i.actual - i.target;
     const share = totalActual ? i.actual / totalActual * 100 : 0;
     return '<tr class="drill-row"><td><strong>' + escapeHtml(i.label) + '</strong></td><td class="numeric">' + formatRupiah(i.target) + '</td><td class="numeric">' + formatRupiah(i.actual) +
@@ -396,7 +403,7 @@ function renderArea() {
     const selected = a.name === areaState.area;
     const cls = a.status_color === "🔴" ? "danger" : a.status_color === "🟡" ? "warning" : "";
     return '<button type="button" class="region-card area-pick' + (selected ? " selected" : "") + '" aria-pressed="' + selected + '" onclick="selectArea(' + escapeHtml(JSON.stringify(a.name)) + ')">' +
-      '<div class="region-top"><h3>' + escapeHtml(a.name) + '</h3><span class="badge ' + cls + '">' + a.achievement + '%</span></div><p>Achievement</p></button>';
+      '<div class="region-top"><h3>' + escapeHtml(a.name) + '</h3><span class="badge ' + cls + '">' + a.achievement + '%</span></div><p>Capaian</p></button>';
   }).join("");
 
   const kabSelect = document.getElementById("area-kab");
@@ -431,7 +438,7 @@ function renderArea() {
     for (const c of k.kecamatan) {
       if (areaState.kec !== "all" && c.name !== areaState.kec) continue;
       const rate = c.target_outlets ? c.actual_outlets / c.target_outlets * 100 : 0;
-      const status = rate >= 90 ? '<span class="badge">Excellent</span>' : rate >= 75 ? '<span class="badge warning">Good</span>' : '<span class="badge danger">Low</span>';
+      const status = rate >= 90 ? '<span class="badge">Sangat baik</span>' : rate >= 75 ? '<span class="badge warning">Baik</span>' : '<span class="badge danger">Rendah</span>';
       rows.push("<tr><td>" + escapeHtml(k.name) + "</td><td><strong>" + escapeHtml(c.name) + '</strong></td><td class="numeric mono">' + c.target_outlets + ' Toko</td><td class="numeric mono">' + c.actual_outlets +
         ' Toko</td><td class="numeric mono">' + (Math.round(rate * 10) / 10) + "%</td><td>" + status + "</td></tr>");
     }
@@ -546,7 +553,10 @@ function drawAdminChart(canvas) {
   if (donut) options.cutout = "62%";
   else {
     const valueAxis = { beginAtZero: true, max: cfg.yMax, ticks: { color: "#475569", font: { size: 11 } }, grid: { color: "#eef2f7" } };
+    if (cfg.tickPrefix || cfg.tickSuffix) valueAxis.ticks.callback = function (v) { return (cfg.tickPrefix || "") + Number(v).toLocaleString("id-ID") + (cfg.tickSuffix || ""); };
+    if (cfg.stacked) { valueAxis.stacked = true; }
     const catAxis = { grid: { display: false }, ticks: { color: "#1e293b", font: { size: 12 } } };
+    if (cfg.stacked) catAxis.stacked = true;
     options.scales = horizontal ? { x: valueAxis, y: catAxis } : { x: catAxis, y: valueAxis };
     labelRoom(options);
   }
@@ -609,12 +619,12 @@ function initSalesDetail() {
     document.getElementById("sales-detail").hidden = true;
     return;
   }
-  document.title = "Detail Sales - " + s.name + " | Teh Dandang OWNER";
+  document.title = "Detail Sales - " + s.name + " | Teh Dandang";
   document.getElementById("page-title").textContent = s.name + " (NPK: " + s.npk + ")";
-  document.getElementById("breadcrumb").textContent = "Detail Sales";
+  document.getElementById("breadcrumb").textContent = s.name;
   document.getElementById("page-description").textContent = "SAP SlpCode: " + s.slp_code + " · Area: " + s.area + " (" + s.region + ")";
   document.getElementById("sd-actual").textContent = rupiahFull(s.actual);
-  document.getElementById("sd-ach").textContent = "Achievement: " + s.achievement + "% dari target " + rupiahFull(s.target);
+  document.getElementById("sd-ach").textContent = "Capaian: " + s.achievement + "% dari target " + rupiahFull(s.target);
   document.getElementById("sd-ro").textContent = s.ro_rate + "%";
   document.getElementById("sd-roa").textContent = s.roa_rate + "%";
   document.getElementById("sd-ec").textContent = s.ec_rate + "%";
@@ -642,9 +652,9 @@ function initOutletDetail() {
     document.getElementById("outlet-detail").hidden = true;
     return;
   }
-  document.title = "Detail Outlet - " + o.card_name + " | Teh Dandang OWNER";
+  document.title = "Detail Outlet - " + o.card_name + " | Teh Dandang";
   document.getElementById("page-title").textContent = o.card_name;
-  document.getElementById("breadcrumb").textContent = "Detail Outlet";
+  document.getElementById("breadcrumb").textContent = o.card_name;
   document.getElementById("page-description").textContent = "SAP CardCode: " + o.card_code + " · Market: " + o.market + " · Sales: " + o.sales_name;
   document.getElementById("od-ro").innerHTML = roBadge("RO Status: " + o.ro_status).replace('class="badge "', 'class="badge ' + (o.ro_status === "Inactive" ? "danger" : o.ro_status === "Warning" ? "warning" : "") + '"');
   document.getElementById("od-profile").innerHTML = definitionList([
@@ -672,7 +682,10 @@ initOutletDetail();
 // Sembunyikan kolom pencarian di halaman yang tidak punya tabel untuk dicari.
 if (!document.querySelector("table[data-filterable]") && !document.getElementById("drill-data") && !document.getElementById("live-map")) {
   const toolbar = document.querySelector(".toolbar");
-  if (toolbar) toolbar.hidden = true;
+  if (toolbar) {
+    toolbar.querySelector(".search-field").hidden = true;
+    if (toolbar.children.length === 1) toolbar.hidden = true;
+  }
 }
 
 /* ---------- Peta persebaran sales (Leaflet) ---------- */
@@ -712,4 +725,5 @@ function initSalesMap() {
 }
 
 document.addEventListener("DOMContentLoaded", initSalesMap);
+
 
