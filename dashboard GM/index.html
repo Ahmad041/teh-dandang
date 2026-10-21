@@ -41,6 +41,195 @@
     .table-custom th { background: #f8fafc; color: #475569; font-weight: 700; padding: 9px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }
     .table-custom td { padding: 9px 12px; font-size: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
     .risk-stat-box { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
+
+    /* Area Row Clickable & Sales Drill-down */
+    .area-row-clickable {
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease;
+    }
+    .area-row-clickable:hover {
+      background-color: #f8fafc !important;
+    }
+    .area-row-clickable.is-expanded {
+      background-color: #f5f3ff !important;
+      border-left: 3px solid #7c3aed;
+    }
+    .drilldown-chevron {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 9px;
+      font-weight: 800;
+      margin-right: 6px;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .area-row-clickable:hover .drilldown-chevron {
+      background: #9B1C1C;
+      color: #fff;
+    }
+    .area-row-clickable.is-expanded .drilldown-chevron {
+      transform: rotate(90deg);
+      background: #7c3aed;
+      color: #fff;
+    }
+    .drilldown-sales-row {
+      display: none;
+      background: #faf5ff;
+    }
+    .drilldown-sales-row.is-open {
+      display: table-row;
+      animation: fadeInRow 0.22s ease forwards;
+    }
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .drilldown-card-inner {
+      background: #ffffff;
+      border: 1px solid #ddd6fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 8px 6px 12px 6px;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.06);
+    }
+    .sales-subtable th {
+      background: #f3e8ff !important;
+      color: #581c87 !important;
+      font-size: 11px !important;
+      padding: 7px 10px !important;
+      font-weight: 700 !important;
+      border-bottom: 1px solid #d8b4fe !important;
+    }
+    .sales-subtable td {
+      font-size: 11.5px !important;
+      padding: 7px 10px !important;
+      border-bottom: 1px solid #f3e8ff !important;
+    }
+    .sales-subtable tr:hover td {
+      background: #faf5ff !important;
+    }
+
+    /* Kontribusi Progress Bar */
+    .contrib-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 95px;
+    }
+    .contrib-val {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 12px;
+    }
+    .contrib-bar {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .contrib-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #9B1C1C, #ea580c);
+    }
+
+    /* Sparkline Mini Box */
+    .sparkline-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sparkline-svg {
+      overflow: visible;
+      flex-shrink: 0;
+    }
+
+    /* Territory Chart Pill Button Toggle */
+    .chart-pill-btn {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      line-height: 1.2;
+    }
+    .chart-pill-btn.active {
+      background: #9B1C1C;
+      color: #ffffff;
+      border-color: #9B1C1C;
+    }
+
+    /* Sticky first column for tables (Variant & Risk tables) */
+    .table-sticky-first th:first-child {
+      position: sticky;
+      left: 0;
+      background: #f8fafc !important;
+      z-index: 3;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.06);
+    }
+    .table-sticky-first td:first-child {
+      position: sticky;
+      left: 0;
+      background: #ffffff !important;
+      z-index: 2;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.06);
+    }
+    .table-sticky-first tr:hover td:first-child {
+      background: #f8fafc !important;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+
+    /* Risk Card Clickable & Filter Tabs */
+    .risk-stat-card-clickable {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.18s ease;
+      position: relative;
+    }
+    .risk-stat-card-clickable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      border-color: #94a3b8 !important;
+    }
+    .risk-stat-card-clickable.active-card {
+      box-shadow: 0 0 0 2px #9B1C1C, 0 6px 16px rgba(155, 28, 28, 0.12);
+      border-color: #9B1C1C !important;
+    }
+    .risk-area-pill-btn {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .risk-area-pill-btn:hover {
+      background: #f1f5f9;
+    }
+    .risk-area-pill-btn.active {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
   </style>
 </head>
 
@@ -167,7 +356,7 @@
           <!-- Seksi 1: Pencapaian Target & KPI Agregat Nasional GM (Bullet 1 & 2) -->
           <div class="row g-3 mb-3">
             <!-- 1. Penjualan Aktual vs Target -->
-            <div class="col-12 col-sm-6 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-4 col-xl">
               <div class="kpi-card-custom border-green">
                 <span class="kpi-label">Penjualan Nasional</span>
                 <div class="kpi-value text-success">Rp 95,5 M</div>
@@ -175,7 +364,7 @@
               </div>
             </div>
             <!-- 2. RoA (Outlet Aktif Beli Rutin) -->
-            <div class="col-12 col-sm-6 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-4 col-xl">
               <div class="kpi-card-custom border-green">
                 <span class="kpi-label">Tren RoA (Aktif)</span>
                 <div class="kpi-value text-success">12.180 <small style="font-size:12px; color:#64748b;">Toko</small></div>
@@ -183,7 +372,7 @@
               </div>
             </div>
             <!-- 3. NOO (Outlet Baru Dibuka) -->
-            <div class="col-12 col-sm-6 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-4 col-xl">
               <div class="kpi-card-custom border-blue">
                 <span class="kpi-label">Tren NOO (Baru)</span>
                 <div class="kpi-value text-primary">482 <small style="font-size:12px; color:#64748b;">Toko</small></div>
@@ -191,7 +380,7 @@
               </div>
             </div>
             <!-- 4. NOP (Penetrasi Varian Ke-2+) -->
-            <div class="col-12 col-sm-6 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-4 col-xl">
               <div class="kpi-card-custom border-purple">
                 <span class="kpi-label">Tren NOP (Varian)</span>
                 <div class="kpi-value" style="color:#7c3aed;">4.320 <small style="font-size:12px; color:#64748b;">Toko</small></div>
@@ -199,19 +388,11 @@
               </div>
             </div>
             <!-- 5. RoA Item (SKU Repeat Order) -->
-            <div class="col-12 col-sm-6 col-xl-2">
+            <div class="col-12 col-sm-6 col-md-4 col-xl">
               <div class="kpi-card-custom border-green">
                 <span class="kpi-label">RoA Item (SKU)</span>
                 <div class="kpi-value">4.8 <small style="font-size:12px; color:#64748b;">SKU/Toko</small></div>
                 <span class="kpi-sub"><strong class="text-success">+12%</strong> sebaran varian</span>
-              </div>
-            </div>
-            <!-- 6. Efektivitas Tim & 90 Area -->
-            <div class="col-12 col-sm-6 col-xl-2">
-              <div class="kpi-card-custom border-blue">
-                <span class="kpi-label">Tim &amp; 90 Area</span>
-                <div class="kpi-value">1.200 <small style="font-size:12px; color:#64748b;">Sales</small></div>
-                <span class="kpi-sub"><span class="gm-badge-jawa">72 Jawa</span> · <span class="gm-badge-luar">18 Luar</span></span>
               </div>
             </div>
           </div>
@@ -232,16 +413,22 @@
 
             <div class="col-12 col-lg-4">
               <section class="card h-100">
-                <div class="card-heading d-flex justify-content-between align-items-center mb-2">
-                  <h2 class="heading-title" style="font-size:15px; margin:0;">Distribusi Kontribusi Wilayah</h2>
-                  <span class="badge" style="background:#9B1C1C; color:#fff;">90 Area</span>
+                <div class="card-heading d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                  <div>
+                    <h2 class="heading-title" style="font-size:15px; margin:0;" id="territoryChartTitle">Kontribusi Penjualan per Area</h2>
+                    <span class="text-muted" style="font-size:10.5px;">Pangsa terhadap Omzet Nasional Rp 95,5 M</span>
+                  </div>
+                  <div class="d-flex gap-1" id="territoryChartToggle">
+                    <button type="button" class="chart-pill-btn active" onclick="switchTerritoryChart('area')" id="btnTerritoryArea">Per Area</button>
+                    <button type="button" class="chart-pill-btn" onclick="switchTerritoryChart('macro')" id="btnTerritoryMacro">Jawa vs Luar</button>
+                  </div>
                 </div>
-                <div style="height: 200px; position: relative;">
+                <div style="height: 195px; position: relative;">
                   <canvas id="gmTerritoryChart"></canvas>
                 </div>
-                <div class="d-flex justify-content-around mt-2 pt-2 border-top text-center" style="font-size:12px;">
-                  <div><strong class="text-danger d-block">80% Omzet</strong> Jawa (72 Area)</div>
-                  <div><strong class="text-primary d-block">20% Omzet</strong> Luar Jawa (18 Area)</div>
+                <div class="d-flex justify-content-around mt-2 pt-2 border-top text-center" style="font-size:11.5px;" id="territoryChartFooter">
+                  <div><strong class="text-danger d-block" id="footerAreaTop">Semarang &amp; Demak</strong> Area Tertinggi (5.6%)</div>
+                  <div><strong class="text-primary d-block" id="footerAreaLuar">Medan &amp; Deli</strong> Luar Jawa (3.2%)</div>
                 </div>
               </section>
             </div>
@@ -249,9 +436,17 @@
 
           <!-- Seksi 3: Perbandingan Kinerja Antar-ASM & Area (Bukan Hanya Ranking Sales) (Bullet 1, 3 & Story 1, 2) -->
           <section class="card mb-4" id="asm-performance-section">
-            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
-              <h2 class="heading-title" style="font-size:15px; margin:0;">Perbandingan Kinerja Antar-ASM &amp; Pencapaian Seluruh Area</h2>
-              <span class="badge" style="background:#f8fafc; border:1px solid #cbd5e1; color:#0f172a; font-weight:700;">90 ASM Lapangan</span>
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div>
+                <h2 class="heading-title" style="font-size:15px; margin:0;">Perbandingan Kinerja Antar-ASM &amp; Pencapaian Seluruh Area</h2>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" style="background:#f5f3ff; color:#6b21a8; border:1px solid #ddd6fe; font-weight:700;">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M19 9l-7 7-7-7"></path></svg>
+                  Drill-down Tim Sales Aktif
+                </span>
+                <span class="badge" style="background:#f8fafc; border:1px solid #cbd5e1; color:#0f172a; font-weight:700;">90 ASM Lapangan</span>
+              </div>
             </div>
             <div class="table-scroll" style="border:1px solid #e2e8f0; border-radius:8px;">
               <table class="table-custom" style="width:100%; margin:0;">
@@ -262,78 +457,750 @@
                     <th>Wilayah (RSM)</th>
                     <th>Target Penjualan</th>
                     <th>Realisasi &amp; Capaian</th>
-                    <th>Tren Tim Sales</th>
+                    <th>% Kontribusi</th>
+                    <th>Tren Tim Sales (Sparkline)</th>
                     <th>Kondisi Outlet (RoA %)</th>
                     <th>Penyelesaian Alert SLA</th>
                     <th>Status Kinerja</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><strong>Area Solo Raya</strong></td>
+                  <!-- 1. Solo Raya -->
+                  <tr class="area-row-clickable" onclick="toggleAreaDrilldown('drill-solo', this)" title="Klik untuk drill-down tim sales Solo Raya">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Solo Raya</strong>
+                    </td>
                     <td>Budi Santoso, S.E.</td>
                     <td><span class="gm-badge-jawa">Jateng</span></td>
                     <td>Rp 4,50 M</td>
                     <td><strong class="text-success">Rp 4,85 M</strong> <span class="badge badge-rsm-green">107.8%</span></td>
-                    <td><span style="color:#16a34a; font-weight:600;">+5.2%</span> <small style="color:#64748b;">(42 Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val">5.1%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 4,85 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 25%;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-solo" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.35"/>
+                              <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,16 L14,13 L26,14 L38,9 L48,7 L58,3 L58,20 L2,20 Z" fill="url(#sg-solo)"/>
+                          <path d="M2,16 L14,13 L26,14 L38,9 L48,7 L58,3" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="3" r="2.5" fill="#16a34a"/>
+                        </svg>
+                        <div>
+                          <span style="color:#16a34a; font-weight:700; font-size:11.5px;">+5.2%</span>
+                          <small style="color:#64748b; font-size:10px; display:block;">(42 Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong>89.2%</strong> <small style="color:#16a34a;">(Sehat)</small></td>
-                    <td><span class="badge bg-success">96% Selesai &le; 24 Jam</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-success">96% Selesai &le; 24 Jam</span>
+                        <small style="color:#16a34a; font-weight:700; font-size:11px;">2 Alert Terbuka (Ringan)</small>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-green">Sangat Baik</span></td>
                   </tr>
-                  <tr>
-                    <td><strong>Area Semarang &amp; Demak</strong></td>
+                  <!-- Sub-tabel Drill-down Sales: Area Solo Raya -->
+                  <tr class="drilldown-sales-row" id="drill-solo">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#581c87; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Solo Raya (ASM: Budi Santoso, S.E.)
+                            </strong>
+                            <span class="badge ms-2" style="background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;">5 Salesman Unggulan dari 42 Personil</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 4,50 M</strong> · Realisasi: <strong class="text-success">Rp 4,85 M (107.8%)</strong>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr>
+                                <th>Kode Sales</th>
+                                <th>Nama Salesman &amp; Teritori Rute</th>
+                                <th>Target Penjualan</th>
+                                <th>Aktual Penjualan</th>
+                                <th>% Capaian</th>
+                                <th>Outlet Aktif (RO)</th>
+                                <th>Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0101</span></td>
+                                <td><strong>Eko Prasetyo</strong> <small class="text-muted d-block">Rute: Boyolali Kota &amp; Cepogo</small></td>
+                                <td>Rp 950 Jt</td>
+                                <td><strong class="text-success">Rp 1,08 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">113.7%</span></td>
+                                <td>48 Toko <small class="text-success">(92% ROA)</small></td>
+                                <td><span class="badge bg-success">⭐ Top Performer</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0102</span></td>
+                                <td><strong>Agus Setiawan</strong> <small class="text-muted d-block">Rute: Kota Surakarta Barat &amp; Laweyan</small></td>
+                                <td>Rp 920 Jt</td>
+                                <td><strong class="text-success">Rp 980 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">106.5%</span></td>
+                                <td>44 Toko <small class="text-success">(88% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0103</span></td>
+                                <td><strong>Tri Widodo</strong> <small class="text-muted d-block">Rute: Karanganyar &amp; Palur</small></td>
+                                <td>Rp 880 Jt</td>
+                                <td><strong class="text-success">Rp 940 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">106.8%</span></td>
+                                <td>42 Toko <small class="text-success">(86% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0104</span></td>
+                                <td><strong>Bambang S.</strong> <small class="text-muted d-block">Rute: Sukoharjo &amp; Klaten Utara</small></td>
+                                <td>Rp 900 Jt</td>
+                                <td><strong class="text-success">Rp 960 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">106.7%</span></td>
+                                <td>43 Toko <small class="text-success">(87% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0105</span></td>
+                                <td><strong>Danang Prasojo</strong> <small class="text-muted d-block">Rute: Wonogiri &amp; Sragen</small></td>
+                                <td>Rp 850 Jt</td>
+                                <td><strong>Rp 890 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">104.7%</span></td>
+                                <td>38 Toko <small class="text-success">(84% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Tercapai</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 2. Semarang & Demak -->
+                  <tr class="area-row-clickable" onclick="toggleAreaDrilldown('drill-semarang', this)" title="Klik untuk drill-down tim sales Semarang & Demak">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Semarang &amp; Demak</strong>
+                    </td>
                     <td>Eko Prasetyo, S.Kom.</td>
                     <td><span class="gm-badge-jawa">Jateng</span></td>
                     <td>Rp 5,20 M</td>
                     <td><strong class="text-success">Rp 5,35 M</strong> <span class="badge badge-rsm-green">102.9%</span></td>
-                    <td><span style="color:#16a34a; font-weight:600;">+3.8%</span> <small style="color:#64748b;">(48 Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val">5.6%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 5,35 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 28%;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-smg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.35"/>
+                              <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,14 L14,15 L26,11 L38,12 L48,8 L58,4 L58,20 L2,20 Z" fill="url(#sg-smg)"/>
+                          <path d="M2,14 L14,15 L26,11 L38,12 L48,8 L58,4" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="4" r="2.5" fill="#16a34a"/>
+                        </svg>
+                        <div>
+                          <span style="color:#16a34a; font-weight:700; font-size:11.5px;">+3.8%</span>
+                          <small style="color:#64748b; font-size:10px; display:block;">(48 Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong>86.4%</strong> <small style="color:#16a34a;">(Sehat)</small></td>
-                    <td><span class="badge bg-success">94% Selesai &le; 24 Jam</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-success">94% Selesai &le; 24 Jam</span>
+                        <small style="color:#16a34a; font-weight:700; font-size:11px;">3 Alert Terbuka (Ringan)</small>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-green">Baik</span></td>
                   </tr>
-                  <tr>
-                    <td><strong>Area Surabaya Barat</strong></td>
+                  <!-- Sub-tabel Drill-down Sales: Area Semarang & Demak -->
+                  <tr class="drilldown-sales-row" id="drill-semarang">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#581c87; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Semarang &amp; Demak (ASM: Eko Prasetyo, S.Kom.)
+                            </strong>
+                            <span class="badge ms-2" style="background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;">5 Salesman Unggulan dari 48 Personil</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 5,20 M</strong> · Realisasi: <strong class="text-success">Rp 5,35 M (102.9%)</strong>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr>
+                                <th>Kode Sales</th>
+                                <th>Nama Salesman &amp; Teritori Rute</th>
+                                <th>Target Penjualan</th>
+                                <th>Aktual Penjualan</th>
+                                <th>% Capaian</th>
+                                <th>Outlet Aktif (RO)</th>
+                                <th>Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0201</span></td>
+                                <td><strong>Joko Susilo</strong> <small class="text-muted d-block">Rute: Semarang Tengah &amp; Johar</small></td>
+                                <td>Rp 1,15 M</td>
+                                <td><strong class="text-success">Rp 1,22 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">106.1%</span></td>
+                                <td>52 Toko <small class="text-success">(90% ROA)</small></td>
+                                <td><span class="badge bg-success">⭐ Top Performer</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0202</span></td>
+                                <td><strong>Rahmat Hidayat</strong> <small class="text-muted d-block">Rute: Semarang Barat &amp; Ngaliyan</small></td>
+                                <td>Rp 1,05 M</td>
+                                <td><strong class="text-success">Rp 1,09 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">103.8%</span></td>
+                                <td>46 Toko <small class="text-success">(86% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0203</span></td>
+                                <td><strong>Wahyu Wibowo</strong> <small class="text-muted d-block">Rute: Demak Kota &amp; Bintoro</small></td>
+                                <td>Rp 1,02 M</td>
+                                <td><strong class="text-success">Rp 1,04 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">102.0%</span></td>
+                                <td>43 Toko <small class="text-success">(85% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0204</span></td>
+                                <td><strong>Hendra Wijaya</strong> <small class="text-muted d-block">Rute: Ungaran &amp; Ambarawa</small></td>
+                                <td>Rp 1,00 M</td>
+                                <td><strong>Rp 1,02 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">102.0%</span></td>
+                                <td>41 Toko <small class="text-success">(84% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Tercapai</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0205</span></td>
+                                <td><strong>Arif Pratama</strong> <small class="text-muted d-block">Rute: Sayung &amp; Mranggen</small></td>
+                                <td>Rp 980 Jt</td>
+                                <td><strong>Rp 980 Jt</strong></td>
+                                <td><span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700;">100.0%</span></td>
+                                <td>39 Toko <small class="text-muted">(81% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Tercapai</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 3. Surabaya Barat -->
+                  <tr class="area-row-clickable" onclick="toggleAreaDrilldown('drill-surabaya', this)" title="Klik untuk drill-down tim sales Surabaya Barat">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Surabaya Barat</strong>
+                    </td>
                     <td>Dedi Suherman, M.M.</td>
                     <td><span class="gm-badge-jawa">Jatim</span></td>
                     <td>Rp 4,80 M</td>
                     <td><strong class="text-success">Rp 5,02 M</strong> <span class="badge badge-rsm-green">104.6%</span></td>
-                    <td><span style="color:#16a34a; font-weight:600;">+4.0%</span> <small style="color:#64748b;">(40 Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val">5.3%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 5,02 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 26%;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-sby" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.35"/>
+                              <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,15 L14,13 L26,14 L38,10 L48,6 L58,4 L58,20 L2,20 Z" fill="url(#sg-sby)"/>
+                          <path d="M2,15 L14,13 L26,14 L38,10 L48,6 L58,4" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="4" r="2.5" fill="#16a34a"/>
+                        </svg>
+                        <div>
+                          <span style="color:#16a34a; font-weight:700; font-size:11.5px;">+4.0%</span>
+                          <small style="color:#64748b; font-size:10px; display:block;">(40 Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong>88.0%</strong> <small style="color:#16a34a;">(Sehat)</small></td>
-                    <td><span class="badge bg-success">92% Selesai &le; 24 Jam</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-success">92% Selesai &le; 24 Jam</span>
+                        <small style="color:#16a34a; font-weight:700; font-size:11px;">4 Alert Terbuka (Ringan)</small>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-green">Baik</span></td>
                   </tr>
-                  <tr>
-                    <td><strong>Area Bandung Raya</strong></td>
+                  <!-- Sub-tabel Drill-down Sales: Area Surabaya Barat -->
+                  <tr class="drilldown-sales-row" id="drill-surabaya">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#581c87; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Surabaya Barat (ASM: Dedi Suherman, M.M.)
+                            </strong>
+                            <span class="badge ms-2" style="background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;">4 Salesman Unggulan dari 40 Personil</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 4,80 M</strong> · Realisasi: <strong class="text-success">Rp 5,02 M (104.6%)</strong>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr>
+                                <th>Kode Sales</th>
+                                <th>Nama Salesman &amp; Teritori Rute</th>
+                                <th>Target Penjualan</th>
+                                <th>Aktual Penjualan</th>
+                                <th>% Capaian</th>
+                                <th>Outlet Aktif (RO)</th>
+                                <th>Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0301</span></td>
+                                <td><strong>Fajar Nugroho</strong> <small class="text-muted d-block">Rute: Tandes &amp; Benowo</small></td>
+                                <td>Rp 1,25 M</td>
+                                <td><strong class="text-success">Rp 1,35 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">108.0%</span></td>
+                                <td>54 Toko <small class="text-success">(92% ROA)</small></td>
+                                <td><span class="badge bg-success">⭐ Top Performer</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0302</span></td>
+                                <td><strong>Rudi Hartono</strong> <small class="text-muted d-block">Rute: Dukuh Pakis &amp; Wiyung</small></td>
+                                <td>Rp 1,20 M</td>
+                                <td><strong class="text-success">Rp 1,26 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">105.0%</span></td>
+                                <td>48 Toko <small class="text-success">(88% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0303</span></td>
+                                <td><strong>Slamet Riyadi</strong> <small class="text-muted d-block">Rute: Karangpilang &amp; Jambangan</small></td>
+                                <td>Rp 1,18 M</td>
+                                <td><strong class="text-success">Rp 1,22 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">103.4%</span></td>
+                                <td>44 Toko <small class="text-success">(86% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0304</span></td>
+                                <td><strong>Budi Cahyono</strong> <small class="text-muted d-block">Rute: Perbatasan Gresik Selatan</small></td>
+                                <td>Rp 1,17 M</td>
+                                <td><strong>Rp 1,19 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">101.7%</span></td>
+                                <td>40 Toko <small class="text-success">(84% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Tercapai</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 4. Bandung Raya -->
+                  <tr class="area-row-clickable" onclick="toggleAreaDrilldown('drill-bandung', this)" title="Klik untuk drill-down tim sales Bandung Raya">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Bandung Raya</strong>
+                    </td>
                     <td>Asep Kurniawan</td>
                     <td><span class="gm-badge-jawa">Jabar</span></td>
                     <td>Rp 4,10 M</td>
                     <td><strong>Rp 4,02 M</strong> <span class="badge badge-rsm-yellow">98.0%</span></td>
-                    <td><span style="color:#16a34a; font-weight:600;">+2.0%</span> <small style="color:#64748b;">(36 Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val">4.2%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 4,02 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 21%;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-bdg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.3"/>
+                              <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,12 L14,14 L26,11 L38,13 L48,10 L58,8 L58,20 L2,20 Z" fill="url(#sg-bdg)"/>
+                          <path d="M2,12 L14,14 L26,11 L38,13 L48,10 L58,8" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="8" r="2.5" fill="#16a34a"/>
+                        </svg>
+                        <div>
+                          <span style="color:#16a34a; font-weight:700; font-size:11.5px;">+2.0%</span>
+                          <small style="color:#64748b; font-size:10px; display:block;">(36 Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong>81.5%</strong> <small style="color:#b45309;">(Sedang)</small></td>
-                    <td><span class="badge bg-warning text-dark">85% Selesai</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-warning text-dark">85% Selesai</span>
+                        <small style="color:#b45309; font-weight:700; font-size:11px;">7 Alert Terbuka (Waspada)</small>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-yellow">Cukup</span></td>
                   </tr>
-                  <tr>
-                    <td><strong>Area Medan &amp; Deli</strong></td>
+                  <!-- Sub-tabel Drill-down Sales: Area Bandung Raya -->
+                  <tr class="drilldown-sales-row" id="drill-bandung">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#581c87; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Bandung Raya (ASM: Asep Kurniawan)
+                            </strong>
+                            <span class="badge ms-2" style="background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;">4 Salesman Unggulan dari 36 Personil</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 4,10 M</strong> · Realisasi: <strong class="text-primary">Rp 4,02 M (98.0%)</strong>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr>
+                                <th>Kode Sales</th>
+                                <th>Nama Salesman &amp; Teritori Rute</th>
+                                <th>Target Penjualan</th>
+                                <th>Aktual Penjualan</th>
+                                <th>% Capaian</th>
+                                <th>Outlet Aktif (RO)</th>
+                                <th>Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0401</span></td>
+                                <td><strong>Cecep Supriatna</strong> <small class="text-muted d-block">Rute: Bandung Kulon &amp; Bojongloa</small></td>
+                                <td>Rp 1,05 M</td>
+                                <td><strong class="text-success">Rp 1,08 M</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">102.9%</span></td>
+                                <td>44 Toko <small class="text-success">(84% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0402</span></td>
+                                <td><strong>Dadan Ramdani</strong> <small class="text-muted d-block">Rute: Cimahi &amp; Padalarang</small></td>
+                                <td>Rp 1,04 M</td>
+                                <td><strong>Rp 1,02 M</strong></td>
+                                <td><span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700;">98.1%</span></td>
+                                <td>40 Toko <small class="text-muted">(81% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Cukup</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0403</span></td>
+                                <td><strong>Yayan Mulyana</strong> <small class="text-muted d-block">Rute: Bandung Wetan &amp; Cibeunying</small></td>
+                                <td>Rp 1,02 M</td>
+                                <td><strong>Rp 980 Jt</strong></td>
+                                <td><span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700;">96.1%</span></td>
+                                <td>37 Toko <small class="text-muted">(79% ROA)</small></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Cukup</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0404</span></td>
+                                <td><strong>Iman Santoso</strong> <small class="text-muted d-block">Rute: Ujungberung &amp; Cibiru</small></td>
+                                <td>Rp 990 Jt</td>
+                                <td><strong style="color:#b45309;">Rp 940 Jt</strong></td>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">94.9%</span></td>
+                                <td>35 Toko <small class="text-danger">(76% ROA)</small></td>
+                                <td><span class="badge bg-warning text-dark">Perlu Monitoring</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 5. Medan & Deli -->
+                  <tr class="area-row-clickable" onclick="toggleAreaDrilldown('drill-medan', this)" title="Klik untuk drill-down tim sales Medan & Deli">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Medan &amp; Deli</strong>
+                    </td>
                     <td>Rian Iskandar, S.E.</td>
                     <td><span class="gm-badge-luar">Luar Jawa</span></td>
                     <td>Rp 2,80 M</td>
                     <td><strong class="text-success">Rp 3,05 M</strong> <span class="badge badge-rsm-green">108.9%</span></td>
-                    <td><span style="color:#16a34a; font-weight:600;">+6.5%</span> <small style="color:#64748b;">(28 Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val">3.2%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 3,05 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 16%;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-mdn" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.35"/>
+                              <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,18 L14,15 L26,12 L38,11 L48,6 L58,2 L58,20 L2,20 Z" fill="url(#sg-mdn)"/>
+                          <path d="M2,18 L14,15 L26,12 L38,11 L48,6 L58,2" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="2" r="2.5" fill="#16a34a"/>
+                        </svg>
+                        <div>
+                          <span style="color:#16a34a; font-weight:700; font-size:11.5px;">+6.5%</span>
+                          <small style="color:#64748b; font-size:10px; display:block;">(28 Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong>76.2%</strong> <small style="color:#b45309;">(Ekspansi NOO)</small></td>
-                    <td><span class="badge bg-success">88% Selesai</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-success">88% Selesai</span>
+                        <small style="color:#16a34a; font-weight:700; font-size:11px;">5 Alert Terbuka (Ekspansi)</small>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-green">Baik</span></td>
                   </tr>
-                  <tr style="background:#fff5f5;">
-                    <td><strong>Area Cirebon &amp; Majalengka</strong></td>
+                  <!-- Sub-tabel Drill-down Sales: Area Medan & Deli -->
+                  <tr class="drilldown-sales-row" id="drill-medan">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#581c87; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Medan &amp; Deli (ASM: Rian Iskandar, S.E.)
+                            </strong>
+                            <span class="badge ms-2" style="background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;">4 Salesman Unggulan dari 28 Personil</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 2,80 M</strong> · Realisasi: <strong class="text-success">Rp 3,05 M (108.9%)</strong>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr>
+                                <th>Kode Sales</th>
+                                <th>Nama Salesman &amp; Teritori Rute</th>
+                                <th>Target Penjualan</th>
+                                <th>Aktual Penjualan</th>
+                                <th>% Capaian</th>
+                                <th>Outlet Aktif (RO)</th>
+                                <th>Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0501</span></td>
+                                <td><strong>Zulkifli Lubis</strong> <small class="text-muted d-block">Rute: Medan Kota &amp; Petisah</small></td>
+                                <td>Rp 780 Jt</td>
+                                <td><strong class="text-success">Rp 860 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">110.3%</span></td>
+                                <td>42 Toko <small class="text-success">(88% ROA)</small></td>
+                                <td><span class="badge bg-success">⭐ Top Performer</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0502</span></td>
+                                <td><strong>Faisal Harahap</strong> <small class="text-muted d-block">Rute: Medan Amplas &amp; Johor</small></td>
+                                <td>Rp 720 Jt</td>
+                                <td><strong class="text-success">Rp 790 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">109.7%</span></td>
+                                <td>39 Toko <small class="text-success">(85% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0503</span></td>
+                                <td><strong>Boy Simanjuntak</strong> <small class="text-muted d-block">Rute: Deli Serdang Barat &amp; Lubuk Pakam</small></td>
+                                <td>Rp 660 Jt</td>
+                                <td><strong class="text-success">Rp 715 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">108.3%</span></td>
+                                <td>36 Toko <small class="text-success">(82% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700;">SLS-0504</span></td>
+                                <td><strong>Ahmad Siregar</strong> <small class="text-muted d-block">Rute: Belawan &amp; Medan Labuhan</small></td>
+                                <td>Rp 640 Jt</td>
+                                <td><strong class="text-success">Rp 685 Jt</strong></td>
+                                <td><span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">107.0%</span></td>
+                                <td>33 Toko <small class="text-success">(80% ROA)</small></td>
+                                <td><span class="badge" style="background:#dbeafe; color:#1e40af;">Baik</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 6. Cirebon & Majalengka (Underperforming Area) -->
+                  <tr class="area-row-clickable" style="background:#fff5f5;" onclick="toggleAreaDrilldown('drill-cirebon', this)" title="Klik untuk drill-down tim sales Cirebon (Area Kritis)">
+                    <td>
+                      <span class="drilldown-chevron">▶</span>
+                      <strong>Area Cirebon &amp; Majalengka</strong>
+                    </td>
                     <td>Ahmad Fauzi</td>
                     <td><span class="gm-badge-jawa">Jabar</span></td>
                     <td>Rp 2,20 M</td>
                     <td><strong class="text-danger">Rp 1,82 M</strong> <span class="badge badge-rsm-red">82.7%</span></td>
-                    <td><span style="color:#dc2626; font-weight:600;">-2.1%</span> <small style="color:#dc2626;">(Drop Sales)</small></td>
+                    <td>
+                      <div class="contrib-wrap">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="contrib-val text-danger">1.9%</span>
+                          <small class="text-muted" style="font-size:10px;">Rp 1,82 M</small>
+                        </div>
+                        <div class="contrib-bar"><div class="contrib-fill" style="width: 10%; background:#dc2626;"></div></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sparkline-box">
+                        <svg class="sparkline-svg" width="60" height="20" viewBox="0 0 60 20" fill="none">
+                          <defs>
+                            <linearGradient id="sg-crb" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#dc2626" stop-opacity="0.35"/>
+                              <stop offset="100%" stop-color="#dc2626" stop-opacity="0.0"/>
+                            </linearGradient>
+                          </defs>
+                          <path d="M2,4 L14,7 L26,11 L38,13 L48,16 L58,18 L58,20 L2,20 Z" fill="url(#sg-crb)"/>
+                          <path d="M2,4 L14,7 L26,11 L38,13 L48,16 L58,18" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="58" cy="18" r="2.5" fill="#dc2626"/>
+                        </svg>
+                        <div>
+                          <span style="color:#dc2626; font-weight:700; font-size:11.5px;">-2.1%</span>
+                          <small style="color:#dc2626; font-size:10px; display:block;">(Drop Sales)</small>
+                        </div>
+                      </div>
+                    </td>
                     <td><strong class="text-danger">68.5%</strong> <small style="color:#dc2626;">(Kritis)</small></td>
-                    <td><span class="badge bg-danger">68% (Melewati SLA)</span></td>
+                    <td>
+                      <div class="d-flex flex-column gap-1">
+                        <span class="badge bg-danger">68% Selesai</span>
+                        <strong style="color:#dc2626; font-size:11px;">16 Alert Terbuka (Melewati SLA!)</strong>
+                      </div>
+                    </td>
                     <td><span class="badge badge-rsm-red">Perlu Intervensi</span></td>
+                  </tr>
+                  <!-- Sub-tabel Drill-down Sales: Area Cirebon & Majalengka -->
+                  <tr class="drilldown-sales-row" id="drill-cirebon">
+                    <td colspan="10" style="padding:0; border:none;">
+                      <div class="drilldown-card-inner" style="border-left-color:#dc2626; background:#fffafa;">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                          <div>
+                            <strong style="color:#991b1b; font-size:12.5px;">
+                              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="me-1 d-inline"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                              Rincian Kinerja Tim Salesman — Area Cirebon &amp; Majalengka (ASM: Ahmad Fauzi)
+                            </strong>
+                            <span class="badge ms-2" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5;">Area Perlu Intervensi Lapangan</span>
+                          </div>
+                          <div style="font-size:11px; color:#475569;">
+                            Target Area: <strong>Rp 2,20 M</strong> · Realisasi: <strong class="text-danger">Rp 1,82 M (82.7%)</strong> · <span class="text-danger fw-bold">Defisit: -Rp 380 Jt</span>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table-custom sales-subtable" style="width:100%; margin:0; border-radius:6px; overflow:hidden;">
+                            <thead>
+                              <tr style="background:#fee2e2 !important;">
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Kode Sales</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Nama Salesman &amp; Teritori Rute</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Target Penjualan</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Aktual Penjualan</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">% Capaian</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Outlet Aktif (RO)</th>
+                                <th style="background:#fee2e2 !important; color:#991b1b !important; border-bottom:1px solid #fca5a5 !important;">Status Sales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">SLS-0601</span></td>
+                                <td><strong>Toni Irawan</strong> <small class="text-muted d-block">Rute: Cirebon Kota &amp; Harjamukti</small></td>
+                                <td>Rp 600 Jt</td>
+                                <td><strong class="text-danger">Rp 520 Jt</strong></td>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">86.7%</span></td>
+                                <td>31 Toko <small class="text-danger">(71% ROA)</small></td>
+                                <td><span class="badge bg-danger">⚠️ Drop Order (-13.3%)</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">SLS-0602</span></td>
+                                <td><strong>Nanang Kosasih</strong> <small class="text-muted d-block">Rute: Sumber &amp; Plered</small></td>
+                                <td>Rp 550 Jt</td>
+                                <td><strong class="text-danger">Rp 450 Jt</strong></td>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">81.8%</span></td>
+                                <td>27 Toko <small class="text-danger">(68% ROA)</small></td>
+                                <td><span class="badge bg-danger">⚠️ Kritis (-18.2%)</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">SLS-0603</span></td>
+                                <td><strong>Maman Sulaeman</strong> <small class="text-muted d-block">Rute: Majalengka Timur &amp; Cigasong</small></td>
+                                <td>Rp 530 Jt</td>
+                                <td><strong class="text-danger">Rp 430 Jt</strong></td>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">81.1%</span></td>
+                                <td>25 Toko <small class="text-danger">(66% ROA)</small></td>
+                                <td><span class="badge bg-danger">⚠️ Kritis (-18.9%)</span></td>
+                              </tr>
+                              <tr>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">SLS-0604</span></td>
+                                <td><strong>Suryana</strong> <small class="text-muted d-block">Rute: Jatiwangi &amp; Kadipaten</small></td>
+                                <td>Rp 520 Jt</td>
+                                <td><strong class="text-danger">Rp 420 Jt</strong></td>
+                                <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">80.8%</span></td>
+                                <td>23 Toko <small class="text-danger">(64% ROA)</small></td>
+                                <td><span class="badge bg-danger">⚠️ Kritis (-19.2%)</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -342,115 +1209,376 @@
 
           <!-- Seksi 4: Kontribusi Tiap Produk Teh Terhadap Penjualan (Bullet 4 & Story 4) -->
           <section class="card mb-4" id="product-section">
-            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
-              <h2 class="heading-title" style="font-size:15px; margin:0;">Kontribusi Tiap Produk Teh Terhadap Penjualan &amp; Coverage</h2>
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div>
+                <h2 class="heading-title" style="font-size:15px; margin:0;">Kontribusi Tiap Produk Teh Terhadap Penjualan &amp; Coverage</h2>
+              </div>
               <span class="badge" style="background:#f1f5f9; color:#475569; font-weight:600;">5 SKU Resmi Teh Dandang</span>
             </div>
-            <div class="row g-3 align-items-center">
-              <div class="col-12 col-lg-4 text-center">
-                <div style="height: 230px; position: relative;">
-                  <canvas id="gmProductContribChart"></canvas>
+
+            <!-- Panel Terpadu: Donut Chart & Insight Pareto Produk -->
+            <div class="d-flex align-items-center gap-4 p-3 mb-3 rounded border flex-wrap flex-md-nowrap" style="background:#f8fafc; border-color:#e2e8f0;">
+              <div style="width: 135px; height: 135px; flex-shrink: 0; position: relative;" class="mx-auto mx-md-0">
+                <canvas id="gmProductContribChart"></canvas>
+              </div>
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                  <strong style="font-size: 13.5px; color: #0f172a;">Pareto Produk: 90% Penjualan Ditopang 2 SKU Utama</strong>
+                  <span class="badge bg-success">Dominan</span>
                 </div>
-                <div class="text-muted mt-2" style="font-size:11.5px;">
-                  Pareto Produk: <strong>90% Penjualan</strong> ditopang Teh Celup Biru &amp; Teh Merah Tubruk
+                <p class="text-muted mb-2" style="font-size: 12px; line-height: 1.4;">
+                  <strong>Teh Dandang Biru Celup</strong> (55.0%) dan <strong>Teh Dandang Merah Tubruk</strong> (35.0%) menyumbang <strong class="text-success">Rp 85,9 M (90%)</strong> dari total omzet nasional. Tiga varian lainnya berkontribusi 10.0% (<strong class="text-primary">Rp 9,6 M</strong>) dengan potensi penetrasi NOP dan margin premium tinggi.
+                </p>
+                <div class="d-flex gap-2 flex-wrap" style="font-size: 11px;">
+                  <span class="badge" style="background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe;">● Biru Celup: 55.0% (Rp 52,5 M)</span>
+                  <span class="badge" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca;">● Merah Tubruk: 35.0% (Rp 33,4 M)</span>
+                  <span class="badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;">● Jasmine Box: 6.0% (Rp 5,7 M)</span>
+                  <span class="badge" style="background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;">● Hijau Herbal: 3.0% (Rp 2,9 M)</span>
+                  <span class="badge" style="background:#f3e8ff; color:#6b21a8; border:1px solid #e9d5ff;">● White Tea: 1.0% (Rp 1,0 M)</span>
                 </div>
               </div>
-              <div class="col-12 col-lg-8">
-                <div class="table-scroll" style="border:1px solid #e2e8f0; border-radius:8px;">
-                  <table class="table-custom" style="width:100%; margin:0;">
-                    <thead>
-                      <tr>
-                        <th>Varian Produk Teh</th>
-                        <th>Penjualan (Rp)</th>
-                        <th>Kontribusi</th>
-                        <th>Outlet Pembeli</th>
-                        <th>Repeat Order</th>
-                        <th>Pertumbuhan</th>
-                        <th>Product Coverage</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Teh Dandang Biru Celup 25s</strong></td>
-                        <td><strong style="color:#16a34a;">Rp 52,5 M</strong></td>
-                        <td><strong>55.0%</strong></td>
-                        <td>12.300 Toko</td>
-                        <td><strong>91.2%</strong></td>
-                        <td><span style="color:#16a34a; font-weight:600;">+6.8%</span></td>
-                        <td><span class="badge bg-success">94% (Core Fast Moving)</span></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Teh Dandang Merah Tubruk 40g</strong></td>
-                        <td><strong style="color:#16a34a;">Rp 33,4 M</strong></td>
-                        <td><strong>35.0%</strong></td>
-                        <td>11.500 Toko</td>
-                        <td><strong>87.5%</strong></td>
-                        <td><span style="color:#16a34a; font-weight:600;">+4.2%</span></td>
-                        <td><span class="badge bg-success">88% (Fast Moving GT)</span></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Teh Dandang Jasmine Premium Box</strong></td>
-                        <td><strong>Rp 5,7 M</strong></td>
-                        <td>6.0%</td>
-                        <td>5.500 Toko</td>
-                        <td>68.0%</td>
-                        <td><span style="color:#16a34a; font-weight:600;">+12.5%</span></td>
-                        <td><span class="badge bg-warning text-dark">42% (Peluang NOP Tinggi)</span></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Teh Dandang Hijau Herbal 20s</strong></td>
-                        <td><strong>Rp 2,9 M</strong></td>
-                        <td>3.0%</td>
-                        <td>3.650 Toko</td>
-                        <td>62.4%</td>
-                        <td><span style="color:#16a34a; font-weight:600;">+8.0%</span></td>
-                        <td><span class="badge bg-secondary">28% (Modern Trade/HOREKA)</span></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Teh Dandang White Tea Special</strong></td>
-                        <td><strong>Rp 1,0 M</strong></td>
-                        <td>1.0%</td>
-                        <td>1.950 Toko</td>
-                        <td>54.0%</td>
-                        <td><span style="color:#16a34a; font-weight:600;">+18.2%</span></td>
-                        <td><span class="badge" style="background:#ede9fe; color:#5b21b6;">15% (Segmen Premium)</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            </div>
+
+            <!-- Tabel Rincian Varian Produk Spanning Full Width -->
+            <div class="table-scroll" style="border:1px solid #e2e8f0; border-radius:8px; overflow-x:auto;">
+              <table class="table-custom table-sticky-first" style="width:100%; min-width:680px; margin:0;">
+                <thead>
+                  <tr>
+                    <th style="min-width: 230px;">Varian Produk Teh</th>
+                    <th style="min-width: 115px;">Penjualan (Rp)</th>
+                    <th style="min-width: 140px;">% Kontribusi</th>
+                    <th style="min-width: 110px;">Outlet Pembeli</th>
+                    <th style="min-width: 100px;">Repeat Order</th>
+                    <th style="min-width: 100px;">Pertumbuhan</th>
+                    <th style="min-width: 160px;">Product Coverage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#1e40af; flex-shrink:0;"></span>
+                        <strong>Teh Dandang Biru Celup 25s</strong>
+                      </div>
+                    </td>
+                    <td><strong style="color:#16a34a;">Rp 52,5 M</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="min-width:40px; font-weight:700;">55.0%</span>
+                        <div style="flex-grow:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden; min-width:60px;">
+                          <div style="width:55%; height:100%; background:#1e40af;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>12.300 Toko</td>
+                    <td><strong>91.2%</strong></td>
+                    <td><span style="color:#16a34a; font-weight:600;">+6.8%</span></td>
+                    <td><span class="badge bg-success">94% (Core Fast Moving)</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#9B1C1C; flex-shrink:0;"></span>
+                        <strong>Teh Dandang Merah Tubruk 40g</strong>
+                      </div>
+                    </td>
+                    <td><strong style="color:#16a34a;">Rp 33,4 M</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="min-width:40px; font-weight:700;">35.0%</span>
+                        <div style="flex-grow:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden; min-width:60px;">
+                          <div style="width:35%; height:100%; background:#9B1C1C;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>11.500 Toko</td>
+                    <td><strong>87.5%</strong></td>
+                    <td><span style="color:#16a34a; font-weight:600;">+4.2%</span></td>
+                    <td><span class="badge bg-success">88% (Fast Moving GT)</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#b45309; flex-shrink:0;"></span>
+                        <strong>Teh Dandang Jasmine Premium Box</strong>
+                      </div>
+                    </td>
+                    <td><strong>Rp 5,7 M</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="min-width:40px; font-weight:700;">6.0%</span>
+                        <div style="flex-grow:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden; min-width:60px;">
+                          <div style="width:12%; height:100%; background:#b45309;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>5.500 Toko</td>
+                    <td>68.0%</td>
+                    <td><span style="color:#16a34a; font-weight:600;">+12.5%</span></td>
+                    <td><span class="badge bg-warning text-dark">42% (Peluang NOP Tinggi)</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#15803d; flex-shrink:0;"></span>
+                        <strong>Teh Dandang Hijau Herbal 20s</strong>
+                      </div>
+                    </td>
+                    <td><strong>Rp 2,9 M</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="min-width:40px; font-weight:700;">3.0%</span>
+                        <div style="flex-grow:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden; min-width:60px;">
+                          <div style="width:8%; height:100%; background:#15803d;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>3.650 Toko</td>
+                    <td>62.4%</td>
+                    <td><span style="color:#16a34a; font-weight:600;">+8.0%</span></td>
+                    <td><span class="badge bg-secondary">28% (Modern Trade/HOREKA)</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#6d28d9; flex-shrink:0;"></span>
+                        <strong>Teh Dandang White Tea Special</strong>
+                      </div>
+                    </td>
+                    <td><strong>Rp 1,0 M</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span style="min-width:40px; font-weight:700;">1.0%</span>
+                        <div style="flex-grow:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden; min-width:60px;">
+                          <div style="width:5%; height:100%; background:#6d28d9;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>1.950 Toko</td>
+                    <td>54.0%</td>
+                    <td><span style="color:#16a34a; font-weight:600;">+18.2%</span></td>
+                    <td><span class="badge" style="background:#ede9fe; color:#5b21b6;">15% (Segmen Premium)</span></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
           <!-- Seksi 5: Konsentrasi Risiko Outlet Tidak Aktif & Penurunan Transaksi (Bullet 5 & Story 3) -->
           <section class="card mb-4" id="risk-section">
-            <div class="card-heading d-flex justify-content-between align-items-center mb-3">
-              <h2 class="heading-title" style="font-size:15px; margin:0;">Konsentrasi Risiko Outlet Tidak Aktif &amp; Penurunan Transaksi</h2>
+            <div class="card-heading d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div>
+                <h2 class="heading-title" style="font-size:15px; margin:0;">Konsentrasi Risiko Outlet Tidak Aktif &amp; Penurunan Transaksi</h2>
+              </div>
               <span class="badge bg-danger">Mitigasi Risiko Retensi</span>
             </div>
 
-            <!-- 3 Kategori Pengelompokan Risiko -->
+            <!-- 3 Kategori Pengelompokan Risiko (Dapat Diklik untuk Membuka Rincian) -->
             <div class="row g-3 mb-3">
               <div class="col-12 col-md-4">
-                <div class="risk-stat-box" style="border-left:4px solid #ef4444; background:#fef2f2;">
-                  <span style="font-size:11px; text-transform:uppercase; color:#991b1b; font-weight:700; display:block;">1. Penurunan Nilai Pembelian (&gt; 30%)</span>
+                <div class="risk-stat-box risk-stat-card-clickable" id="card-risk-value" onclick="filterRiskCategory('value', this)" style="border-left:4px solid #ef4444; background:#fef2f2;">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <span style="font-size:11px; text-transform:uppercase; color:#991b1b; font-weight:700;">1. Penurunan Nilai Beli (&gt; 30%)</span>
+                    <span class="badge" style="background:#fee2e2; color:#991b1b; font-size:10px;">Klik Kartu ▾</span>
+                  </div>
                   <strong style="font-size:22px; color:#991b1b; display:block; margin:2px 0;">142 <small style="font-size:12px;">Outlet</small></strong>
                   <span style="font-size:11.5px; color:#475569; display:block;">Defisit omzet: -Rp 420 Jt · Perlu program bundling promo &amp; diskon kuantitas.</span>
                 </div>
               </div>
               <div class="col-12 col-md-4">
-                <div class="risk-stat-box" style="border-left:4px solid #f59e0b; background:#fffbeb;">
-                  <span style="font-size:11px; text-transform:uppercase; color:#92400e; font-weight:700; display:block;">2. Penurunan Frekuensi Order (Drop RO)</span>
+                <div class="risk-stat-box risk-stat-card-clickable" id="card-risk-freq" onclick="filterRiskCategory('freq', this)" style="border-left:4px solid #f59e0b; background:#fffbeb;">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <span style="font-size:11px; text-transform:uppercase; color:#92400e; font-weight:700;">2. Drop Frekuensi Order (Drop RO)</span>
+                    <span class="badge" style="background:#fef3c7; color:#92400e; font-size:10px;">Klik Kartu ▾</span>
+                  </div>
                   <strong style="font-size:22px; color:#b45309; display:block; margin:2px 0;">218 <small style="font-size:12px;">Outlet</small></strong>
-                  <span style="font-size:11.5px; color:#475569; display:block;">Siklus order melambat &gt; 21 hari · Perlu audit kepatuhan kunjungan 2 mingguan sales.</span>
+                  <span style="font-size:11.5px; color:#475569; display:block;">Siklus order melambat &gt; 21 hari · Perlu audit kepatuhan kunjungan 2 mingguan.</span>
                 </div>
               </div>
               <div class="col-12 col-md-4">
-                <div class="risk-stat-box" style="border-left:4px solid #b91c1c; background:#fee2e2;">
-                  <span style="font-size:11px; text-transform:uppercase; color:#7f1d1d; font-weight:700; display:block;">3. Outlet Tidak Aktif (&gt; 30–60 Hari Non-ROA)</span>
+                <div class="risk-stat-box risk-stat-card-clickable" id="card-risk-nonroa" onclick="filterRiskCategory('nonroa', this)" style="border-left:4px solid #b91c1c; background:#fee2e2;">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <span style="font-size:11px; text-transform:uppercase; color:#7f1d1d; font-weight:700;">3. Outlet Tidak Aktif (Non-ROA)</span>
+                    <span class="badge" style="background:#fee2e2; color:#991b1b; font-size:10px;">Klik Kartu ▾</span>
+                  </div>
                   <strong style="font-size:22px; color:#7f1d1d; display:block; margin:2px 0;">2.320 <small style="font-size:12px;">Outlet</small></strong>
                   <span style="font-size:11.5px; color:#475569; display:block;">16.0% total RO · Mandat re-aktivasi khusus &amp; restrukturisasi rute sales ASM.</span>
                 </div>
+              </div>
+            </div>
+
+            <!-- Pemecahan Sebaran Outlet Berisiko per Area (Highlight Cirebon Paling Bermasalah) -->
+            <div class="p-3 mb-3 rounded border" style="background:#f8fafc; border-color:#e2e8f0;">
+              <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <div>
+                  <strong style="font-size:13px; color:#0f172a;">Pemecahan Sebaran Outlet Berisiko per Area:</strong>
+                </div>
+                <div class="d-flex align-items-center gap-1 flex-wrap" id="riskAreaFilters">
+                  <button type="button" class="risk-area-pill-btn active" onclick="filterRiskArea('all', this)">Semua Area (164)</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('cirebon', this)" style="color:#b91c1c; border-color:#fca5a5; background:#fff5f5;">🔴 Cirebon: 86 Toko (Kritis)</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('bandung', this)">🟡 Bandung: 34 Toko</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('medan', this)">Medan: 14 Toko</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('surabaya', this)">Surabaya: 12 Toko</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('semarang', this)">Semarang: 10 Toko</button>
+                  <button type="button" class="risk-area-pill-btn" onclick="filterRiskArea('solo', this)">Solo: 8 Toko</button>
+                </div>
+              </div>
+
+              <!-- Bar Visualisasi Distribusi Masalah per Area -->
+              <div style="height: 10px; border-radius: 5px; overflow: hidden; display: flex; background: #e2e8f0;">
+                <div style="width: 52.4%; background: #dc2626;" title="Cirebon & Majalengka: 86 Outlet (52.4%)"></div>
+                <div style="width: 20.7%; background: #f59e0b;" title="Bandung Raya: 34 Outlet (20.7%)"></div>
+                <div style="width: 8.5%; background: #0284c7;" title="Medan & Deli: 14 Outlet (8.5%)"></div>
+                <div style="width: 7.3%; background: #10b981;" title="Surabaya Barat: 12 Outlet (7.3%)"></div>
+                <div style="width: 6.1%; background: #6366f1;" title="Semarang & Demak: 10 Outlet (6.1%)"></div>
+                <div style="width: 5.0%; background: #14b8a6;" title="Solo Raya: 8 Outlet (5.0%)"></div>
+              </div>
+              <div class="d-flex justify-content-between mt-1 text-muted flex-wrap" style="font-size:10.5px;">
+                <span><strong class="text-danger">52.4% Masalah Terkonsentrasi di Cirebon &amp; Majalengka</strong></span>
+                <span>Bandung Raya (20.7%) &middot; Medan (8.5%) &middot; Surabaya (7.3%) &middot; Semarang (6.1%) &middot; Solo (5.0%)</span>
+              </div>
+            </div>
+
+            <!-- Tabel Daftar Outlet Berisiko Terbuka -->
+            <div class="card border" id="riskOutletsCard" style="box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-radius:8px; overflow:hidden;">
+              <div class="bg-white d-flex justify-content-between align-items-center py-2 px-3 border-bottom flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <strong style="font-size:13px; color:#0f172a;" id="riskTableTitle">Daftar Outlet Berisiko yang Perlu Intervensi</strong>
+                  <span class="badge" id="riskTableCountBadge" style="background:#fee2e2; color:#991b1b; font-weight:700;">10 Toko Terpantau</span>
+                  <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none" onclick="filterRiskCategory('all', null); filterRiskArea('all', null);" style="font-size:11px; color:#64748b;">(Tampilkan Semua)</button>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="text" id="riskSearchInput" placeholder="Cari nama toko / rute..." oninput="searchRiskTable()" style="font-size:11.5px; padding:3px 10px; border:1px solid #cbd5e1; border-radius:6px; width:190px;">
+                  <span class="text-muted" style="font-size:11px;">Filter: <strong id="activeCategoryLabel" class="text-danger">Semua Kategori Risiko</strong></span>
+                </div>
+              </div>
+              <div class="table-scroll" style="max-height: 380px; overflow-y: auto;">
+                <table class="table-custom table-sticky-first" id="riskOutletsTable" style="width:100%; min-width:850px; margin:0;">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 190px;">Nama Outlet (CardCode)</th>
+                      <th style="min-width: 130px;">Area Operasional</th>
+                      <th style="min-width: 130px;">ASM Bertanggung Jawab</th>
+                      <th style="min-width: 130px;">Salesman Lapangan</th>
+                      <th style="min-width: 130px;">Kategori Risiko</th>
+                      <th style="min-width: 150px;">Besar Penurunan Kinerja</th>
+                      <th style="min-width: 120px;">Siklus Kunjungan</th>
+                      <th style="min-width: 170px;">Rekomendasi Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 1. Cirebon - Value Drop -->
+                    <tr class="risk-outlet-row" data-cat="value" data-area="cirebon" style="background:#fffafa;">
+                      <td><strong>Toko Sumber Rejeki</strong> <small class="text-muted d-block">OCRD-CRB01 · Harjamukti</small></td>
+                      <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">Cirebon &amp; Majalengka</span></td>
+                      <td>Ahmad Fauzi</td>
+                      <td>Toni Irawan <small class="text-muted">(SLS-0601)</small></td>
+                      <td><span class="badge bg-danger">Nilai Turun &gt; 30%</span></td>
+                      <td><strong class="text-danger">-52.5%</strong> <small class="d-block text-muted">Rp 22,0 Jt &rarr; Rp 10,4 Jt/bln</small></td>
+                      <td><span class="text-danger fw-bold">28 Hari (Macet)</span></td>
+                      <td><span class="badge bg-warning text-dark">Program Promo Bundling Teh Merah</span></td>
+                    </tr>
+                    <!-- 2. Cirebon - Freq Drop -->
+                    <tr class="risk-outlet-row" data-cat="freq" data-area="cirebon" style="background:#fffafa;">
+                      <td><strong>Warung Barokah Plered</strong> <small class="text-muted d-block">OCRD-CRB02 · Plered</small></td>
+                      <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">Cirebon &amp; Majalengka</span></td>
+                      <td>Ahmad Fauzi</td>
+                      <td>Nanang Kosasih <small class="text-muted">(SLS-0602)</small></td>
+                      <td><span class="badge bg-warning text-dark">Drop Frekuensi RO</span></td>
+                      <td><strong class="text-danger">-75.0% Order</strong> <small class="d-block text-muted">Dari 4x/bln &rarr; sisa 1x/bln</small></td>
+                      <td><span class="text-danger fw-bold">26 Hari (Lambat)</span></td>
+                      <td><span class="badge bg-danger">Audit Kepatuhan Rute Sales</span></td>
+                    </tr>
+                    <!-- 3. Cirebon - Non-ROA -->
+                    <tr class="risk-outlet-row" data-cat="nonroa" data-area="cirebon" style="background:#fffafa;">
+                      <td><strong>UD Maju Makmur Kadipaten</strong> <small class="text-muted d-block">OCRD-CRB03 · Kadipaten</small></td>
+                      <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">Cirebon &amp; Majalengka</span></td>
+                      <td>Ahmad Fauzi</td>
+                      <td>Suryana <small class="text-muted">(SLS-0604)</small></td>
+                      <td><span class="badge" style="background:#7f1d1d; color:#fff;">Non-ROA (&gt; 30 Hari)</span></td>
+                      <td><strong class="text-danger">Macet 52 Hari</strong> <small class="d-block text-muted">0 Transaksi sejak Agustus</small></td>
+                      <td><span class="badge bg-danger">Non-Aktif 52 Hari</span></td>
+                      <td><span class="badge bg-danger">Kunjungan Gabungan ASM + Sales</span></td>
+                    </tr>
+                    <!-- 4. Cirebon - Value Drop -->
+                    <tr class="risk-outlet-row" data-cat="value" data-area="cirebon" style="background:#fffafa;">
+                      <td><strong>Toko Harapan Cigasong</strong> <small class="text-muted d-block">OCRD-CRB04 · Cigasong</small></td>
+                      <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">Cirebon &amp; Majalengka</span></td>
+                      <td>Ahmad Fauzi</td>
+                      <td>Maman Sulaeman <small class="text-muted">(SLS-0603)</small></td>
+                      <td><span class="badge bg-danger">Nilai Turun &gt; 30%</span></td>
+                      <td><strong class="text-danger">-41.2%</strong> <small class="d-block text-muted">Rp 17,0 Jt &rarr; Rp 10,0 Jt/bln</small></td>
+                      <td><span class="text-warning fw-bold">21 Hari</span></td>
+                      <td><span class="badge bg-warning text-dark">Restrukturisasi Plafon Kredit</span></td>
+                    </tr>
+                    <!-- 5. Cirebon - Non-ROA -->
+                    <tr class="risk-outlet-row" data-cat="nonroa" data-area="cirebon" style="background:#fffafa;">
+                      <td><strong>Grosir Bintang Majalengka</strong> <small class="text-muted d-block">OCRD-CRB05 · Pasar Lama</small></td>
+                      <td><span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">Cirebon &amp; Majalengka</span></td>
+                      <td>Ahmad Fauzi</td>
+                      <td>Suryana <small class="text-muted">(SLS-0604)</small></td>
+                      <td><span class="badge" style="background:#7f1d1d; color:#fff;">Non-ROA (&gt; 30 Hari)</span></td>
+                      <td><strong class="text-danger">Macet 44 Hari</strong> <small class="d-block text-muted">0 Transaksi sejak September</small></td>
+                      <td><span class="badge bg-danger">Non-Aktif 44 Hari</span></td>
+                      <td><span class="badge bg-danger">Re-aktivasi Khusus Mitra Pareto</span></td>
+                    </tr>
+                    <!-- 6. Bandung - Value Drop -->
+                    <tr class="risk-outlet-row" data-cat="value" data-area="bandung">
+                      <td><strong>Toko Sinar Jaya Cibiru</strong> <small class="text-muted d-block">OCRD-BDG01 · Cibiru</small></td>
+                      <td><span class="badge" style="background:#fef3c7; color:#92400e;">Bandung Raya</span></td>
+                      <td>Asep Kurniawan</td>
+                      <td>Iman Santoso <small class="text-muted">(SLS-0404)</small></td>
+                      <td><span class="badge bg-danger">Nilai Turun &gt; 30%</span></td>
+                      <td><strong class="text-danger">-36.8%</strong> <small class="d-block text-muted">Rp 19,0 Jt &rarr; Rp 12,0 Jt/bln</small></td>
+                      <td><span>18 Hari</span></td>
+                      <td><span class="badge bg-info text-dark">Pendampingan Supervisor Lapangan</span></td>
+                    </tr>
+                    <!-- 7. Bandung - Freq Drop -->
+                    <tr class="risk-outlet-row" data-cat="freq" data-area="bandung">
+                      <td><strong>Warung Bu Aminah Padalarang</strong> <small class="text-muted d-block">OCRD-BDG02 · Padalarang</small></td>
+                      <td><span class="badge" style="background:#fef3c7; color:#92400e;">Bandung Raya</span></td>
+                      <td>Asep Kurniawan</td>
+                      <td>Dadan Ramdani <small class="text-muted">(SLS-0402)</small></td>
+                      <td><span class="badge bg-warning text-dark">Drop Frekuensi RO</span></td>
+                      <td><strong class="text-warning">-50.0% Order</strong> <small class="d-block text-muted">Dari 4x/bln &rarr; sisa 2x/bln</small></td>
+                      <td><span class="text-warning fw-bold">22 Hari</span></td>
+                      <td><span class="badge bg-warning text-dark">Inspeksi Display &amp; Spanduk Toko</span></td>
+                    </tr>
+                    <!-- 8. Medan - Value Drop -->
+                    <tr class="risk-outlet-row" data-cat="value" data-area="medan">
+                      <td><strong>Toko Rezeki Baru Petisah</strong> <small class="text-muted d-block">OCRD-MDN01 · Medan Petisah</small></td>
+                      <td><span class="badge" style="background:#e0f2fe; color:#075985;">Medan &amp; Deli</span></td>
+                      <td>Rian Iskandar, S.E.</td>
+                      <td>Zulkifli Lubis <small class="text-muted">(SLS-0501)</small></td>
+                      <td><span class="badge bg-danger">Nilai Turun &gt; 30%</span></td>
+                      <td><strong class="text-danger">-34.0%</strong> <small class="d-block text-muted">Rp 15,0 Jt &rarr; Rp 9,9 Jt/bln</small></td>
+                      <td><span>19 Hari</span></td>
+                      <td><span class="badge bg-success">Optimasi Logistik Depo Medan</span></td>
+                    </tr>
+                    <!-- 9. Surabaya - Freq Drop -->
+                    <tr class="risk-outlet-row" data-cat="freq" data-area="surabaya">
+                      <td><strong>Toko Subur Benowo</strong> <small class="text-muted d-block">OCRD-SBY01 · Benowo</small></td>
+                      <td><span class="badge" style="background:#dcfce7; color:#15803d;">Surabaya Barat</span></td>
+                      <td>Dedi Suherman, M.M.</td>
+                      <td>Fajar Nugroho <small class="text-muted">(SLS-0301)</small></td>
+                      <td><span class="badge bg-warning text-dark">Drop Frekuensi RO</span></td>
+                      <td><strong class="text-warning">-33.3% Order</strong> <small class="d-block text-muted">Dari 3x/bln &rarr; sisa 2x/bln</small></td>
+                      <td><span>20 Hari</span></td>
+                      <td><span class="badge bg-info text-dark">Monitoring Jadwal Siklus Mingguan</span></td>
+                    </tr>
+                    <!-- 10. Solo - Value Drop -->
+                    <tr class="risk-outlet-row" data-cat="value" data-area="solo">
+                      <td><strong>Toko Berkah Cepogo</strong> <small class="text-muted d-block">OCRD-SLO01 · Cepogo</small></td>
+                      <td><span class="badge" style="background:#dcfce7; color:#15803d;">Solo Raya</span></td>
+                      <td>Budi Santoso, S.E.</td>
+                      <td>Eko Prasetyo <small class="text-muted">(SLS-0101)</small></td>
+                      <td><span class="badge bg-warning text-dark">Nilai Turun (Musiman)</span></td>
+                      <td><strong class="text-warning">-31.0%</strong> <small class="d-block text-muted">Rp 14,5 Jt &rarr; Rp 10,0 Jt</small></td>
+                      <td><span>14 Hari (Normal)</span></td>
+                      <td><span class="badge bg-primary">Penawaran SKU Baru Teh Gula Celup</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>
@@ -462,7 +1590,6 @@
                 <svg aria-hidden="true" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M2 5h13v12H2z M15 9h4l3 4v4h-7 M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4 M18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4"></path></svg>
                 Evaluasi Indikasi Penyalahgunaan Kendaraan Operasional (Telematics GPS)
               </h2>
-              <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border:1px solid #bfdbfe;">40 / 42 Armada Online (Concox GT06N)</span>
             </div>
 
             <!-- Tabel Kasus Penyimpangan & Hasil Verifikasi -->
@@ -578,27 +1705,169 @@
         });
       }
 
-      // 2. Chart Territory Doughnut (90 Area: 72 Jawa vs 18 Luar Jawa)
+      // 2. Chart Territory Doughnut (Default: Per Area Unggulan + Toggle Jawa vs Luar Jawa)
+      const territoryDataArea = {
+        labels: ['Semarang & Demak (5.6%)', 'Surabaya Barat (5.3%)', 'Solo Raya (5.1%)', 'Bandung Raya (4.2%)', 'Medan & Deli (3.2%)', 'Cirebon (1.9%)', '84 Area Lain (74.7%)'],
+        datasets: [{
+          data: [5.6, 5.3, 5.1, 4.2, 3.2, 1.9, 74.7],
+          backgroundColor: ['#9B1C1C', '#c2410c', '#d97706', '#2563eb', '#7c3aed', '#dc2626', '#e2e8f0'],
+          borderWidth: 2
+        }]
+      };
+
+      const territoryDataMacro = {
+        labels: ['Wilayah Jawa - 72 Area (80%)', 'Wilayah Luar Jawa - 18 Area (20%)'],
+        datasets: [{
+          data: [80, 20],
+          backgroundColor: ['#9B1C1C', '#0284c7'],
+          borderWidth: 2
+        }]
+      };
+
+      let territoryChartInstance = null;
       const ctxTerritory = document.getElementById('gmTerritoryChart');
       if (ctxTerritory && window.Chart) {
-        new Chart(ctxTerritory, {
+        territoryChartInstance = new Chart(ctxTerritory, {
           type: 'doughnut',
-          data: {
-            labels: ['Wilayah Jawa (72 Area)', 'Wilayah Luar Jawa (18 Area)'],
-            datasets: [{
-              data: [72, 18],
-              backgroundColor: ['#9B1C1C', '#0284c7'],
-              borderWidth: 2
-            }]
-          },
+          data: territoryDataArea,
           options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { position: 'bottom' }
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 10,
+                  font: { size: 9.5 }
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return ' ' + context.label + ': ' + context.parsed + '% Omzet';
+                  }
+                }
+              }
             }
           }
         });
+      }
+
+      window.switchTerritoryChart = function(mode) {
+        const btnArea = document.getElementById('btnTerritoryArea');
+        const btnMacro = document.getElementById('btnTerritoryMacro');
+        const title = document.getElementById('territoryChartTitle');
+        const footer = document.getElementById('territoryChartFooter');
+
+        if (!territoryChartInstance) return;
+
+        if (mode === 'area') {
+          if (btnArea) btnArea.classList.add('active');
+          if (btnMacro) btnMacro.classList.remove('active');
+          if (title) title.innerText = 'Kontribusi Penjualan per Area';
+          if (footer) {
+            footer.innerHTML = `
+              <div><strong class="text-danger d-block">Semarang &amp; Demak</strong> Area Tertinggi (5.6%)</div>
+              <div><strong class="text-primary d-block">Medan &amp; Deli</strong> Luar Jawa (3.2%)</div>
+            `;
+          }
+          territoryChartInstance.data = territoryDataArea;
+          territoryChartInstance.options.plugins.legend.labels.font = { size: 9.5 };
+          territoryChartInstance.update();
+        } else {
+          if (btnMacro) btnMacro.classList.add('active');
+          if (btnArea) btnArea.classList.remove('active');
+          if (title) title.innerText = 'Distribusi Jawa vs Luar Jawa';
+          if (footer) {
+            footer.innerHTML = `
+              <div><strong class="text-danger d-block">80% Omzet</strong> Jawa (72 Area)</div>
+              <div><strong class="text-primary d-block">20% Omzet</strong> Luar Jawa (18 Area)</div>
+            `;
+          }
+          territoryChartInstance.data = territoryDataMacro;
+          territoryChartInstance.options.plugins.legend.labels.font = { size: 11 };
+          territoryChartInstance.update();
+        }
+      };
+
+      // Toggle Area Drill-down Sub-tabel Sales
+      window.toggleAreaDrilldown = function(drillRowId, triggerRow) {
+        const drillRow = document.getElementById(drillRowId);
+        if (!drillRow) return;
+
+        const isOpen = drillRow.classList.contains('is-open');
+        if (isOpen) {
+          drillRow.classList.remove('is-open');
+          if (triggerRow) triggerRow.classList.remove('is-expanded');
+        } else {
+          drillRow.classList.add('is-open');
+          if (triggerRow) triggerRow.classList.add('is-expanded');
+        }
+      };
+
+      // 4. Filter & Search Rincian Outlet Berisiko
+      let currentRiskCategory = 'all';
+      let currentRiskArea = 'all';
+
+      window.filterRiskCategory = function(cat, el) {
+        currentRiskCategory = cat;
+        // Update active class pada kartu risiko
+        document.querySelectorAll('.risk-stat-card-clickable').forEach(c => c.classList.remove('active-card'));
+        if (el) el.classList.add('active-card');
+
+        // Update teks label kategori aktif
+        const label = document.getElementById('activeCategoryLabel');
+        if (label) {
+          const names = {
+            'all': 'Semua Kategori Risiko',
+            'value': 'Penurunan Nilai Beli (> 30%)',
+            'freq': 'Drop Frekuensi Order (Drop RO)',
+            'nonroa': 'Outlet Tidak Aktif (Non-ROA)'
+          };
+          label.innerText = names[cat] || 'Kategori Terpilih';
+        }
+
+        applyRiskFilters();
+      };
+
+      window.filterRiskArea = function(area, el) {
+        currentRiskArea = area;
+        document.querySelectorAll('.risk-area-pill-btn').forEach(btn => btn.classList.remove('active'));
+        if (el) el.classList.add('active');
+
+        applyRiskFilters();
+      };
+
+      window.searchRiskTable = function() {
+        applyRiskFilters();
+      };
+
+      function applyRiskFilters() {
+        const query = (document.getElementById('riskSearchInput')?.value || '').toLowerCase().trim();
+        const rows = document.querySelectorAll('.risk-outlet-row');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+          const rowCat = row.getAttribute('data-cat') || '';
+          const rowArea = row.getAttribute('data-area') || '';
+          const rowText = row.innerText.toLowerCase();
+
+          const matchCat = (currentRiskCategory === 'all' || rowCat === currentRiskCategory);
+          const matchArea = (currentRiskArea === 'all' || rowArea === currentRiskArea);
+          const matchSearch = (!query || rowText.includes(query));
+
+          if (matchCat && matchArea && matchSearch) {
+            row.style.display = '';
+            visibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        const badge = document.getElementById('riskTableCountBadge');
+        if (badge) {
+          badge.innerText = `${visibleCount} Toko Ditampilkan`;
+        }
       }
 
       // 3. Chart Kontribusi Produk Teh (5 Varian) - Bullet 4
@@ -617,8 +1886,16 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            cutout: '62%',
             plugins: {
-              legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return ' ' + context.label + ' Omzet';
+                  }
+                }
+              }
             }
           }
         });
