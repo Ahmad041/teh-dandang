@@ -23,7 +23,9 @@
       const s = D.sales[x[4]], units = {};
       codes.forEach(function (c, i) { units[c] = x[5][i]; });
       return { id: x[0], name: x[1], lat: x[2], lng: x[3], sales: s.id, area: s.area, region: s.region, pulau: s.pulau, units: units, target: x[6],
-        visits_plan: 2, visits_done: x[7], noo: !!x[8], nop: x[9] >= 0 ? codes[x[9]] : null, status: STATUS[x[10]], risk: RISK[x[10]], slow: x[11] };
+        visits_plan: 2, visits_done: x[7], noo: !!x[8], nop: x[9] >= 0 ? codes[x[9]] : null, status: STATUS[x[10]], risk: RISK[x[10]], slow: x[11],
+        visits: x[12] || [], batch: x[13] === undefined ? -1 : x[13],
+        orders: x[12] ? (x[12][1] === 2) + (x[12][3] === 2) : 0 };
     });
   }
   const SALES = {};
@@ -202,19 +204,21 @@
   }
 
   function metrics(outlets, factor) {
-    const m = { outlets: outlets.length, actual: 0, target: 0, visitsPlan: 0, visitsDone: 0, units: {}, active: 0, atRisk: 0, inactive: 0 };
+    const m = { outlets: outlets.length, actual: 0, target: 0, visitsPlan: 0, visitsDone: 0, visitsOrder: 0, units: {}, active: 0, atRisk: 0, inactive: 0 };
     for (const p of D.products) m.units[p.code] = 0;
     for (const o of outlets) {
       m.actual += outletActual(o) * factor;
       m.target += o.target * factor;
       m.visitsPlan += o.visits_plan * factor;
       m.visitsDone += o.visits_done * factor;
+      m.visitsOrder += o.orders * factor;
       for (const k in o.units) m.units[k] += o.units[k] * factor;
       if (o.status === "Inactive") m.inactive++;
       else { m.active++; if (o.status === "At Risk") m.atRisk++; }
     }
     m.visitsPlan = Math.round(m.visitsPlan);
     m.visitsDone = Math.round(m.visitsDone);
+    m.visitsOrder = Math.round(m.visitsOrder);
     for (const k in m.units) m.units[k] = Math.round(m.units[k]);
     m.nooList = flaggedSet(outlets, "noo", factor);
     m.nopList = flaggedSet(outlets, "nop", factor);
@@ -223,7 +227,9 @@
     m.nooTarget = targetShare(outlets, "noo_target", factor);
     m.nopTarget = targetShare(outlets, "nop_target", factor);
     m.salesPct = m.target ? m.actual / m.target * 100 : 0;
-    m.ecPct = m.visitsPlan ? m.visitsDone / m.visitsPlan * 100 : 0;
+    // Effective call = kunjungan yang ada transaksi di tanggal yang sama ÷ kunjungan terlaksana
+    m.ecPct = m.visitsDone ? m.visitsOrder / m.visitsDone * 100 : 0;
+    m.visitPct = m.visitsPlan ? m.visitsDone / m.visitsPlan * 100 : 0;
     m.nooPct = m.nooTarget ? m.nooActual / m.nooTarget * 100 : 0;
     m.nopPct = m.nopTarget ? m.nopActual / m.nopTarget * 100 : 0;
     m.roaPct = m.outlets ? m.active / m.outlets * 100 : 0;
@@ -243,24 +249,28 @@
     const k = (scopeKey || "") + "|" + isoDate(info.start) + "|" + info.days;
     // nilai per outlet supaya total wilayah = jumlah area = jumlah toko
     const t = "|" + isoDate(info.start) + "|" + info.days;
-    let act = 0, done = 0;
+    let act = 0, done = 0, ord = 0;
     for (const c in p.units) p.units[c] = 0;
     for (const o of outlets) {
       const f = info.prevFactor * (1 + noise(o.id + t) * .12);
       act += outletActual(o) * f;
-      done += Math.min(o.visits_plan, o.visits_done * (1 + noise(o.id + t + "v") * .1)) * info.prevFactor;
+      const dv = Math.min(o.visits_plan, o.visits_done * (1 + noise(o.id + t + "v") * .1));
+      done += dv * info.prevFactor;
+      ord += Math.min(dv, o.orders * (1 + noise(o.id + t + "o") * .12)) * info.prevFactor;
       for (const c in o.units) p.units[c] += o.units[c] * f;
     }
     for (const c in p.units) p.units[c] = Math.round(p.units[c]);
     p.actual = act;
     p.visitsDone = Math.min(p.visitsPlan, Math.round(done));
+    p.visitsOrder = Math.min(p.visitsDone, Math.round(ord));
     p.active = Math.min(p.outlets, Math.max(0, Math.round(p.active * (1 + noise(k + "r") * .04))));
     p.inactive = p.outlets - p.active;
     p.atRisk = Math.min(p.active, Math.max(0, Math.round(p.atRisk * (1 + noise(k + "k") * .2))));
     p.nooActual = Math.max(0, Math.round(p.nooActual * (1 + noise(k + "n") * .2)));
     p.nopActual = Math.max(0, Math.round(p.nopActual * (1 + noise(k + "p") * .2)));
     p.salesPct = p.target ? p.actual / p.target * 100 : 0;
-    p.ecPct = p.visitsPlan ? p.visitsDone / p.visitsPlan * 100 : 0;
+    p.ecPct = p.visitsDone ? p.visitsOrder / p.visitsDone * 100 : 0;
+    p.visitPct = p.visitsPlan ? p.visitsDone / p.visitsPlan * 100 : 0;
     p.roaPct = p.outlets ? p.active / p.outlets * 100 : 0;
     return p;
   }
@@ -288,11 +298,11 @@
   function childGroups(state) {
     const outlets = scopeOutlets(state, true);
     const by = function (key, id) { return outlets.filter(function (o) { return o[key] === id; }); };
-    if (state.pulau === "all" && state.region === "all") {
+    if (state.pulau === "all" && state.region === "all" && D.pulau.length > 1) {
       return { level: "Pulau", key: "pulau", groups: D.pulau.map(function (p) { return { id: p.code, name: p.name, sub: "GM " + p.gm, outlets: by("pulau", p.code) }; }) };
     }
     if (state.region === "all") {
-      return { level: "Wilayah", key: "wilayah", groups: D.regions.filter(function (r) { return r.pulau === state.pulau; }).map(function (r) {
+      return { level: "Wilayah", key: "wilayah", groups: D.regions.filter(function (r) { return state.pulau === "all" || r.pulau === state.pulau; }).map(function (r) {
         return { id: r.code, name: r.name, sub: "RSM " + r.rsm, outlets: by("region", r.code) };
       }) };
     }
@@ -325,7 +335,7 @@
     if (state.sales !== "all") return SALES[state.sales].name;
     if (state.area !== "all") return AREA[state.area].name;
     if (state.region !== "all") return REGION[state.region].name;
-    if (state.pulau !== "all") return PULAU[state.pulau].name;
+    if (state.pulau !== "all" && D.pulau.length > 1) return PULAU[state.pulau].name;
     return "Semua Wilayah";
   }
 
@@ -486,7 +496,10 @@
       if (searchField && searchField.parentNode) searchField.parentNode.removeChild(searchField);
       // Wilayah: Jawa / Luar Jawa (semua region di dalamnya) atau satu region
       const wil = state.region !== "all" ? state.region : state.pulau !== "all" ? "P:" + state.pulau : "all";
-      const wilOpts = (LOCK.pulau ? "" : '<option value="all">Semua Wilayah</option>') + D.pulau.filter(function (p) { return !LOCK.pulau || p.code === LOCK.pulau; }).map(function (p) {
+      const single = D.pulau.length === 1;
+      const wilOpts = single ? '<option value="all">Semua Wilayah</option>' + D.regions.map(function (r) {
+        return '<option value="' + r.code + '"' + (wil === r.code ? " selected" : "") + ">" + esc(r.name) + "</option>";
+      }).join("") : (LOCK.pulau ? "" : '<option value="all">Semua Wilayah</option>') + D.pulau.filter(function (p) { return !LOCK.pulau || p.code === LOCK.pulau; }).map(function (p) {
         return '<optgroup label="' + esc(p.name) + '"><option value="P:' + p.code + '"' + (wil === "P:" + p.code ? " selected" : "") + ">Semua " + esc(p.name) + "</option>" +
           D.regions.filter(function (r) { return r.pulau === p.code; }).map(function (r) {
             return '<option value="' + r.code + '"' + (wil === r.code ? " selected" : "") + ">" + esc(r.name) + "</option>";
@@ -496,19 +509,19 @@
       const sales = state.area === "all" ? [] : D.sales.filter(function (x) { return x.area === state.area; });
       const outlets = state.sales === "all" ? [] : D.outlets.filter(function (o) { return o.sales === state.sales; }).map(function (o) { return { id: o.id, name: o.name }; });
       const items = D.products.map(function (p) { return { id: p.code, name: p.name }; });
-      const dirty = state.period !== DEFAULT_PRESET || (state.region !== (LOCK.region || "all")) || (state.pulau !== (LOCK.pulau || "all")) || state.area !== (LOCK.area || "all") ||
+      const dirty = state.period !== DEFAULT_PRESET || (state.region !== (LOCK.region || "all")) || state.area !== (LOCK.area || "all") ||
         state.sales !== (LOCK.sales || "all") || state.outlet !== "all" || state.item !== "all";
       const hide = function (k) { return LOCK[k] ? " hidden" : ""; };
       container.innerHTML =
         '<div class="filter-bar">' +
-        '<div class="dp" id="f-date"></div>' +
+        (options.noDate ? "" : '<div class="dp" id="f-date"></div>') +
         '<div class="filter-field"' + hide("region") + '><label class="sr-only" for="f-region">Wilayah</label><select id="f-region">' + wilOpts + "</select></div>" +
         '<div class="filter-field"' + hide("area") + '><label class="sr-only" for="f-area">Area</label><select id="f-area"' + (state.region === "all" ? " disabled" : "") + ">" + opts(areas, state.area, "Semua Area") + "</select></div>" +
         (third === "item"
           ? '<div class="filter-field"><label class="sr-only" for="f-item">Produk</label><select id="f-item">' + opts(items, state.item, "Semua Produk") + "</select></div>"
           : third === "none" ? ""
           : '<div class="filter-field"' + hide("sales") + '><label class="sr-only" for="f-sales">Sales</label><select id="f-sales"' + (state.area === "all" ? " disabled" : "") + ">" + opts(sales, state.sales, "Semua Sales") + "</select></div>" +
-            '<div class="filter-field"><label class="sr-only" for="f-outlet">Toko</label><select id="f-outlet"' + (state.sales === "all" ? " disabled" : "") + ">" + opts(outlets, state.outlet, "Semua Toko") + "</select></div>") +
+            (third === "sales" ? "" : '<div class="filter-field"><label class="sr-only" for="f-outlet">Toko</label><select id="f-outlet"' + (state.sales === "all" ? " disabled" : "") + ">" + opts(outlets, state.outlet, "Semua Toko") + "</select></div>")) +
         (dirty ? '<button type="button" class="button ghost" id="f-reset">Reset</button>' : "") +
         "</div>";
       // kolom cari ikut di baris filter (satu kartu)
@@ -516,13 +529,13 @@
       if (sf && !sf.hidden) container.querySelector(".filter-bar").appendChild(sf);
       const tb = document.querySelector(".toolbar");
       if (tb && !tb.children.length) tb.hidden = true;
-      datePicker(container.querySelector("#f-date"), state, function (patch) {
+      if (!options.noDate) datePicker(container.querySelector("#f-date"), state, function (patch) {
         for (const k in patch) state[k] = patch[k];
         commit();
       });
       container.querySelector("#f-region").onchange = function () {
         const v = this.value;
-        state.pulau = v === "all" ? "all" : v.indexOf("P:") === 0 ? v.slice(2) : REGION[v].pulau;
+        state.pulau = v === "all" ? (LOCK.pulau || "all") : v.indexOf("P:") === 0 ? v.slice(2) : REGION[v].pulau;
         state.region = v === "all" || v.indexOf("P:") === 0 ? "all" : v;
         state.area = "all"; state.sales = "all"; state.outlet = "all"; commit();
       };
@@ -561,10 +574,43 @@
     };
   }
 
+  // ---------- tanggal relatif & penyimpanan di browser ----------
+  function dayFromSnapshot(offset) { return addDays(SNAPSHOT, offset); }
+  function fmtDay(d) { return ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"][d.getDay()] + ", " + d.getDate() + " " + MONTHS[d.getMonth()]; }
+  const store = {
+    get: function (key, fallback) {
+      try { const v = localStorage.getItem("td-" + key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
+    },
+    set: function (key, value) {
+      try { localStorage.setItem("td-" + key, JSON.stringify(value)); return true; } catch (e) { return false; }
+    }
+  };
+  function nowText() { const d = new Date(); return d.getDate() + " " + MONTHS[d.getMonth()] + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+  function who() { return (ROLE.label || "Owner") + (ROLE.name ? " · " + ROLE.name : ""); }
+
+
+  // Jadwal kunjungan: tiap toko dikunjungi 2 minggu sekali -> kunjungan berikutnya = kunjungan terakhir + 14 hari.
+  // Perubahan dari ASM & pengajuan sales yang disetujui disimpan di browser (td-jadwal).
+  function jadwalStore() { const j = store.get("jadwal", {}); j.changes = j.changes || {}; j.extras = j.extras || []; j.requests = j.requests || []; return j; }
+  function schedule(outlets, from, to) {
+    const j = jadwalStore(), list = [];
+    const ids = {};
+    for (const o of outlets) {
+      ids[o.id] = o;
+      const v = o.visits;
+      if (!v || !v.length) continue;
+      const base = v[v.length - 2] + 14, ch = j.changes[o.id];
+      const day = ch ? ch.day : base;
+      if (day >= from && day <= to) list.push({ key: o.id, o: o, day: day, base: base, changed: ch || null, extra: false });
+    }
+    for (const x of j.extras) if (ids[x.oid] && x.day >= from && x.day <= to) list.push({ key: x.id, o: ids[x.oid], day: x.day, base: x.day, changed: null, extra: x });
+    return list.sort(function (a, b) { return a.day - b.day || a.o.name.localeCompare(b.o.name); });
+  }
+
   window.AF = {
     D: D, PRICE: PRICE, PULAU: PULAU, REGION: REGION, AREA: AREA, SALES: SALES, OUTLET: OUTLET, MONTHS: MONTHS,
     readState: readState, stateQuery: stateQuery, periodInfo: periodInfo, scopeOutlets: scopeOutlets, outletActual: outletActual,
-    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, LOCK: LOCK, ROLE: ROLE, scopedTrend: scopedTrend, childGroups: childGroups, drillPatch: drillPatch, scopeName: scopeName, renderFilterBar: renderFilterBar,
+    metrics: metrics, prevMetrics: prevMetrics, delta: delta, deltaPill: deltaPill, deltaTone: deltaTone, LOCK: LOCK, ROLE: ROLE, scopedTrend: scopedTrend, SNAPSHOT: SNAPSHOT, isoDate: isoDate, fromIso: fromIso, addDays: addDays, dayFromSnapshot: dayFromSnapshot, fmtDay: fmtDay, fmtDate: fmtDate, store: store, jadwalStore: jadwalStore, schedule: schedule, nowText: nowText, who: who, childGroups: childGroups, drillPatch: drillPatch, scopeName: scopeName, renderFilterBar: renderFilterBar,
     rupiah: rupiah, num: num, pct: pct, tone: tone, esc: esc
   };
 })();

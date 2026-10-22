@@ -53,7 +53,7 @@ function showToast(message) {
     toast.setAttribute("role", "status");
     document.body.appendChild(toast);
   }
-  toast.textContent = message + " (demo)";
+  toast.textContent = message;
   toast.hidden = false;
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(function () { toast.hidden = true; }, 3500);
@@ -140,7 +140,7 @@ function setDrillMonth(value) {
 
 function drillSteps(st) {
   const AF = window.AF;
-  return [["pulau", st.pulau !== "all" && AF.PULAU[st.pulau].name], ["region", st.region !== "all" && AF.REGION[st.region].name],
+  return [["region", st.region !== "all" && AF.REGION[st.region].name],
     ["area", st.area !== "all" && AF.AREA[st.area].name], ["sales", st.sales !== "all" && "Sales: " + AF.SALES[st.sales].name]].filter(function (x) { return x[1]; });
 }
 
@@ -196,7 +196,7 @@ function buildAFTree(month) {
     return n;
   }
   function productNode(o) {
-    const n = { title: o.name + " · " + mName, levelName: "Toko", depth: 6, isLowest: true, items: [] };
+    const n = { title: o.name + " · " + mName, levelName: "Toko", depth: 5, isLowest: true, items: [] };
     D.products.forEach(function (p, i) {
       const f = factor(o, month);
       const a = o.units[p.code] * p.price * f;
@@ -216,17 +216,17 @@ function buildAFTree(month) {
     for (const g of groups) { if (seen[g.label]) g.label += " (" + g.id + ")"; seen[g.label] = 1; }
     return groups;
   }
-  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.pulau.map(function (p) { return { label: p.name, id: p.code, outlets: by(D.outlets, "pulau", p.code) }; }), function (pg) {
-    return node(pg.label + " · " + mName, "Pulau", 2, D.regions.filter(function (r) { return r.pulau === pg.id; }).map(function (r) { return { label: r.name, id: r.code, outlets: by(pg.outlets, "region", r.code) }; }), function (rg) {
-      return node(rg.label + " · " + mName, "Wilayah", 3, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
-        return node(ag.label + " · " + mName, "Area", 4, uniq(D.sales.filter(function (x) { return x.area === ag.id; }).map(function (x) { return { label: "Sales: " + x.name, id: x.id, outlets: by(ag.outlets, "sales", x.id) }; })), function (sg) {
-          return node(sg.label + " · " + mName, "Sales", 5, uniq(sg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; })), function (og) {
-            return productNode(og.o);
-          });
+  // Semua Wilayah (1) -> Wilayah (2) -> Area (3) -> Sales (4) -> Toko (5)
+  const regionLevel = function (rg) {
+    return node(rg.label + " · " + mName, "Wilayah", 2, D.areas.filter(function (a) { return a.region === rg.id; }).map(function (a) { return { label: a.name, id: a.id, outlets: by(rg.outlets, "area", a.id) }; }), function (ag) {
+      return node(ag.label + " · " + mName, "Area", 3, uniq(D.sales.filter(function (x) { return x.area === ag.id; }).map(function (x) { return { label: "Sales: " + x.name, id: x.id, outlets: by(ag.outlets, "sales", x.id) }; })), function (sg) {
+        return node(sg.label + " · " + mName, "Sales", 4, uniq(sg.outlets.map(function (o) { return { label: o.name, id: o.id, outlets: [o], o: o }; })), function (og) {
+          return productNode(og.o);
         });
       });
     });
-  });
+  };
+  return node("Semua Wilayah · " + mName, "Semua Wilayah", 1, D.regions.map(function (r) { return { label: r.name, id: r.code, outlets: by(D.outlets, "region", r.code) }; }), regionLevel);
 }
 
 function drillCurrent() {
@@ -284,7 +284,7 @@ function renderDrill() {
   const totalTarget = items.reduce(function (sum, i) { return sum + i.target; }, 0);
   const totalActual = items.reduce(function (sum, i) { return sum + i.actual; }, 0);
 
-  document.getElementById("drill-depth").textContent = "Level " + depth + " dari 6";
+  document.getElementById("drill-depth").textContent = "Level " + depth + " dari 5";
   document.getElementById("drill-back").disabled = window.drillState.length <= 1;
   document.getElementById("drill-reset").disabled = window.drillState.length <= 1;
 
@@ -329,7 +329,7 @@ function renderDrill() {
   const datasets = donut
     ? [{ label: "Aktual (Juta Rp)", data: actual, backgroundColor: colors }]
     : [
-      { label: "Aktual (Juta Rp)", data: actual, backgroundColor: colors, borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
+      { label: "Aktual (Juta Rp)", data: actual, backgroundColor: "#2563eb", borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
       { label: "Target (Juta Rp)", data: target, backgroundColor: "#dbe3ee", borderColor: "#bac8da", borderWidth: 1, borderRadius: 3, grouped: false, barPercentage: 0.65, order: 2, valueLabel: false }
     ];
   const options = {
@@ -708,7 +708,7 @@ initSalesDetail();
 initOutletDetail();
 
 // Sembunyikan kolom pencarian di halaman yang tidak punya tabel untuk dicari.
-if (!document.querySelector("table[data-filterable]") && !document.getElementById("drill-data") && !document.getElementById("live-map")) {
+if (!document.querySelector("table[data-filterable]") && !document.getElementById("drill-data") && !document.getElementById("live-map") && !document.getElementById("jadwal-page")) {
   const toolbar = document.querySelector(".toolbar");
   if (toolbar) {
     toolbar.querySelector(".search-field").hidden = true;
@@ -755,3 +755,24 @@ function initSalesMap() {
 document.addEventListener("DOMContentLoaded", initSalesMap);
 
 
+
+// Tabel bisa diurutkan dengan klik judul kolom (nilai dari atribut data-v kalau ada)
+document.addEventListener("click", function (event) {
+  const th = event.target.closest("table.sortable thead th");
+  if (!th) return;
+  const table = th.closest("table"), col = Array.prototype.indexOf.call(th.parentNode.children, th);
+  const dir = th.dataset.dir === "desc" ? "asc" : "desc";
+  for (const x of th.parentNode.children) { delete x.dataset.dir; x.removeAttribute("aria-sort"); }
+  th.dataset.dir = dir;
+  th.setAttribute("aria-sort", dir === "asc" ? "ascending" : "descending");
+  const body = table.tBodies[0];
+  const rows = Array.prototype.filter.call(body.rows, function (r) { return !r.classList.contains("filter-empty") && r.cells.length > col; });
+  const val = function (r) { const c = r.cells[col]; const v = c.dataset.v !== undefined ? c.dataset.v : c.textContent.trim(); const n = parseFloat(v); return isNaN(n) || /[a-z]/i.test(v) && isNaN(Number(v)) ? v.toLowerCase() : n; };
+  rows.sort(function (a, b) {
+    const x = val(a), y = val(b);
+    const r = typeof x === "number" && typeof y === "number" ? x - y : String(x).localeCompare(String(y), "id");
+    return dir === "asc" ? r : -r;
+  });
+  const empty = body.querySelector(".filter-empty");
+  for (const r of rows) body.insertBefore(r, empty);
+});
