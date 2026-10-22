@@ -24,7 +24,7 @@
   const KINDS = [
     { key: "NOO", label: "NOO", color: "#10b981", radius: 7 },
     { key: "NOP", label: "NOP", color: "#8b5cf6", radius: 6 },
-    { key: "Aktif", label: "ROA", color: "#2563eb", radius: 4 },
+    { key: "Aktif", label: "ROA", color: "#ED1B24", radius: 4 },
     { key: "Tidak aktif", label: "RO tidak ROA", color: "#94a3b8", radius: 4 }
   ];
   const KIND = {};
@@ -69,7 +69,12 @@
       mk.addTo(layer);
       pts.push([o.lat, o.lng]);
     }
-    if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: maxZoom || 13 });
+    if (pts.length) {
+      // ukuran peta dihitung ulang dulu supaya titik-titik benar-benar di tengah
+      const fit = function () { map.invalidateSize(); map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: maxZoom || 13 }); };
+      fit();
+      setTimeout(fit, 250);
+    }
   }
 
   function kindSets(m) {
@@ -93,14 +98,14 @@
       kpiCard({ href: "penjualan.html", label: "Volume Penjualan", value: AF.rupiah(m.actual), dl: AF.delta(m.actual, p.actual), prevRange: pr,
         bar: m.salesPct, sub: "<b>" + AF.pct(m.salesPct) + "</b> dari target " + AF.rupiah(m.target) }),
       kpiCard({ href: "effective-call.html", label: "Effective Call", value: AF.pct(m.ecPct), dl: AF.delta(m.ecPct, p.ecPct, true), prevRange: pr,
-        bar: m.ecPct, sub: AF.num(m.visitsDone) + " / " + AF.num(m.visitsPlan) + " kunjungan" }),
+        bar: m.ecPct, sub: AF.num(m.visitsOrder) + " transaksi / " + AF.num(m.visitsDone) + " kunjungan · terlaksana " + AF.pct(m.visitPct) }),
       kpiCard({ href: "noo.html", label: "NOO", value: AF.num(m.nooActual) + "<small> / " + AF.num(m.nooTarget) + "</small>", dl: AF.delta(m.nooActual, p.nooActual), prevRange: pr,
         bar: m.nooPct, sub: "<b>" + AF.pct(m.nooPct) + "</b> dari target" }),
       kpiCard({ href: "nop.html", label: "NOP", value: AF.num(m.nopActual) + "<small> / " + AF.num(m.nopTarget) + "</small>", dl: AF.delta(m.nopActual, p.nopActual), prevRange: pr,
         bar: m.nopPct, sub: "<b>" + AF.pct(m.nopPct) + "</b> dari target" }),
       kpiCard({ href: "roa.html", label: "ROA", value: AF.pct(m.roaPct), dl: AF.delta(m.roaPct, p.roaPct, true), prevRange: pr,
         bar: m.roaPct, sub: AF.num(m.active) + " dari " + AF.num(m.outlets) + " RO beli bulan ini" }),
-      kpiCard({ href: "ro-item.html", label: "Produk Paling Laku", value: '<span class="kpi-item">' + AF.esc(short(top.p.name)) + "</span>", dl: AF.delta(top.u, top.pu), prevRange: pr,
+      kpiCard({ href: "ro-item.html", label: AF.ROLE.key === "sales" ? "Penjualan" : "Produk Paling Laku", value: '<span class="kpi-item">' + AF.esc(short(top.p.name)) + "</span>", dl: AF.delta(top.u, top.pu), prevRange: pr,
         sub: AF.num(top.u) + " unit · " + AF.pct(totalUnits ? top.u / totalUnits * 100 : 0) })
     ].join("");
 
@@ -120,7 +125,7 @@
     refreshAdminChart(document.getElementById("trend-chart"), {
       type: "bar", legend: "top", clickHref: "drilldown.html" + q, labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
-        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 44, order: 2 },
+        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#ED1B24", borderRadius: 6, maxBarThickness: 44, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },
         { type: "line", label: "Tahun Lalu", data: t.lastYear, borderColor: "#94a3b8", borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, tension: .3, order: 1 }
       ]
@@ -131,7 +136,7 @@
     refreshAdminChart(document.getElementById("product-chart"), {
       type: "bar", axis: "y", clickHref: "ro-item.html" + qi, clickValues: items.map(function (x) { return x.p.code; }),
       labels: items.map(function (x) { return short(x.p.name); }),
-      datasets: [{ label: "Unit terjual", data: items.map(function (x) { return x.u; }), backgroundColor: ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd"], borderRadius: 4 }]
+      datasets: [{ label: "Unit terjual", data: items.map(function (x) { return x.u; }), backgroundColor: ["#B9141B", "#ED1B24", "#F0444B", "#F47A7F", "#F8A9AC"], borderRadius: 4 }]
     });
 
     // kesehatan outlet
@@ -166,21 +171,20 @@
       rows.push(["Sales", sales.length], ["Admin &amp; admin gudang", admins]);
       // sales dengan EC terendah di cakupan ini
       const per = {};
-      for (const o of outlets) { const x = per[o.sales] || (per[o.sales] = { p: 0, d: 0 }); x.p += o.visits_plan; x.d += o.visits_done; }
-      const low = Object.keys(per).map(function (id) { return { s: AF.SALES[id], ec: per[id].p ? per[id].d / per[id].p * 100 : 0 }; }).sort(function (a, b) { return a.ec - b.ec; }).slice(0, 3);
+      for (const o of outlets) { const x = per[o.sales] || (per[o.sales] = { t: 0, d: 0 }); x.t += o.orders; x.d += o.visits_done; }
+      const low = Object.keys(per).map(function (id) { return { s: AF.SALES[id], ec: per[id].d ? per[id].t / per[id].d * 100 : 0 }; }).sort(function (a, b) { return a.ec - b.ec; }).slice(0, 3);
       box.innerHTML = rows.map(function (r) { return "<li><span>" + r[0] + "</span><strong>" + AF.num(r[1]) + "</strong></li>"; }).join("") +
         '<li class="list-head"><span>EC terendah</span><span></span></li>' +
         low.map(function (x) { return "<li><span>" + AF.esc(x.s.name) + '<span class="subtext">' + AF.esc(AF.AREA[x.s.area].name) + '</span></span><span class="badge ' + (x.ec >= 90 ? "" : x.ec >= 80 ? "warning" : "danger") + '">' + AF.pct(x.ec) + "</span></li>"; }).join("");
     }
     const vbox = document.getElementById("visit-list");
     if (vbox) {
-      const due = outlets.filter(function (o) { return o.visits_done < o.visits_plan; })
-        .sort(function (a, b) { return (b.status === "Inactive") - (a.status === "Inactive") || a.visits_done - b.visits_done; });
-      document.getElementById("visit-count").textContent = due.length + " toko";
-      vbox.innerHTML = due.slice(0, 8).map(function (o) {
-        const st = o.status === "Inactive" ? '<span class="badge danger">RO tidak ROA</span>' : o.status === "At Risk" ? '<span class="badge warning">&gt; 14 hari</span>' : '<span class="badge neutral">' + o.visits_done + "/" + o.visits_plan + "</span>";
-        return '<li><a href="' + outletHref(o) + '"><span>' + AF.esc(o.name) + '</span></a><span>' + st + "</span></li>";
-      }).join("") || "<li><span>Semua toko sudah dikunjungi bulan ini.</span></li>";
+      const up = AF.schedule(outlets, 0, 14);
+      document.getElementById("visit-count").textContent = up.length + " kunjungan · 14 hari";
+      vbox.innerHTML = up.slice(0, 7).map(function (x) {
+        const st = x.o.status === "Inactive" ? '<span class="badge danger">RO tidak ROA</span>' : x.o.status === "At Risk" ? '<span class="badge warning">Berisiko</span>' : "";
+        return '<li><a href="jadwal.html"><span>' + AF.esc(x.o.name) + '<span class="subtext">' + AF.fmtDay(AF.dayFromSnapshot(x.day)) + (x.changed || x.extra ? " · diubah" : "") + "</span></span></a><span>" + st + "</span></li>";
+      }).join("") + '<li><a class="link-more" href="jadwal.html">Lihat semua jadwal →</a></li>';
     }
   }
 
@@ -208,23 +212,23 @@
       const k = kindMap[o.id];
       const badge = k === "NOO" ? '<span class="badge">NOO</span>' : k === "NOP" ? '<span class="badge blue">NOP</span>' : k === "Tidak aktif" ? '<span class="badge danger">RO tidak ROA</span>' : '<span class="badge neutral">ROA</span>';
       return '<tr class="child-row" data-href="' + outletHref(o) + '"' + (parent !== undefined ? ' data-parent="' + parent + '" hidden' : "") + '><td><strong>' + AF.esc(o.name) +
-        '</strong><span class="subtext">' + AF.esc(AF.AREA[o.area].name) + '</span></td><td colspan="3">' + badge + '</td><td class="numeric">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
+        '</strong><span class="subtext">' + AF.esc(AF.AREA[o.area].name) + '</span></td><td colspan="3" class="center">' + badge + '</td><td class="center">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
     };
     if (g.key === "toko") {
       const list = outlets.slice().sort(function (a, b) { return isNew(b) - isNew(a); });
       document.getElementById("map-group-title").textContent = "Toko (" + list.length + ")";
-      gt.querySelector("thead").innerHTML = '<tr><th scope="col">Toko</th><th scope="col" colspan="3">Status</th><th scope="col">Aktual</th></tr>';
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">Toko</th><th scope="col" colspan="3" class="center">Status</th><th scope="col" class="center">Aktual</th></tr>';
       gt.querySelector("tbody").innerHTML = list.map(function (o) { return tokoRow(o); }).join("");
     } else {
       document.getElementById("map-group-title").textContent = "Per " + g.level;
-      gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col">Outlet</th><th scope="col">NOO</th><th scope="col">NOP</th><th scope="col">RO tidak ROA</th></tr>';
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col" class="center">Outlet</th><th scope="col" class="center">NOO</th><th scope="col" class="center">NOP</th><th scope="col" class="center">RO tidak ROA</th></tr>';
       gt.querySelector("tbody").innerHTML = g.groups.map(function (x, i) {
         const c = { "NOO": 0, "NOP": 0, "Tidak aktif": 0 };
         for (const o of x.outlets) if (c[kindMap[o.id]] !== undefined) c[kindMap[o.id]]++;
         const items = x.outlets.filter(isNew);
         return '<tr class="group-row" data-g="' + i + '" aria-expanded="false"><td><button type="button" class="chev" aria-label="Buka toko NOO dan NOP ' + AF.esc(x.name) + '">▸</button>' +
-          '<button type="button" class="group-name" title="Filter ke ' + AF.esc(x.name) + '">' + AF.esc(x.name) + '</button>' + (x.sub ? '<span class="subtext group-sub">' + AF.esc(x.sub) + "</span>" : "") + '</td><td class="numeric mono">' + x.outlets.length +
-          '</td><td class="numeric mono">' + c.NOO + '</td><td class="numeric mono">' + c.NOP + '</td><td class="numeric mono">' + c["Tidak aktif"] + "</td></tr>" +
+          '<button type="button" class="group-name" title="Filter ke ' + AF.esc(x.name) + '">' + AF.esc(x.name) + '</button>' + (x.sub ? '<span class="subtext group-sub">' + AF.esc(x.sub) + "</span>" : "") + '</td><td class="center mono">' + x.outlets.length +
+          '</td><td class="center mono">' + c.NOO + '</td><td class="center mono">' + c.NOP + '</td><td class="center mono">' + c["Tidak aktif"] + "</td></tr>" +
           items.map(function (o) { return tokoRow(o, i); }).join("");
       }).join("");
       for (const tr of gt.querySelectorAll(".group-row")) {
@@ -259,7 +263,7 @@
     refreshAdminChart(document.getElementById("trend-big"), {
       type: "bar", legend: "top", clickHref: "drilldown.html?bulan={i}", labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
-        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 56, order: 2 },
+        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#ED1B24", borderRadius: 6, maxBarThickness: 56, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },
         { type: "line", label: "Tahun Lalu", data: t.lastYear, borderColor: "#94a3b8", borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, tension: .3, order: 1 }
       ]
@@ -320,48 +324,124 @@
   }
 
   // ================================================================ PERINGATAN DINI
-  // 1) RO yang tidak ROA (tidak beli > 1 bulan)  2) produk slow moving berisiko kedaluwarsa di RO tidak ROA  3) RO belum dikunjungi > 14 hari
+  // jadwal kunjungan terlewat, RO tidak ROA, risiko kedaluwarsa (dari riwayat produksi), sales EC / kunjungan < 80%
   let warnType = new URLSearchParams(location.search).get("jenis") || "all";
   const WARN = {
-    roa: { label: "RO tidak ROA", badge: "danger" },
-    exp: { label: "Risiko kedaluwarsa", badge: "danger" },
-    visit: { label: "Belum dikunjungi", badge: "warning" }
+    visit: { label: "Jadwal terlewat", badge: "warning", title: "Jadwal Kunjungan Terlewat", sub: "Sudah dijadwalkan, belum dikunjungi" },
+    roa: { label: "RO tidak ROA", badge: "danger", title: "RO Tidak ROA", sub: "Tidak beli > 1 bulan" },
+    exp: { label: "Risiko kedaluwarsa", badge: "danger", title: "Risiko Kedaluwarsa", sub: "Produk slow moving, batch hampir / sudah kedaluwarsa" },
+    kinerja: { label: "Kinerja sales", badge: "warning", title: "Sales di Bawah 80%", sub: "Effective call atau kunjungan terlaksana < 80%" }
   };
-  function warnRender(state) {
+  const FU = { open: ["Belum ditindaklanjuti", "neutral"], progress: ["Sedang ditindaklanjuti", "warning"], done: ["Selesai", ""] };
+
+  function prodName(code) { for (const p of D.products) if (p.code === code) return p.name; return code; }
+
+  function warnList(state) {
     const outlets = AF.scopeOutlets(state);
     const list = [];
     for (const o of outlets) {
-      if (o.status === "Inactive") {
-        list.push({ t: "roa", o: o, note: "Tidak beli > 1 bulan" });
-        if (o.slow) list.push({ t: "exp", o: o, note: AF.num(o.slow) + " unit produk slow moving belum terjual > 1 bulan" });
-      } else if (o.status === "At Risk") list.push({ t: "visit", o: o, note: "Kunjungan wajib tiap 2 minggu terlewat" });
+      const v = o.visits || [];
+      for (let i = 0; i < v.length; i += 2) if (v[i + 1] === 0) {
+        const d = AF.dayFromSnapshot(v[i]);
+        list.push({ id: "visit-" + o.id + "-" + v[i], t: "visit", o: o, note: "Jadwal " + AF.fmtDay(d) + " belum dikunjungi (" + (-v[i]) + " hari lalu)" });
+      }
+      if (o.status === "Inactive") list.push({ id: "roa-" + o.id, t: "roa", o: o, note: "Tidak beli > 1 bulan" });
+      if (o.slow && o.batch >= 0) {
+        const b = D.batches[o.batch], days = Math.round((AF.fromIso(b.exp) - AF.SNAPSHOT) / 864e5);
+        if (days < 60) list.push({ id: "exp-" + o.id, t: "exp", o: o, code: b.code, note: prodName(b.code) + " " + AF.num(o.slow) + " unit · batch " + b.id + " (produksi " + AF.fmtDate(AF.fromIso(b.prod)) + ") " +
+          (days < 0 ? "sudah kedaluwarsa " + (-days) + " hari" : "kedaluwarsa " + days + " hari lagi"), days: days });
+      }
     }
-    const n = { roa: 0, exp: 0, visit: 0 };
-    for (const w of list) n[w.t]++;
-    const card = function (t, label, sub) {
-      return '<button type="button" class="card kpi warn-card' + (warnType === t ? " selected" : "") + " trend-" + (t === "visit" ? "flat" : "down") + '" data-jenis="' + t + '"><h2 class="kpi-label">' + label +
-        '</h2><div class="kpi-value">' + AF.num(n[t]) + '</div><span class="kpi-sub">' + sub + "</span></button>";
-    };
-    document.getElementById("warn-kpis").innerHTML = card("roa", "RO Tidak ROA", "Tidak beli > 1 bulan") + card("exp", "Risiko Kedaluwarsa", "Produk slow moving di RO tidak ROA") +
-      card("visit", "Belum Dikunjungi > 14 Hari", "Wajib kunjungan tiap 2 minggu");
+    const per = {};
+    for (const o of outlets) { const x = per[o.sales] || (per[o.sales] = { p: 0, d: 0, t: 0 }); x.p += o.visits_plan; x.d += o.visits_done; x.t += o.orders; }
+    for (const id in per) {
+      const x = per[id], ec = x.d ? x.t / x.d * 100 : 0, vp = x.p ? x.d / x.p * 100 : 0;
+      if (ec < 80 || vp < 80) list.push({ id: "kinerja-" + id, t: "kinerja", s: AF.SALES[id], ec: ec, vp: vp,
+        note: (ec < 80 ? "Effective call " + AF.pct(ec) : "") + (ec < 80 && vp < 80 ? " · " : "") + (vp < 80 ? "Kunjungan terlaksana " + AF.pct(vp) : "") + " (batas 80%)" });
+    }
+    return list;
+  }
+
+  function fuBadge(f) { const x = FU[(f && f.status) || "open"]; return '<span class="badge ' + x[1] + '">' + x[0] + "</span>"; }
+
+  // satu dropdown: peringatan untuk Outlet / Produk / Sales
+  const GROUP = { outlet: ["visit", "roa"], produk: ["exp"], sales: ["kinerja"] };
+  let warnGroup = new URLSearchParams(location.search).get("untuk") || "all";
+  function inGroup(t) { return warnGroup === "all" || GROUP[warnGroup].indexOf(t) >= 0; }
+
+  function warnRender(state) {
+    const sel = document.getElementById("warn-group");
+    sel.value = warnGroup;
+    if (warnType !== "all" && !inGroup(warnType)) warnType = "all";
+    const list = warnList(state).filter(function (w) { return inGroup(w.t); });
+    const fu = AF.store.get("followup", {});
+    const n = { visit: 0, roa: 0, exp: 0, kinerja: 0 }, done = { visit: 0, roa: 0, exp: 0, kinerja: 0 };
+    for (const w of list) { n[w.t]++; if (fu[w.id] && fu[w.id].status === "done") done[w.t]++; }
+    const kinds = Object.keys(WARN).filter(inGroup);
+    document.getElementById("warn-kpis").className = "kpi-grid " + (kinds.length === 1 ? "one" : kinds.length === 2 ? "two" : "four");
+    document.getElementById("warn-kpis").innerHTML = kinds.map(function (t) {
+      return '<button type="button" class="card kpi warn-card' + (warnType === t ? " selected" : "") + " trend-" + (t === "visit" || t === "kinerja" ? "flat" : "down") + '" data-jenis="' + t + '"><h2 class="kpi-label">' + WARN[t].title +
+        '</h2><div class="kpi-value">' + AF.num(n[t]) + '</div><span class="kpi-sub">' + WARN[t].sub + (done[t] ? " · " + done[t] + " selesai" : "") + "</span></button>";
+    }).join("");
     for (const b of document.querySelectorAll("[data-jenis]")) b.onclick = function () { warnType = warnType === b.dataset.jenis ? "all" : b.dataset.jenis; warnRender(state); };
-    const rows = list.filter(function (w) { return warnType === "all" || w.t === warnType; });
-    document.getElementById("warn-title").textContent = (warnType === "all" ? "Semua Peringatan" : WARN[warnType].label) + " (" + AF.num(rows.length) + ")";
-    document.querySelector("#warn-table tbody").innerHTML = rows.slice(0, 500).map(function (w) {
-      const o = w.o;
-      return '<tr data-href="' + outletHref(o) + '"><td><span class="badge ' + WARN[w.t].badge + '">' + WARN[w.t].label + "</span></td><td><strong>" + AF.esc(o.name) + '</strong><span class="subtext mono">' + o.id +
-        "</span></td><td>" + AF.esc(AF.REGION[o.region].name) + '<span class="subtext">' + AF.esc(AF.AREA[o.area].name) + "</span></td><td>" + AF.esc(AF.SALES[o.sales].name) +
-        '<span class="subtext">ASM ' + AF.esc(AF.AREA[o.area].asm) + "</span></td><td>" + w.note + "</td></tr>";
-    }).join("") + (rows.length > 500 ? '<tr><td class="table-empty" colspan="5">Menampilkan 500 dari ' + AF.num(rows.length) + " peringatan. Persempit filter wilayah untuk melihat sisanya.</td></tr>" : "") +
-      '<tr class="filter-empty" hidden><td class="table-empty" colspan="5">Tidak ada peringatan.</td></tr>';
+    const fuFilter = document.getElementById("fu-filter").value;
+    const rows = list.filter(function (w) {
+      const st = (fu[w.id] && fu[w.id].status) || "open";
+      return (warnType === "all" || w.t === warnType) && (fuFilter === "all" || st === fuFilter);
+    });
+    document.getElementById("warn-title").textContent = (warnType !== "all" ? WARN[warnType].title : warnGroup === "all" ? "Semua Peringatan" : "Peringatan " + { outlet: "Outlet", produk: "Produk", sales: "Sales" }[warnGroup]) + " (" + AF.num(rows.length) + ")";
+    document.querySelector("#warn-table tbody").innerHTML = rows.slice(0, 400).map(function (w, i) {
+      const f = fu[w.id], last = f && f.notes && f.notes.length ? f.notes[f.notes.length - 1] : null;
+      const who = w.o ? "<strong>" + AF.esc(w.o.name) + '</strong><span class="subtext mono">' + w.o.id + "</span>" : "<strong>" + AF.esc(w.s.name) + '</strong><span class="subtext mono">' + w.s.id + "</span>";
+      const area = w.o || w.s;
+      return '<tr data-i="' + i + '"><td><span class="badge ' + WARN[w.t].badge + '">' + WARN[w.t].label + "</span></td><td>" + who + "</td><td>" + AF.esc(AF.REGION[area.region].name) + '<span class="subtext">' + AF.esc(AF.AREA[area.area].name) +
+        "</span></td><td>" + AF.esc(w.o ? AF.SALES[w.o.sales].name : w.s.name) + '<span class="subtext">ASM ' + AF.esc(AF.AREA[area.area].asm) + "</span></td><td>" + w.note +
+        (last ? '<span class="subtext">Catatan: ' + AF.esc(last.text) + " — " + AF.esc(last.by) + ", " + last.at + "</span>" : "") + "</td><td>" + fuBadge(f) +
+        '</td><td><button type="button" class="detail-button fu-btn" data-i="' + i + '">Tindak lanjut</button></td></tr>';
+    }).join("") + (rows.length > 400 ? '<tr><td class="table-empty" colspan="7">Menampilkan 400 dari ' + AF.num(rows.length) + " peringatan. Persempit filter untuk melihat sisanya.</td></tr>" : "") +
+      '<tr class="filter-empty" hidden><td class="table-empty" colspan="7">Tidak ada peringatan.</td></tr>';
+    for (const b of document.querySelectorAll(".fu-btn")) b.onclick = function () { openFollowUp(b.closest("tr"), rows[Number(b.dataset.i)], state); };
     if (document.getElementById("search").value) searchTables();
+  }
+
+  // form tindak lanjut di bawah baris peringatan (status + catatan, tersimpan di browser)
+  function openFollowUp(tr, w, state) {
+    const next = tr.nextElementSibling;
+    if (next && next.classList.contains("fu-row")) { next.remove(); return; }
+    for (const r of document.querySelectorAll(".fu-row")) r.remove();
+    const fu = AF.store.get("followup", {}), f = fu[w.id] || { status: "open", notes: [] };
+    const hist = f.notes.map(function (n) { return "<li><span>" + AF.esc(n.text) + '</span><span class="subtext">' + AF.esc(n.by) + " · " + n.at + (n.status ? " · " + FU[n.status][0] : "") + "</span></li>"; }).join("");
+    const link = w.o ? '<a class="detail-button" href="' + outletHref(w.o) + '">Buka detail toko</a>' : "";
+    const row = document.createElement("tr");
+    row.className = "fu-row";
+    row.innerHTML = '<td colspan="7"><div class="fu-box"><div class="fu-form"><label>Status<select class="fu-status">' + Object.keys(FU).map(function (k) { return '<option value="' + k + '"' + (f.status === k ? " selected" : "") + ">" + FU[k][0] + "</option>"; }).join("") +
+      '</select></label><label>Catatan<textarea class="fu-note" rows="3" placeholder="Contoh: sudah ditelepon, toko minta dikunjungi Kamis"></textarea></label>' +
+      '<div class="fu-actions"><button type="button" class="button primary fu-save">Simpan</button><button type="button" class="button fu-cancel">Tutup</button>' + link + "</div></div>" +
+      '<div class="fu-hist"><span class="popup-label">Riwayat tindak lanjut</span>' + (hist ? '<ul class="stat-list">' + hist + "</ul>" : '<p class="muted">Belum ada catatan.</p>') + "</div></div></td>";
+    tr.after(row);
+    row.querySelector(".fu-cancel").onclick = function () { row.remove(); };
+    row.querySelector(".fu-save").onclick = function () {
+      const text = row.querySelector(".fu-note").value.trim(), st = row.querySelector(".fu-status").value;
+      if (!text && st === f.status) { row.querySelector(".fu-note").focus(); return; }
+      f.status = st;
+      f.notes.push({ text: text || "Status diubah", by: AF.who(), at: AF.nowText(), status: st });
+      fu[w.id] = f;
+      AF.store.set("followup", fu);
+      showToast("Tindak lanjut tersimpan");
+      warnRender(state);
+    };
+    row.querySelector(".fu-note").focus();
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     const bar = document.getElementById("filter-bar");
     if (document.getElementById("exec-kpis")) filter = AF.renderFilterBar(bar, {}, execRender);
     else if (document.getElementById("map-page")) filter = AF.renderFilterBar(bar, {}, mapPageRender);
-    else if (document.getElementById("warn-page")) filter = AF.renderFilterBar(bar, {}, warnRender);
+    else if (document.getElementById("warn-page")) {
+      filter = AF.renderFilterBar(bar, {}, warnRender);
+      document.getElementById("fu-filter").onchange = function () { warnRender(filter.state); };
+      document.getElementById("warn-group").onchange = function () { warnGroup = this.value; warnType = "all"; warnRender(filter.state); };
+    }
     else if (document.getElementById("health-page")) {
       filter = AF.renderFilterBar(bar, {}, healthRender);
       for (const b of document.querySelectorAll("[data-status]")) b.onclick = function () {
