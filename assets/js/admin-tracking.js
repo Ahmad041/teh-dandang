@@ -5,7 +5,7 @@
   const PLATE = { R1: "AD", R2: "H", R3: "AB", R4: "L", R5: "B", R6: "BK", R7: "KT", R8: "DK", R9: "DD" };
   const TYPES = ["GrandMax", "Blindvan", "Canter Box", "Motor Box"];
   const STATUS = {
-    moving: { label: "Bergerak", color: "#2563eb", badge: "blue" },
+    moving: { label: "Bergerak", color: "#ED1B24", badge: "blue" },
     visit: { label: "Sedang kunjungan", color: "#10b981", badge: "" },
     idle: { label: "Diam", color: "#f59e0b", badge: "warning" },
     offline: { label: "Tidak terhubung", color: "#94a3b8", badge: "neutral" },
@@ -91,7 +91,7 @@
       const next = v.stops[Math.min(v.leg + 1, v.stops.length - 1)];
       return '<button type="button" class="vehicle-row' + (selected === v ? " selected" : "") + '" data-id="' + v.id + '"><span class="dot-status" style="background:' + st.color + '"></span>' +
         '<span class="vehicle-main"><strong class="mono">' + v.plate + "</strong> · " + AF.esc(v.sales.name) + '<span class="subtext">' + AF.esc(AF.REGION[v.region].short) + " · menuju " + AF.esc(next.name) +
-        '</span></span><span class="vehicle-meta"><span class="badge ' + st.badge + '">' + st.label + '</span><span class="subtext mono">' + v.speed + " km/h · " + v.battery + "%</span></span></button>";
+        '</span></span><span class="vehicle-meta"><span class="badge ' + st.badge + '">' + st.label + '</span><span class="subtext mono">' + v.speed + " km/jam · baterai " + v.battery + "%</span></span></button>";
     }).join("") || '<p class="muted">Tidak ada kendaraan sesuai filter.</p>';
     for (const b of document.querySelectorAll(".vehicle-row")) b.onclick = function () { select(vehicles.find(function (x) { return x.id === b.dataset.id; })); };
   }

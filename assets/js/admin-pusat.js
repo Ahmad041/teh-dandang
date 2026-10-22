@@ -166,7 +166,7 @@ function buildDrillRoot(month) {
 
 function buildAFTree(month) {
   const AF = window.AF, D = AF.D, t = D.trend;
-  const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16", "#f97316", "#14b8a6", "#6366f1"];
+  const COLORS = ["#ED1B24", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16", "#f97316", "#14b8a6", "#6366f1"];
   const mName = t.labels[month] + " 2026";
   function factor(o, m) {
     if (m < 0) return t.lastYear[0] / t.actual[9];
@@ -323,13 +323,13 @@ function renderDrill() {
   const horizontal = drillChartType === "horizontal";
   const donut = drillChartType === "donut";
   const labels = items.map(function (i) { return i.label; });
-  const colors = items.map(function (i) { return i.color || "#2563eb"; });
+  const colors = items.map(function (i) { return i.color || "#ED1B24"; });
   const actual = items.map(function (i) { return i.actual / 1000000; });
   const target = items.map(function (i) { return i.target / 1000000; });
   const datasets = donut
     ? [{ label: "Aktual (Juta Rp)", data: actual, backgroundColor: colors }]
     : [
-      { label: "Aktual (Juta Rp)", data: actual, backgroundColor: "#2563eb", borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
+      { label: "Aktual (Juta Rp)", data: actual, backgroundColor: "#ED1B24", borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 },
       { label: "Target (Juta Rp)", data: target, backgroundColor: "#dbe3ee", borderColor: "#bac8da", borderWidth: 1, borderRadius: 3, grouped: false, barPercentage: 0.65, order: 2, valueLabel: false }
     ];
   const options = {
@@ -626,9 +626,14 @@ function rupiahFull(value) {
   return "Rp " + Number(value).toLocaleString("id-ID");
 }
 
+// label status dari data SAP ke Bahasa Indonesia
+function idLabel(t) {
+  return String(t).replace(/Inactive/g, "Tidak aktif").replace(/Active \(Top Performer\)/g, "Aktif · Sales terbaik").replace(/Active/g, "Aktif").replace(/Warning/g, "Perlu perhatian").replace(/Synced to SAP B1/g, "Masuk SAP B1");
+}
+
 function roBadge(status) {
-  const cls = status === "Inactive" ? "danger" : status === "Warning" ? "warning" : "";
-  return '<span class="badge ' + cls + '">' + escapeHtml(status) + "</span>";
+  const cls = /Inactive/.test(status) ? "danger" : /Warning/.test(status) ? "warning" : "";
+  return '<span class="badge ' + cls + '">' + escapeHtml(idLabel(status)) + "</span>";
 }
 
 function definitionList(pairs) {
@@ -650,22 +655,22 @@ function initSalesDetail() {
   document.title = "Detail Sales - " + s.name + " | Teh Dandang";
   document.getElementById("page-title").textContent = s.name + " (NPK: " + s.npk + ")";
   document.getElementById("breadcrumb").textContent = s.name;
-  document.getElementById("page-description").textContent = "SAP SlpCode: " + s.slp_code + " · Area: " + s.area + " (" + s.region + ")";
+  document.getElementById("page-description").textContent = "Kode sales SAP: " + s.slp_code + " · Area: " + s.area + " (" + s.region + ")";
   document.getElementById("sd-actual").textContent = rupiahFull(s.actual);
   document.getElementById("sd-ach").textContent = "Capaian: " + s.achievement + "% dari target " + rupiahFull(s.target);
   document.getElementById("sd-ro").textContent = s.ro_rate + "%";
   document.getElementById("sd-roa").textContent = s.roa_rate + "%";
   document.getElementById("sd-ec").textContent = s.ec_rate + "%";
   const outlets = data.outlets.filter(function (o) { return o.sales_name.toLowerCase() === s.name.toLowerCase(); });
-  document.getElementById("sd-count").textContent = outlets.length + " Outlets";
+  document.getElementById("sd-count").textContent = outlets.length + " toko";
   document.getElementById("sd-profile").innerHTML = definitionList([
-    ["ASM Supervisor", escapeHtml(s.asm)], ["Manager", escapeHtml(s.manager)], ["Nomor Telepon", escapeHtml(s.phone)],
-    ["Plat Kendaraan", escapeHtml(s.vehicle_plate)], ["Status", escapeHtml(s.status)], ["Jumlah Outlet Assigned", outlets.length + " Outlets"]
+    ["ASM", escapeHtml(s.asm)], ["Manajer", escapeHtml(s.manager)], ["Nomor Telepon", escapeHtml(s.phone)],
+    ["Plat Kendaraan", escapeHtml(s.vehicle_plate)], ["Status", escapeHtml(idLabel(s.status))], ["Jumlah toko", outlets.length + " toko"]
   ]);
   document.getElementById("sd-outlets").innerHTML = outlets.map(function (o) {
     return '<tr><td class="mono">' + o.card_code + "</td><td><strong>" + escapeHtml(o.card_name) + '</strong></td><td><span class="badge neutral">' + o.market + "</span></td><td>" +
       escapeHtml(o.address) + "</td><td>" + roBadge(o.ro_status) + '</td><td><a class="detail-button" href="outlet-detail.html?code=' + o.card_code + '">Lihat</a></td></tr>';
-  }).join("") || '<tr><td class="table-empty" colspan="6">Belum ada outlet yang di-assign ke sales ini.</td></tr>';
+  }).join("") || '<tr><td class="table-empty" colspan="6">Belum ada toko untuk sales ini.</td></tr>';
 }
 
 function initOutletDetail() {
@@ -676,32 +681,32 @@ function initOutletDetail() {
   const o = data.outlets.find(function (x) { return x.card_code === code; });
   if (!o) {
     document.getElementById("page-title").textContent = "Outlet tidak ditemukan";
-    document.getElementById("page-description").textContent = "CardCode " + code + " tidak ada di data.";
+    document.getElementById("page-description").textContent = "Kode outlet " + code + " tidak ada di data.";
     document.getElementById("outlet-detail").hidden = true;
     return;
   }
   document.title = "Detail Outlet - " + o.card_name + " | Teh Dandang";
   document.getElementById("page-title").textContent = o.card_name;
   document.getElementById("breadcrumb").textContent = o.card_name;
-  document.getElementById("page-description").textContent = "SAP CardCode: " + o.card_code + " · Market: " + o.market + " · Sales: " + o.sales_name;
-  document.getElementById("od-ro").innerHTML = roBadge("RO Status: " + o.ro_status).replace('class="badge "', 'class="badge ' + (o.ro_status === "Inactive" ? "danger" : o.ro_status === "Warning" ? "warning" : "") + '"');
+  document.getElementById("page-description").textContent = "Kode SAP: " + o.card_code + " · Saluran: " + o.market + " · Sales: " + o.sales_name;
+  document.getElementById("od-ro").innerHTML = roBadge("Status RO: " + o.ro_status).replace('class="badge "', 'class="badge ' + (o.ro_status === "Inactive" ? "danger" : o.ro_status === "Warning" ? "warning" : "") + '"');
   document.getElementById("od-profile").innerHTML = definitionList([
-    ["CardType", o.card_type], ["GroupCode", o.group_code], ["SlpCode Sales", o.slp_code + " (" + escapeHtml(o.sales_name) + ")"],
+    ["Tipe pelanggan", o.card_type === "cCustomer" ? "Pelanggan" : o.card_type], ["Kode grup", o.group_code], ["Kode sales SAP", o.slp_code + " (" + escapeHtml(o.sales_name) + ")"],
     ["Telepon / Email", escapeHtml(o.phone) + "<br/>" + escapeHtml(o.email)], ["Alamat Lengkap", escapeHtml(o.address + ", " + o.kecamatan + ", " + o.city)],
-    ["Last Order Date", o.last_order_date], ["Jumlah RO", o.ro_count + "x"]
+    ["Order terakhir", o.last_order_date], ["Jumlah RO", o.ro_count + "x"]
   ]);
   document.getElementById("od-map-name").textContent = o.card_name;
   document.getElementById("od-map-coord").textContent = "Lat: " + o.latitude + " | Lng: " + o.longitude;
   document.getElementById("od-map-link").href = "https://www.google.com/maps?q=" + o.latitude + "," + o.longitude;
   document.getElementById("od-skus").innerHTML = o.products_purchased.map(function (sku) {
     const p = data.products.find(function (x) { return x.item_code === sku; });
-    return "<li><span><strong>" + escapeHtml(p ? p.item_name : "Teh Dandang Active Item") + '</strong><span class="subtext mono">SKU Code: ' + sku + '</span></span><span class="badge">Active</span></li>';
+    return "<li><span><strong>" + escapeHtml(p ? p.item_name : "Produk Teh Dandang") + '</strong><span class="subtext mono">Kode SKU: ' + sku + '</span></span><span class="badge">Aktif</span></li>';
   }).join("");
   const orders = data.orders.filter(function (x) { return x.card_code === o.card_code; });
   document.getElementById("od-orders").innerHTML = orders.map(function (x) {
     return '<tr><td class="mono">#' + x.doc_num + '</td><td class="mono">' + x.sap_doc_entry + '</td><td class="mono">' + x.doc_date + "</td><td>" + escapeHtml(x.slp_name) +
-      '</td><td class="numeric">' + rupiahFull(x.subtotal) + '</td><td class="numeric"><strong>' + rupiahFull(x.doc_total) + '</strong></td><td><span class="badge">' + escapeHtml(x.sap_status) + "</span></td></tr>";
-  }).join("") || '<tr><td class="table-empty" colspan="7">Belum ada sales order untuk outlet ini.</td></tr>';
+      '</td><td class="numeric">' + rupiahFull(x.subtotal) + '</td><td class="numeric"><strong>' + rupiahFull(x.doc_total) + '</strong></td><td><span class="badge">' + escapeHtml(idLabel(x.sap_status)) + "</span></td></tr>";
+  }).join("") || '<tr><td class="table-empty" colspan="7">Belum ada pesanan untuk outlet ini.</td></tr>';
 }
 
 initSalesDetail();

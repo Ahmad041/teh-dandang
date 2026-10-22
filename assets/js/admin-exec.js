@@ -24,7 +24,7 @@
   const KINDS = [
     { key: "NOO", label: "NOO", color: "#10b981", radius: 7 },
     { key: "NOP", label: "NOP", color: "#8b5cf6", radius: 6 },
-    { key: "Aktif", label: "ROA", color: "#2563eb", radius: 4 },
+    { key: "Aktif", label: "ROA", color: "#ED1B24", radius: 4 },
     { key: "Tidak aktif", label: "RO tidak ROA", color: "#94a3b8", radius: 4 }
   ];
   const KIND = {};
@@ -69,7 +69,12 @@
       mk.addTo(layer);
       pts.push([o.lat, o.lng]);
     }
-    if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: maxZoom || 13 });
+    if (pts.length) {
+      // ukuran peta dihitung ulang dulu supaya titik-titik benar-benar di tengah
+      const fit = function () { map.invalidateSize(); map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: maxZoom || 13 }); };
+      fit();
+      setTimeout(fit, 250);
+    }
   }
 
   function kindSets(m) {
@@ -120,7 +125,7 @@
     refreshAdminChart(document.getElementById("trend-chart"), {
       type: "bar", legend: "top", clickHref: "drilldown.html" + q, labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
-        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 44, order: 2 },
+        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#ED1B24", borderRadius: 6, maxBarThickness: 44, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },
         { type: "line", label: "Tahun Lalu", data: t.lastYear, borderColor: "#94a3b8", borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, tension: .3, order: 1 }
       ]
@@ -131,7 +136,7 @@
     refreshAdminChart(document.getElementById("product-chart"), {
       type: "bar", axis: "y", clickHref: "ro-item.html" + qi, clickValues: items.map(function (x) { return x.p.code; }),
       labels: items.map(function (x) { return short(x.p.name); }),
-      datasets: [{ label: "Unit terjual", data: items.map(function (x) { return x.u; }), backgroundColor: ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd"], borderRadius: 4 }]
+      datasets: [{ label: "Unit terjual", data: items.map(function (x) { return x.u; }), backgroundColor: ["#B9141B", "#ED1B24", "#F0444B", "#F47A7F", "#F8A9AC"], borderRadius: 4 }]
     });
 
     // kesehatan outlet
@@ -207,23 +212,23 @@
       const k = kindMap[o.id];
       const badge = k === "NOO" ? '<span class="badge">NOO</span>' : k === "NOP" ? '<span class="badge blue">NOP</span>' : k === "Tidak aktif" ? '<span class="badge danger">RO tidak ROA</span>' : '<span class="badge neutral">ROA</span>';
       return '<tr class="child-row" data-href="' + outletHref(o) + '"' + (parent !== undefined ? ' data-parent="' + parent + '" hidden' : "") + '><td><strong>' + AF.esc(o.name) +
-        '</strong><span class="subtext">' + AF.esc(AF.AREA[o.area].name) + '</span></td><td colspan="3">' + badge + '</td><td class="numeric">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
+        '</strong><span class="subtext">' + AF.esc(AF.AREA[o.area].name) + '</span></td><td colspan="3" class="center">' + badge + '</td><td class="center">' + AF.rupiah(AF.outletActual(o) * info.factor) + "</td></tr>";
     };
     if (g.key === "toko") {
       const list = outlets.slice().sort(function (a, b) { return isNew(b) - isNew(a); });
       document.getElementById("map-group-title").textContent = "Toko (" + list.length + ")";
-      gt.querySelector("thead").innerHTML = '<tr><th scope="col">Toko</th><th scope="col" colspan="3">Status</th><th scope="col">Aktual</th></tr>';
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">Toko</th><th scope="col" colspan="3" class="center">Status</th><th scope="col" class="center">Aktual</th></tr>';
       gt.querySelector("tbody").innerHTML = list.map(function (o) { return tokoRow(o); }).join("");
     } else {
       document.getElementById("map-group-title").textContent = "Per " + g.level;
-      gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col">Outlet</th><th scope="col">NOO</th><th scope="col">NOP</th><th scope="col">RO tidak ROA</th></tr>';
+      gt.querySelector("thead").innerHTML = '<tr><th scope="col">' + g.level + '</th><th scope="col" class="center">Outlet</th><th scope="col" class="center">NOO</th><th scope="col" class="center">NOP</th><th scope="col" class="center">RO tidak ROA</th></tr>';
       gt.querySelector("tbody").innerHTML = g.groups.map(function (x, i) {
         const c = { "NOO": 0, "NOP": 0, "Tidak aktif": 0 };
         for (const o of x.outlets) if (c[kindMap[o.id]] !== undefined) c[kindMap[o.id]]++;
         const items = x.outlets.filter(isNew);
         return '<tr class="group-row" data-g="' + i + '" aria-expanded="false"><td><button type="button" class="chev" aria-label="Buka toko NOO dan NOP ' + AF.esc(x.name) + '">▸</button>' +
-          '<button type="button" class="group-name" title="Filter ke ' + AF.esc(x.name) + '">' + AF.esc(x.name) + '</button>' + (x.sub ? '<span class="subtext group-sub">' + AF.esc(x.sub) + "</span>" : "") + '</td><td class="numeric mono">' + x.outlets.length +
-          '</td><td class="numeric mono">' + c.NOO + '</td><td class="numeric mono">' + c.NOP + '</td><td class="numeric mono">' + c["Tidak aktif"] + "</td></tr>" +
+          '<button type="button" class="group-name" title="Filter ke ' + AF.esc(x.name) + '">' + AF.esc(x.name) + '</button>' + (x.sub ? '<span class="subtext group-sub">' + AF.esc(x.sub) + "</span>" : "") + '</td><td class="center mono">' + x.outlets.length +
+          '</td><td class="center mono">' + c.NOO + '</td><td class="center mono">' + c.NOP + '</td><td class="center mono">' + c["Tidak aktif"] + "</td></tr>" +
           items.map(function (o) { return tokoRow(o, i); }).join("");
       }).join("");
       for (const tr of gt.querySelectorAll(".group-row")) {
@@ -258,7 +263,7 @@
     refreshAdminChart(document.getElementById("trend-big"), {
       type: "bar", legend: "top", clickHref: "drilldown.html?bulan={i}", labels: t.labels, tickPrefix: "Rp ", tickSuffix: t.unit,
       datasets: [
-        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#2563eb", borderRadius: 6, maxBarThickness: 56, order: 2 },
+        { type: "bar", label: "Aktual Penjualan", data: t.actual, backgroundColor: "#ED1B24", borderRadius: 6, maxBarThickness: 56, order: 2 },
         { type: "line", label: "Target", data: t.target, borderColor: "#f59e0b", backgroundColor: "#fff", pointBorderColor: "#f59e0b", pointBorderWidth: 2, pointRadius: 4, tension: .3, order: 1 },
         { type: "line", label: "Tahun Lalu", data: t.lastYear, borderColor: "#94a3b8", borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, tension: .3, order: 1 }
       ]

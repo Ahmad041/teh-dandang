@@ -1,14 +1,14 @@
 :root {
-  --primary: #2563eb;
-  --primary-dark: #1e40af;
-  --primary-soft: #eff6ff;
+  --primary: #ED1B24;
+  --primary-dark: #A3111A;
+  --primary-soft: #FFF1F1;
   --ink: #1e293b;
   --muted: #65746f;
   --line: #e4ebe7;
   --surface: #fff;
-  --background: #f5f8f6;
+  --background: #f8f9fa;
   --amber: #a86007;
-  --blue: #2563eb;
+  --blue: #334155;
   --red: #c53340;
 }
 
@@ -41,7 +41,7 @@ a {
 }
 
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
-  outline: 3px solid #60a5fa;
+  outline: 3px solid #F47A7F;
   outline-offset: 3px;
 }
 
@@ -131,8 +131,8 @@ button svg.icon {
   font-weight: 600;
   border-radius: 4px;
   white-space: nowrap;
-  color: var(--primary);
-  background: var(--primary-soft);
+  color: #047857;
+  background: #ecfdf5;
 }
 
 .badge.warning {
@@ -146,8 +146,8 @@ button svg.icon {
 }
 
 .badge.blue {
-  color: var(--blue);
-  background: #eef4ff;
+  color: #334155;
+  background: #f1f5f9;
 }
 
 .badge.neutral {
@@ -244,7 +244,7 @@ nav {
   padding: 0 12px 16px;
   flex: 1;
   scrollbar-width: thin;
-  scrollbar-color: #39654f transparent;
+  scrollbar-color: #F8A9AC transparent;
 }
 
 .nav-group {
@@ -466,7 +466,7 @@ main {
 }
 
 .search-field:focus-within {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid #F47A7F;
   outline-offset: 2px;
 }
 
@@ -960,8 +960,8 @@ td.numeric {
 
 .note {
   padding: 12px 16px;
-  border: 1px solid #dbeafe;
-  background: #eff6ff;
+  border: 1px solid #FDE3E4;
+  background: #FFF1F1;
   color: #475569;
   font-size: 12px;
   border-radius: 5px;
@@ -1368,7 +1368,7 @@ dialog p {
 /* Align the portal shell with the supplied drilldown reference. */ :root {
   --background: #f7f9fc;
   --line: #e3eaf3;
-  --blue: #2563eb;
+  --blue: #334155;
   --ink: #17223b;
   --muted: #70809a;
 }
@@ -1394,7 +1394,7 @@ dialog p {
 }
 
 .brand-mark {
-  background: #2563eb;
+  background: #ED1B24;
   color: #fff;
   border: 0;
   border-radius: 10px;
@@ -1425,7 +1425,7 @@ dialog p {
 }
 
 .nav-link.active {
-  background: #2563eb;
+  background: #ED1B24;
   color: #fff;
 }
 
@@ -1464,12 +1464,12 @@ dialog p {
 }
 
 .button.primary {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #ED1B24;
+  border-color: #ED1B24;
 }
 
 .button.primary:hover {
-  background: #1d4ed8;
+  background: #C8141C;
 }
 
 .page-heading {
@@ -1507,9 +1507,9 @@ dialog p {
 }
 
 .drill-breadcrumbs button:last-of-type {
-  background: #2563eb;
+  background: #ED1B24;
   color: #fff;
-  border-color: #2563eb;
+  border-color: #ED1B24;
 }
 
 .drill-summary {
@@ -1551,7 +1551,7 @@ dialog p {
 
 .chart-switcher button[aria-pressed="true"] {
   background: #fff;
-  color: #2563eb;
+  color: #ED1B24;
   box-shadow: 0 1px 3px #17223b0d;
 }
 
@@ -1580,11 +1580,11 @@ dialog p {
 
 .sidebar-profile .avatar {
   background: #eaf0fd;
-  color: #2563eb;
+  color: #ED1B24;
 }
 
 .tabs button[aria-selected="true"] {
-  background: #2563eb;
+  background: #ED1B24;
 }
 
 .map-placeholder {
@@ -1652,7 +1652,7 @@ dialog p {
   }
 
   #nav-toggle:focus-visible ~ .workspace .menu-toggle {
-    outline: 3px solid #60a5fa;
+    outline: 3px solid #F47A7F;
   }
 
 }
@@ -1683,8 +1683,8 @@ h1, h2, h3 { font-weight: 600; }
 
 .drill-breadcrumbs button { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .drill-breadcrumbs button span { background: #e3eaf3; color: #53657e; border-radius: 20px; padding: 2px 8px; font-size: 11px; }
-.drill-breadcrumbs button[aria-current="location"] { background: #2563eb; color: white; border-color: #2563eb; }
-.drill-breadcrumbs button[aria-current="location"] span { background: #1d4ed8; color: white; }
+.drill-breadcrumbs button[aria-current="location"] { background: #ED1B24; color: white; border-color: #ED1B24; }
+.drill-breadcrumbs button[aria-current="location"] span { background: #C8141C; color: white; }
 .drill-summary .kpi-value { overflow-wrap: anywhere; }
 
 .product-swatch {
@@ -1704,3 +1704,18 @@ h1, h2, h3 { font-weight: 600; }
 .overview-data .table-scroll { margin-top:12px; }
 @media(max-width:720px) { .overview-chart-wrap { height:320px; } }
 .health-stat:not(.warning):not(.danger) { background: #eaf8f1; color: #087f5b; }
+
+/* logo Teh Dandang di sidebar */
+.brand.brand-logo { position: relative; justify-content: center; padding: 20px 20px 18px; }
+.brand.brand-logo img { display: block; height: 54px; width: auto; }
+
+/* sembunyikan sidebar (desktop) */
+.sb-hide { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: #64748b; cursor: pointer; padding: 0; z-index: 2; }
+.sb-hide:hover { color: var(--primary); border-color: var(--primary); }
+.sb-hide svg { width: 16px; height: 16px; }
+.sidebar, .workspace { transition: transform .2s ease, margin-left .2s ease; }
+@media (min-width: 1025px) {
+  html.sb-hidden .sidebar { transform: translateX(-100%); }
+  html.sb-hidden .workspace { margin-left: 0; }
+  html.sb-hidden .menu-toggle { display: flex; }
+}

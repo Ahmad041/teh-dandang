@@ -6,7 +6,7 @@
   const AF = window.AF, D = AF.D, KPI = root.dataset.kpi;
   const PNAME = {};
   for (const p of D.products) PNAME[p.code] = p.name;
-  const COLOR = { good: "#10b981", warn: "#f59e0b", bad: "#ef4444", neutral: "#2563eb" };
+  const COLOR = { good: "#10b981", warn: "#f59e0b", bad: "#ef4444", neutral: "#ED1B24" };
   let filter, INFO, sortBy = null;
 
   function setText(id, html) { document.getElementById(id).innerHTML = html; }
@@ -185,7 +185,7 @@
     if (KPI === "ro-item" && lvl !== "Produk") {
       // penyebaran produk ke wilayah: batang bertumpuk per produk
       title = "Penyebaran Produk per " + lvl;
-      const PCOL = ["#1d4ed8", "#3b82f6", "#10b981", "#f59e0b", "#a855f7"];
+      const PCOL = ["#B9141B", "#F0444B", "#10b981", "#f59e0b", "#a855f7"];
       const sel = filter.state.item;
       datasets = D.products.filter(function (p) { return sel === "all" || p.code === sel; }).map(function (p, i) {
         return { label: short(p.name), data: rows.map(function (r) { return r.m.units[p.code]; }), backgroundColor: PCOL[D.products.indexOf(p) % 5], stack: "s", valueLabel: false };
@@ -193,7 +193,7 @@
       legend = true;
     } else if (lvl === "Produk") {
       title = "Unit Terjual per Produk";
-      datasets = [{ label: "Unit", data: rows.map(function (r) { return r.units; }), backgroundColor: rows.map(function (r) { return filter.state.item === r.id ? "#1d4ed8" : "#93c5fd"; }), borderRadius: 4 }];
+      datasets = [{ label: "Unit", data: rows.map(function (r) { return r.units; }), backgroundColor: rows.map(function (r) { return filter.state.item === r.id ? "#B9141B" : "#F8A9AC"; }), borderRadius: 4 }];
     } else if (KPI === "penjualan") {
       title = "Capaian Target per " + lvl;
       datasets = [{ label: "Capaian", data: rows.map(function (r) { return Math.round(r.v.pct * 10) / 10; }), backgroundColor: rows.map(function (r) { return COLOR[r.v.tone]; }), borderRadius: 3, barThickness: 14 }];
@@ -226,7 +226,7 @@
       }
     } else {
       title = "Unit Terjual per " + lvl;
-      datasets = [{ label: "Unit", data: rows.map(function (r) { return r.v.main; }), backgroundColor: "#2563eb", borderRadius: 4 }];
+      datasets = [{ label: "Unit", data: rows.map(function (r) { return r.v.main; }), backgroundColor: "#ED1B24", borderRadius: 4 }];
     }
     setText("chart-title", title);
     // banyak data: batang mendatar, tinggi ikut jumlah baris, area grafik bisa di-scroll
@@ -326,7 +326,7 @@
       const max = rows.length ? rows[0].n : 1;
       html = '<ul class="rank-list nop-stat">' + rows.map(function (r) {
         return '<li><span class="rank-name">' + AF.esc(short(r.p.name)) + '</span><span class="rank-bar"><i style="width:' + r.n / max * 100 + '%"></i></span><span class="rank-val">' + r.n + " toko · " + AF.pct(r.n / tot * 100) + "</span></li>";
-      }).join("") + "</ul>" + '<p class="muted small">NOP dihitung saat toko menambah produk ke-2, ke-3, dst. Produk fast moving tidak muncul karena biasanya sudah dibeli sejak order pertama.</p>';
+      }).join("") + "</ul>";
     } else {
       title = "Peringatan";
       const atRisk = outlets.filter(function (o) { return o.status === "At Risk"; }).length, inactive = outlets.filter(function (o) { return o.status === "Inactive"; }).length;
@@ -422,7 +422,7 @@
     } else if (KPI === "ro-item") {
       title = "Toko yang Membeli Produk";
       headers = ["Info"];
-      rows = ['<tr><td class="table-empty">Pilih produk di panel "Pilih Produk" atau di filter untuk melihat daftar toko pembelinya.</td></tr>'];
+      rows = ['<tr><td class="table-empty">Pilih produk untuk melihat toko pembelinya.</td></tr>'];
     }
     card.hidden = !title;
     if (!title) return;

@@ -89,7 +89,7 @@ function drawMonthlyChart() {
         {
           label: "Realisasi / Actual",
           data: data.actual.slice(start, end),
-          backgroundColor: "#2563eb",
+          backgroundColor: "#ED1B24",
           borderRadius: 3,
           grouped: false,
           barPercentage: 0.42,
@@ -182,7 +182,7 @@ function drawDrillChart() {
     actual.push(mode === "units" ? values.units : values.actual);
     target.push(values.target);
     keys.push(row.key);
-    colors.push(terminal ? row.color : "#2563eb");
+    colors.push(terminal ? row.color : "#ED1B24");
     borders.push(terminal ? row.color : "transparent");
     tableRows[i].querySelector(".drill-target").textContent = "Rp " + values.target.toLocaleString("id-ID");
     tableRows[i].querySelector(".drill-actual").textContent = "Rp " + values.actual.toLocaleString("id-ID");
@@ -194,7 +194,7 @@ function drawDrillChart() {
   node.querySelector('[data-total="target"]').textContent = "Rp " + (totals.target / 1000000).toFixed(2) + " Jt";
   node.querySelector('[data-total="actual"]').textContent = "Rp " + (totals.actual / 1000000).toFixed(2) + " Jt";
   node.querySelector('[data-total="units"]').textContent = totals.units.toLocaleString("id-ID") + " unit";
-  node.querySelector(".drill-filter-summary").textContent = document.querySelector("#drill-mode option:checked").textContent + " · " + document.querySelector("#drill-product option:checked").textContent + " · Data demo";
+  node.querySelector(".drill-filter-summary").textContent = document.querySelector("#drill-mode option:checked").textContent + " · " + document.querySelector("#drill-product option:checked").textContent;
   for (const button of node.querySelectorAll("[data-chart-type]")) button.setAttribute("aria-pressed", button.dataset.chartType === chartType);
 
   const datasets = [{ label: mode === "units" ? "Barang Terjual (Unit)" : "Realisasi (Rp)", data: actual, backgroundColor: colors, borderColor: borders, borderWidth: terminal ? 1.5 : 0, borderRadius: 3, grouped: false, barPercentage: 0.42, order: 1 }];
