@@ -419,7 +419,7 @@
       toggleRow(tr, "detail-row", 7, toko.length ? '<span class="popup-label">Toko yang masih menyimpan batch ' + x.b.id + " (" + toko.length + ")</span>" +
         '<div class="table-scroll mini"><table><thead><tr><th>Toko</th><th>Area</th><th>Sales</th><th class="num">Stok</th></tr></thead><tbody>' +
         toko.slice(0, 60).map(function (o) { return '<tr><td><a href="' + outletLink(o) + '">' + AF.esc(o.name) + "</a></td><td>" + AF.esc(AF.AREA[o.area].name) + "</td><td>" + AF.esc(AF.SALES[o.sales].name) + '</td><td class="num">' + AF.num(o.slow) + " unit</td></tr>"; }).join("") +
-        "</tbody></table></div>" + (toko.length > 60 ? '<p class="muted">60 dari ' + toko.length + " toko ditampilkan.</p>" : "") + (x.info.key !== "ok" ? '<a class="detail-button" href="early-warning.html?jenis=exp">Tindak lanjut di Peringatan Dini</a>' : "")
+        "</tbody></table></div>" + (toko.length > 60 ? '<p class="muted">60 dari ' + toko.length + " toko ditampilkan.</p>" : "")
         : '<p class="muted">Tidak ada toko di cakupan ini yang menyimpan batch ini.</p>');
     };
     if (document.getElementById("search") && document.getElementById("search").value && window.searchTables) window.searchTables();

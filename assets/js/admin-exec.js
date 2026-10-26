@@ -325,6 +325,8 @@
 
   // ================================================================ PERINGATAN DINI
   // jadwal kunjungan terlewat, RO tidak ROA, risiko kedaluwarsa (dari riwayat produksi), sales EC / kunjungan < 80%
+  // Risiko kedaluwarsa disembunyikan sementara (permintaan 26 Okt). Ubah ke false untuk menampilkan lagi.
+  const HIDE_EXP = true;
   let warnType = new URLSearchParams(location.search).get("jenis") || "all";
   const WARN = {
     visit: { label: "Jadwal terlewat", badge: "warning", title: "Jadwal Kunjungan Terlewat", sub: "Sudah dijadwalkan, belum dikunjungi" },
@@ -332,6 +334,8 @@
     exp: { label: "Risiko kedaluwarsa", badge: "danger", title: "Risiko Kedaluwarsa", sub: "Produk slow moving, batch hampir / sudah kedaluwarsa" },
     kinerja: { label: "Kinerja sales", badge: "warning", title: "Sales di Bawah 80%", sub: "Effective call atau kunjungan terlaksana < 80%" }
   };
+  if (HIDE_EXP) delete WARN.exp;
+  if (warnType !== "all" && !WARN[warnType]) warnType = "all";
   const FU = { open: ["Belum ditindaklanjuti", "neutral"], progress: ["Sedang ditindaklanjuti", "warning"], done: ["Selesai", ""] };
 
   function prodName(code) { for (const p of D.products) if (p.code === code) return p.name; return code; }
@@ -346,7 +350,7 @@
         list.push({ id: "visit-" + o.id + "-" + v[i], t: "visit", o: o, note: "Jadwal " + AF.fmtDay(d) + " belum dikunjungi (" + (-v[i]) + " hari lalu)" });
       }
       if (o.status === "Inactive") list.push({ id: "roa-" + o.id, t: "roa", o: o, note: "Tidak beli > 1 bulan" });
-      if (o.slow && o.batch >= 0) {
+      if (!HIDE_EXP && o.slow && o.batch >= 0) {
         const b = D.batches[o.batch], days = Math.round((AF.fromIso(b.exp) - AF.SNAPSHOT) / 864e5);
         if (days < 60) list.push({ id: "exp-" + o.id, t: "exp", o: o, code: b.code, note: prodName(b.code) + " " + AF.num(o.slow) + " unit · batch " + b.id + " (produksi " + AF.fmtDate(AF.fromIso(b.prod)) + ") " +
           (days < 0 ? "sudah kedaluwarsa " + (-days) + " hari" : "kedaluwarsa " + days + " hari lagi"), days: days });
@@ -378,7 +382,7 @@
     const n = { visit: 0, roa: 0, exp: 0, kinerja: 0 }, done = { visit: 0, roa: 0, exp: 0, kinerja: 0 };
     for (const w of list) { n[w.t]++; if (fu[w.id] && fu[w.id].status === "done") done[w.t]++; }
     const kinds = Object.keys(WARN).filter(inGroup);
-    document.getElementById("warn-kpis").className = "kpi-grid " + (kinds.length === 1 ? "one" : kinds.length === 2 ? "two" : "four");
+    document.getElementById("warn-kpis").className = "kpi-grid " + (kinds.length === 1 ? "one" : kinds.length === 2 ? "two" : kinds.length === 3 ? "three" : "four");
     document.getElementById("warn-kpis").innerHTML = kinds.map(function (t) {
       return '<button type="button" class="card kpi warn-card' + (warnType === t ? " selected" : "") + " trend-" + (t === "visit" || t === "kinerja" ? "flat" : "down") + '" data-jenis="' + t + '"><h2 class="kpi-label">' + WARN[t].title +
         '</h2><div class="kpi-value">' + AF.num(n[t]) + '</div><span class="kpi-sub">' + WARN[t].sub + (done[t] ? " · " + done[t] + " selesai" : "") + "</span></button>";
